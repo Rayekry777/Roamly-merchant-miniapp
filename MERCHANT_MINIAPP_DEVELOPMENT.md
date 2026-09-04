@@ -7,7 +7,7 @@ scope: 商户入驻、经营、员工、券、核销与结算展示
 reviewStatus: accepted
 designStatus: 已冻结
 implementationStatus: 开发中
-projectStatus: 阶段 17 已实现
+projectStatus: 阶段 18 已实现
 deviceAcceptanceStatus: 未确认
 ```
 
@@ -100,7 +100,7 @@ deviceAcceptanceStatus: 未确认
 | ---: | ------------------------------------ | ------ |
 |   15 | 独立仓库、请求层、设计令牌和基础组件 | 已实现 |
 |   17 | 登录、会话、五种状态和“我的”         | 已实现 |
-|   18 | 媒体上传、入驻草稿/预览/提交         | 未实现 |
+|   18 | 媒体上传、入驻草稿/预览/提交         | 已实现 |
 |   20 | 四类券编辑和草稿生命周期             | 未实现 |
 |   21 | 审核结果、销售状态和下架             | 未实现 |
 |   25 | 员工邀请与账号管理                   | 未实现 |
@@ -118,6 +118,8 @@ deviceAcceptanceStatus: 未确认
 - 截图检查常见手机宽度下无文字溢出、底部栏遮挡、按钮错位和动态内容跳动。
 
 阶段 17 已完成：4 个 Vitest 文件共 19 项通过，TypeScript、ESLint、Stylelint、Prettier、npm 构建及微信开发者工具 `build-npm` 均通过；开发者工具构建无警告，Android/iOS 真机状态保持“未确认”。
+
+阶段 18 已完成：四步入驻、完整预览、地图选点、七日多时段、单张营业执照、最多九张经营图、Bearer 私有下载、草稿恢复、409 刷新和幂等提交均已落地；6 个 Vitest 文件共 29 项通过，TypeScript、ESLint、Stylelint、Prettier、npm 构建及微信开发者工具自动化项目连接通过，Android/iOS 真机状态保持“未确认”。
 
 ## 非目标
 

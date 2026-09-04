@@ -22,6 +22,7 @@ interface RequestOptions<TBody> {
   data?: TBody;
   auth?: AuthMode;
   showError?: boolean;
+  headers?: Record<string, string>;
 }
 
 export function request<
@@ -40,7 +41,10 @@ export function request<
       method: options.method ?? "GET",
       data: options.data,
       timeout: 12000,
-      header: token ? { Authorization: `Bearer ${token}` } : {},
+      header: {
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        ...options.headers,
+      },
       success(response) {
         if (response.statusCode === 401) merchantSession.clear();
         if (response.statusCode === 204) {
@@ -87,5 +91,112 @@ export function request<
       wx.showToast({ title: error.message, icon: "none" });
     }
     throw error;
+  });
+}
+
+export function uploadFile<T>(
+  path: string,
+  filePath: string,
+  formData: Record<string, string>,
+): Promise<T> {
+  const token = merchantSession.getToken();
+  if (!token) {
+    return Promise.reject(new ApiError("请先登录", 401, "UNAUTHORIZED"));
+  }
+  return new Promise<T>((resolve, reject) => {
+    wx.uploadFile({
+      url: `${getEnvironment().apiBaseUrl}${path}`,
+      filePath,
+      name: "file",
+      formData,
+      timeout: 30000,
+      header: { Authorization: `Bearer ${token}` },
+      success(response) {
+        if (response.statusCode === 401) merchantSession.clear();
+        let value: unknown;
+        try {
+          value = JSON.parse(response.data);
+        } catch {
+          reject(
+            new ApiError(
+              "响应格式异常",
+              response.statusCode,
+              "RESPONSE_CONTRACT_INVALID",
+            ),
+          );
+          return;
+        }
+        if (response.statusCode < 200 || response.statusCode >= 300) {
+          const error = value as ErrorResult;
+          reject(
+            new ApiError(
+              error.message || `服务暂时不可用（${response.statusCode}）`,
+              response.statusCode,
+              error.code,
+              error.fieldErrors,
+            ),
+          );
+          return;
+        }
+        const result = value as Result<T>;
+        if (!result || result.code !== "OK" || !("data" in result)) {
+          reject(
+            new ApiError(
+              "响应格式异常",
+              response.statusCode,
+              "RESPONSE_CONTRACT_INVALID",
+            ),
+          );
+          return;
+        }
+        resolve(result.data as T);
+      },
+      fail(error) {
+        reject(
+          new ApiError(
+            error.errMsg.includes("timeout")
+              ? "上传超时，请稍后重试"
+              : "图片上传失败",
+          ),
+        );
+      },
+    });
+  });
+}
+
+export function downloadPrivateFile(path: string): Promise<string> {
+  const token = merchantSession.getToken();
+  if (!token) {
+    return Promise.reject(new ApiError("请先登录", 401, "UNAUTHORIZED"));
+  }
+  return new Promise<string>((resolve, reject) => {
+    wx.downloadFile({
+      url: `${getEnvironment().apiBaseUrl}${path}`,
+      timeout: 30000,
+      header: { Authorization: `Bearer ${token}` },
+      success(response) {
+        if (response.statusCode === 401) merchantSession.clear();
+        if (response.statusCode < 200 || response.statusCode >= 300) {
+          reject(
+            new ApiError(
+              `图片读取失败（${response.statusCode}）`,
+              response.statusCode,
+              response.statusCode === 401
+                ? "UNAUTHORIZED"
+                : "MEDIA_LOAD_FAILED",
+            ),
+          );
+          return;
+        }
+        resolve(response.tempFilePath);
+      },
+      fail(error) {
+        reject(
+          new ApiError(
+            error.errMsg.includes("timeout") ? "图片读取超时" : "图片读取失败",
+          ),
+        );
+      },
+    });
   });
 }

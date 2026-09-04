@@ -1,0 +1,102 @@
+<view class="page-shell onboarding-page">
+  <view class="page-kicker">ROAMLY MERCHANT</view>
+  <view class="page-heading">商户入驻</view>
+  <view class="page-rule" aria-hidden="true"></view>
+
+  <view wx:if="{{loading}}" class="state-panel">正在同步入驻资料...</view>
+  <view wx:elif="{{error}}" class="state-panel error-panel">
+    <view>{{error}}</view>
+    <button class="text-action" bindtap="load">重新加载</button>
+  </view>
+
+  <block wx:else>
+    <view wx:if="{{rejectionReason}}" class="review-banner warning-banner">
+      <view class="banner-label">审核未通过</view>
+      <view class="banner-copy">{{rejectionReason}}</view>
+    </view>
+    <view wx:if="{{readonly}}" class="review-banner">
+      <view class="banner-label">{{statusLabel}}</view>
+      <view class="banner-copy">资料已锁定，审核结果会同步到“我的”。</view>
+      <button class="primary-action compact-action" bindtap="openPreview">查看完整资料</button>
+    </view>
+
+    <block wx:else>
+      <view class="step-strip">
+        <view wx:for="{{steps}}" wx:key="*this" class="step-item {{index === currentStep ? 'step-active' : ''}}">
+          <view class="step-index">{{index + 1}}</view>
+          <view class="step-name">{{item}}</view>
+        </view>
+      </view>
+
+      <view wx:if="{{currentStep === 0}}" class="form-section">
+        <view class="section-heading">主体与联系人</view>
+        <label class="field"><text>门店名称</text><input value="{{draft.shopName}}" data-field="shopName" bindinput="onFieldInput" maxlength="128" placeholder="请输入门店名称" /></label>
+        <label class="field"><text>统一社会信用代码</text><input value="{{draft.licenseNumber}}" data-field="licenseNumber" bindinput="onFieldInput" maxlength="64" placeholder="请输入证照编号" /></label>
+        <label class="field"><text>法定代表人</text><input value="{{draft.legalRepresentative}}" data-field="legalRepresentative" bindinput="onFieldInput" maxlength="64" placeholder="请输入姓名" /></label>
+        <label class="field"><text>联系人</text><input value="{{draft.contactName}}" data-field="contactName" bindinput="onFieldInput" maxlength="64" placeholder="请输入联系人" /></label>
+        <label class="field"><text>联系电话</text><input value="{{draft.contactPhone}}" data-field="contactPhone" bindinput="onFieldInput" type="number" maxlength="11" placeholder="请输入手机号" /></label>
+      </view>
+
+      <view wx:elif="{{currentStep === 1}}" class="form-section">
+        <view class="section-heading">门店与地图</view>
+        <label class="field"><text>经营类目</text><picker range="{{shopTypeNames}}" value="{{shopTypeIndex}}" bindchange="onShopTypeChange"><view class="picker-value">{{shopTypeIndex >= 0 ? shopTypeNames[shopTypeIndex] : '请选择经营类目'}}<text>›</text></view></picker></label>
+        <label class="field"><text>所在城市</text><picker range="{{cityNames}}" value="{{cityIndex}}" bindchange="onCityChange"><view class="picker-value">{{cityIndex >= 0 ? cityNames[cityIndex] : '请选择城市'}}<text>›</text></view></picker></label>
+        <label class="field"><text>区县</text><input value="{{draft.district}}" data-field="district" bindinput="onFieldInput" maxlength="64" placeholder="请输入区县" /></label>
+        <label class="field"><text>详细地址</text><textarea value="{{draft.address}}" data-field="address" bindinput="onFieldInput" maxlength="255" auto-height placeholder="请输入详细地址" /></label>
+        <button class="map-action" bindtap="chooseLocation">地图选点</button>
+        <view wx:if="{{draft.longitude !== undefined}}" class="coordinate">{{draft.longitude}}, {{draft.latitude}}</view>
+      </view>
+
+      <view wx:elif="{{currentStep === 2}}" class="form-section">
+        <view class="section-heading">营业时间</view>
+        <view wx:for="{{businessHoursView}}" wx:key="dayOfWeek" class="hours-row">
+          <view class="hours-head"><text>{{item.label}}</text><view class="closed-control"><text>{{item.closed ? '休息' : '营业'}}</text><switch checked="{{item.closed}}" color="#ff5f57" data-day="{{index}}" bindchange="toggleClosed" /></view></view>
+          <block wx:if="{{!item.closed}}">
+            <view wx:for="{{item.periods}}" wx:for-item="period" wx:for-index="periodIndex" wx:key="periodIndex" class="period-row">
+              <picker mode="time" value="{{period.open}}" data-day="{{index}}" data-period="{{periodIndex}}" data-field="open" bindchange="changePeriod"><view class="time-value">{{period.open}}</view></picker>
+              <text class="time-separator">至</text>
+              <picker mode="time" value="{{period.close}}" data-day="{{index}}" data-period="{{periodIndex}}" data-field="close" bindchange="changePeriod"><view class="time-value">{{period.close}}</view></picker>
+              <button wx:if="{{item.periods.length > 1}}" class="icon-action" data-day="{{index}}" data-period="{{periodIndex}}" bindtap="removePeriod">×</button>
+            </view>
+            <button wx:if="{{item.periods.length < 3}}" class="add-period" data-day="{{index}}" bindtap="addPeriod">+ 添加时段</button>
+          </block>
+        </view>
+
+        <view class="media-heading">营业执照</view>
+        <view class="media-grid">
+          <view wx:if="{{draft.licenseMedia}}" class="media-item">
+            <image src="{{draft.licenseMedia.localPath}}" mode="aspectFill" />
+            <button class="media-remove" bindtap="removeLicense">×</button>
+          </view>
+          <button wx:else class="media-add" bindtap="chooseLicense">+</button>
+        </view>
+
+        <view class="media-heading">经营图片 <text>{{draft.galleryMedia.length}}/9</text></view>
+        <view class="media-grid">
+          <view wx:for="{{draft.galleryMedia}}" wx:key="id" class="media-item">
+            <image src="{{item.localPath}}" mode="aspectFill" />
+            <button class="media-remove" data-index="{{index}}" bindtap="removeGallery">×</button>
+          </view>
+          <button wx:if="{{draft.galleryMedia.length < 9}}" class="media-add" bindtap="chooseGallery">+</button>
+        </view>
+        <view wx:if="{{uploading}}" class="upload-state">图片上传中...</view>
+      </view>
+
+      <view wx:else class="form-section">
+        <view class="section-heading">Mock 结算资料</view>
+        <view class="mock-badge">模拟结算</view>
+        <label class="field"><text>结算户名</text><input value="{{draft.settlementAccountName}}" data-field="settlementAccountName" bindinput="onFieldInput" maxlength="64" placeholder="请输入户名" /></label>
+        <label class="field"><text>结算银行</text><input value="{{draft.settlementBankName}}" data-field="settlementBankName" bindinput="onFieldInput" maxlength="64" placeholder="请输入银行名称" /></label>
+        <label class="field"><text>账号后四位</text><input value="{{draft.settlementAccountSuffix}}" data-field="settlementAccountSuffix" bindinput="onFieldInput" type="number" maxlength="4" placeholder="仅填写后四位" /></label>
+        <view class="privacy-note">当前仅保存户名、银行和账号后四位，不采集完整银行卡号。</view>
+      </view>
+
+      <view class="footer-actions">
+        <button wx:if="{{currentStep > 0}}" class="secondary-action" bindtap="previousStep">上一步</button>
+        <button class="secondary-action" loading="{{saving}}" disabled="{{saving || uploading}}" bindtap="saveOnly">保存草稿</button>
+        <button wx:if="{{currentStep < 3}}" class="primary-action" loading="{{saving}}" disabled="{{saving || uploading}}" bindtap="nextStep">下一步</button>
+        <button wx:else class="primary-action" loading="{{saving}}" disabled="{{saving || uploading}}" bindtap="openPreview">预览资料</button>
+      </view>
+    </block>
+  </block>
+</view>

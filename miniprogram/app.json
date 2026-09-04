@@ -4,7 +4,9 @@
     "pages/orders/index",
     "pages/verification/index",
     "pages/me/index",
-    "pages/login/index"
+    "pages/login/index",
+    "pages/onboarding/index",
+    "pages/onboarding/preview"
   ],
   "window": {
     "navigationBarTitleText": "Roamly 商户",

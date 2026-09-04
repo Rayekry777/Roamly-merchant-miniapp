@@ -9,6 +9,27 @@
   background: var(--roamly-surface);
 }
 
+.onboarding-entry {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24rpx;
+}
+
+.onboarding-note {
+  margin-top: 7rpx;
+  color: var(--roamly-muted);
+  font-size: 23rpx;
+  white-space: normal;
+}
+
+.entry-action {
+  flex: none;
+  color: var(--roamly-primary);
+  font-size: 24rpx;
+  font-weight: 700;
+}
+
 .state-panel,
 .error-panel {
   padding: 36rpx;

@@ -13,6 +13,8 @@ Page({
     canOperate: false,
     avatarText: "商",
     error: "",
+    canOnboard: false,
+    onboardingLabel: "",
   },
   onShow() {
     void this.loadCurrent();
@@ -33,6 +35,15 @@ Page({
         statusTone: view.tone,
         canOperate: view.canOperate,
         avatarText: view.avatarText,
+        canOnboard:
+          current.role === "OWNER" &&
+          ["NOT_APPLIED", "PENDING", "REJECTED"].includes(current.status),
+        onboardingLabel:
+          current.status === "PENDING"
+            ? "查看入驻资料"
+            : current.status === "REJECTED"
+              ? "修改入驻资料"
+              : "开始商户入驻",
       });
     } catch (error) {
       this.setData({
@@ -49,6 +60,9 @@ Page({
   },
   openLogin() {
     wx.navigateTo({ url: "/pages/login/index" });
+  },
+  openOnboarding() {
+    wx.navigateTo({ url: "/pages/onboarding/index" });
   },
   async logout() {
     const confirmed = await new Promise<boolean>((resolve) => {

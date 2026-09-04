@@ -1,0 +1,63 @@
+<view class="page-shell preview-page">
+  <view class="page-kicker">APPLICATION PREVIEW</view>
+  <view class="heading-row">
+    <view class="page-heading">资料预览</view>
+    <view class="status-badge">{{statusLabel}}</view>
+  </view>
+  <view class="page-rule" aria-hidden="true"></view>
+
+  <view wx:if="{{error}}" class="error-panel">{{error}}</view>
+
+  <block wx:if="{{draft}}">
+    <view class="summary-section">
+      <view class="section-title">主体与联系人</view>
+      <view class="summary-row"><text>门店名称</text><text>{{draft.shopName}}</text></view>
+      <view class="summary-row"><text>信用代码</text><text>{{draft.licenseNumber}}</text></view>
+      <view class="summary-row"><text>法定代表人</text><text>{{draft.legalRepresentative}}</text></view>
+      <view class="summary-row"><text>联系人</text><text>{{draft.contactName}}</text></view>
+      <view class="summary-row"><text>联系电话</text><text>{{draft.contactPhone}}</text></view>
+    </view>
+
+    <view class="summary-section">
+      <view class="section-title">门店位置</view>
+      <view class="summary-row"><text>经营类目</text><text>{{shopTypeName}}</text></view>
+      <view class="summary-row"><text>城市区县</text><text>{{cityName}} · {{draft.district}}</text></view>
+      <view class="summary-row multiline"><text>详细地址</text><text>{{draft.address}}</text></view>
+      <view class="summary-row"><text>地图坐标</text><text>{{draft.longitude}}, {{draft.latitude}}</text></view>
+    </view>
+
+    <view class="summary-section">
+      <view class="section-title">营业时间</view>
+      <view wx:for="{{hours}}" wx:key="dayOfWeek" class="hours-summary">
+        <text>{{item.label}}</text>
+        <text wx:if="{{item.closed}}" class="muted">休息</text>
+        <view wx:else class="period-summary"><text wx:for="{{item.periods}}" wx:for-item="period" wx:key="index">{{period.open}}-{{period.close}}</text></view>
+      </view>
+    </view>
+
+    <view class="summary-section">
+      <view class="section-title">经营图片</view>
+      <view class="media-label">营业执照</view>
+      <image wx:if="{{draft.licenseMedia.localPath}}" class="license-image" src="{{draft.licenseMedia.localPath}}" mode="aspectFill" />
+      <view wx:else class="media-unavailable">私有图片暂未加载</view>
+      <view class="media-label">门店图片 · {{draft.galleryMedia.length}} 张</view>
+      <scroll-view wx:if="{{draft.galleryMedia.length}}" class="gallery-strip" scroll-x enhanced show-scrollbar="{{false}}">
+        <image wx:for="{{draft.galleryMedia}}" wx:key="id" src="{{item.localPath}}" mode="aspectFill" />
+      </scroll-view>
+    </view>
+
+    <view class="summary-section">
+      <view class="section-title">Mock 结算</view>
+      <view class="summary-row"><text>结算户名</text><text>{{draft.settlementAccountName}}</text></view>
+      <view class="summary-row"><text>结算银行</text><text>{{draft.settlementBankName}}</text></view>
+      <view class="summary-row"><text>账号尾号</text><text>•••• {{draft.settlementAccountSuffix}}</text></view>
+    </view>
+
+    <view wx:if="{{submittedAt}}" class="submitted-time">提交时间：{{submittedAt}}</view>
+
+    <view class="footer-actions">
+      <button class="secondary-action" bindtap="goBack">返回</button>
+      <button wx:if="{{canSubmit}}" class="primary-action" loading="{{submitting}}" disabled="{{submitting}}" bindtap="submit">提交审核</button>
+    </view>
+  </block>
+</view>

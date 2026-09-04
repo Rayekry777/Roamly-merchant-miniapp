@@ -35,6 +35,14 @@
       <view class="status-copy">{{guidance}}</view>
     </view>
 
+    <view wx:if="{{canOnboard}}" class="section-block onboarding-entry" bindtap="openOnboarding">
+      <view>
+        <view class="section-title">商户入驻</view>
+        <view class="onboarding-note">{{guidance}}</view>
+      </view>
+      <view class="entry-action">{{onboardingLabel}} ›</view>
+    </view>
+
     <view wx:if="{{current.shop}}" class="section-block">
       <view class="section-title">当前门店</view>
       <view class="shop-row">
