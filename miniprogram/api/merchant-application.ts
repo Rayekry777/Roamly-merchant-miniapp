@@ -85,7 +85,7 @@ export async function uploadBusinessImage(
     filePath,
     { purpose },
   );
-  return { ...parseMedia(value), localPath: filePath };
+  return { ...parseBusinessMedia(value), localPath: filePath };
 }
 
 export async function deleteBusinessImage(mediaId: string): Promise<void> {
@@ -114,10 +114,10 @@ export function parseApplication(value: unknown): MerchantApplication {
   const result = {
     ...item,
     businessHours: item.businessHours.map(parseDay),
-    galleryMedia: item.galleryMedia.map(parseMedia),
+    galleryMedia: item.galleryMedia.map(parseBusinessMedia),
   } as unknown as MerchantApplication;
   if (item.licenseMedia !== undefined) {
-    result.licenseMedia = parseMedia(item.licenseMedia);
+    result.licenseMedia = parseBusinessMedia(item.licenseMedia);
   }
   optionalStrings(item, [
     "shopName",
@@ -147,7 +147,7 @@ export function parseApplication(value: unknown): MerchantApplication {
   return result;
 }
 
-function parseMedia(value: unknown): BusinessMedia {
+export function parseBusinessMedia(value: unknown): BusinessMedia {
   const item = record(value);
   if (
     !string(item.id) ||
@@ -229,7 +229,12 @@ function applicationStatus(value: unknown): value is MerchantApplicationStatus {
 }
 
 function mediaPurpose(value: unknown): value is BusinessMediaPurpose {
-  return value === "LICENSE" || value === "GALLERY";
+  return (
+    value === "LICENSE" ||
+    value === "GALLERY" ||
+    value === "VOUCHER_COVER" ||
+    value === "VOUCHER_DETAIL"
+  );
 }
 
 function dayOfWeek(value: unknown): value is BusinessDayOfWeek {

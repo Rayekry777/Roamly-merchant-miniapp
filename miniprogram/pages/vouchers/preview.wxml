@@ -1,0 +1,79 @@
+<view class="preview-page">
+  <view wx:if="{{loading}}" class="page-shell state-panel">正在生成预览...</view>
+  <view wx:elif="{{error && !draft}}" class="page-shell state-panel error-panel">
+    <view>{{error}}</view>
+    <button class="text-action" bindtap="retryLoad">重新加载</button>
+  </view>
+
+  <block wx:elif="{{draft}}">
+    <view class="hero-media">
+      <image wx:if="{{draft.coverMedia && draft.coverMedia.localPath}}" src="{{draft.coverMedia.localPath}}" mode="aspectFill" />
+      <view wx:else class="cover-placeholder">{{typeLabel}}</view>
+      <view class="preview-flag">消费者预览</view>
+    </view>
+
+    <view class="page-shell preview-content">
+      <view class="title-meta"><text>{{typeLabel}}</text><text>{{statusLabel}}</text></view>
+      <view class="voucher-title">{{displayTitle}}</view>
+      <view class="price-row">
+        <text class="price-now">{{priceText}}</text>
+        <text wx:if="{{marketText}}" class="price-market">{{marketText}}</text>
+      </view>
+
+      <view wx:if="{{error}}" class="error-banner">
+        <view>{{error}}</view>
+        <button wx:if="{{submitErrorStep}}" class="text-action" bindtap="edit">返回第 {{submitErrorStep}} 步</button>
+      </view>
+
+      <view class="shop-band">
+        <view class="shop-mark">店</view>
+        <view class="shop-copy"><view>{{shopName}}</view><view>{{shopAddress}}</view></view>
+      </view>
+
+      <view class="content-section">
+        <view class="section-title">购买信息</view>
+        <view class="summary-row"><text>{{benefitLabel}}</text><text>{{benefitText}}</text></view>
+        <view class="summary-row"><text>库存</text><text>{{draft.availableStock}} / {{draft.totalStock}}</text></view>
+        <view class="summary-row"><text>每人限购</text><text>{{draft.purchaseLimit || '待填写'}}</text></view>
+        <view class="summary-row multiline"><text>销售时间</text><text>{{saleTimeText}}</text></view>
+      </view>
+
+      <view wx:if="{{packageItems.length}}" class="content-section">
+        <view class="section-title">{{draft.productType === 'MULTI_USE' ? '服务明细' : '套餐内容'}}</view>
+        <view wx:for="{{packageItems}}" wx:key="index" class="package-row">
+          <view class="package-name">{{item.name}}</view>
+          <view class="package-right"><text>{{item.quantity}}</text><text wx:if="{{item.price}}">{{item.price}}</text></view>
+        </view>
+      </view>
+
+      <view class="content-section">
+        <view class="section-title">有效期与使用时间</view>
+        <view class="summary-row multiline"><text>有效期</text><text>{{validityText}}</text></view>
+        <view wx:for="{{usageRows}}" wx:key="label" class="summary-row"><text>{{item.label}}</text><text>{{item.value}}</text></view>
+        <view class="summary-row multiline"><text>不可用日期</text><text>{{excludedText}}</text></view>
+      </view>
+
+      <view class="content-section">
+        <view class="section-title">使用与退款规则</view>
+        <view class="rule-line"><text>{{draft.reservationRequired ? '需预约' : '无需预约'}}</text><text wx:if="{{draft.reservationRequired}}">{{draft.reservationNotice || '预约说明待填写'}}</text></view>
+        <view class="rule-line"><text>{{draft.stackable ? '可叠加店内优惠' : '不可叠加店内优惠'}}</text></view>
+        <view class="rule-line"><text>{{draft.refundAnytime ? '支持随时退' : '不支持随时退'}}</text></view>
+        <view class="rule-line"><text>{{draft.refundExpired ? '支持过期退' : '不支持过期退'}}</text></view>
+      </view>
+
+      <view wx:if="{{draft.detailMedia.length}}" class="content-section detail-section">
+        <view class="section-title">图文详情</view>
+        <view wx:for="{{draft.detailMedia}}" wx:key="id" class="detail-media">
+          <image wx:if="{{item.localPath}}" src="{{item.localPath}}" mode="widthFix" />
+          <view wx:else class="media-unavailable">私有图片暂未加载</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="footer-actions">
+      <button wx:if="{{canEdit}}" class="secondary-action" bindtap="edit">返回编辑</button>
+      <button wx:if="{{canSubmit}}" class="primary-action" loading="{{submitting}}" disabled="{{submitting}}" bindtap="submit">提交审核</button>
+      <button wx:else class="primary-action disabled-action" disabled="{{true}}">{{statusLabel}}</button>
+    </view>
+  </block>
+</view>

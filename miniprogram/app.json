@@ -6,7 +6,10 @@
     "pages/me/index",
     "pages/login/index",
     "pages/onboarding/index",
-    "pages/onboarding/preview"
+    "pages/onboarding/preview",
+    "pages/vouchers/index",
+    "pages/vouchers/editor",
+    "pages/vouchers/preview"
   ],
   "window": {
     "navigationBarTitleText": "Roamly 商户",

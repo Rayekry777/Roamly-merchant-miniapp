@@ -6,6 +6,7 @@ import {
 import type { CurrentMerchant } from "../types/merchant-auth";
 import { ApiError } from "../utils/request";
 import { merchantSession } from "../utils/session";
+import { voucherDraftStore } from "./voucher-draft";
 
 class MerchantStore {
   current: CurrentMerchant | null = null;
@@ -59,6 +60,7 @@ class MerchantStore {
   }
 
   clear(): void {
+    voucherDraftStore.clear();
     this.current = null;
     this.initialized = true;
     merchantSession.clear();

@@ -1,0 +1,199 @@
+<view class="page-shell editor-page">
+  <view class="page-kicker">VOUCHER STUDIO</view>
+  <view class="heading-row">
+    <view class="heading-copy">
+      <view class="page-heading">编辑团购券</view>
+      <view class="voucher-type-line">{{productTypeLabel}} · {{statusLabel}}</view>
+    </view>
+    <view class="type-mark">{{productTypeLabel}}</view>
+  </view>
+  <view class="page-rule" aria-hidden="true"></view>
+
+  <view wx:if="{{loading}}" class="state-panel">正在读取团购券...</view>
+  <view wx:elif="{{error && !draft}}" class="state-panel error-panel">
+    <view>{{error}}</view>
+    <button class="text-action" bindtap="retryLoad">重新加载</button>
+  </view>
+
+  <block wx:elif="{{draft}}">
+    <view wx:if="{{draft.rejectionReason}}" class="notice-banner reject-banner">
+      <view class="notice-title">审核意见</view>
+      <view class="notice-copy">{{draft.rejectionReason}}</view>
+    </view>
+    <view wx:if="{{readonly}}" class="notice-banner readonly-banner">
+      <view class="notice-title">{{statusLabel}}</view>
+      <view class="notice-copy">当前版本已锁定，可分步查看并进入消费者视角预览。</view>
+    </view>
+    <view wx:if="{{error}}" class="notice-banner error-banner">
+      <view class="notice-copy">{{error}}</view>
+      <button wx:if="{{conflictAvailable}}" class="text-action inline-action" bindtap="reapplyConflict">恢复本次填写</button>
+    </view>
+
+    <view class="step-strip">
+      <view wx:for="{{steps}}" wx:key="*this" class="step-item {{index === currentStep ? 'step-active' : ''}}">
+        <view class="step-index">{{index + 1}}</view>
+        <view class="step-name">{{item}}</view>
+      </view>
+    </view>
+
+    <view wx:if="{{currentStep === 0}}" class="form-section">
+      <view class="section-heading">券型与基础信息</view>
+      <view class="type-summary">
+        <view class="type-summary-name">{{productTypeLabel}}</view>
+        <view class="type-summary-copy">{{productTypeHint}}</view>
+      </view>
+      <label class="field">
+        <text>券标题</text>
+        <input value="{{draft.title}}" disabled="{{readonly}}" data-field="title" bindinput="fieldInput" maxlength="120" placeholder="例如：双人招牌套餐" />
+      </label>
+      <label class="field">
+        <text>副标题</text>
+        <textarea value="{{draft.subTitle}}" disabled="{{readonly}}" data-field="subTitle" bindinput="fieldInput" maxlength="255" auto-height placeholder="补充套餐亮点或适用人群" />
+      </label>
+
+      <block wx:if="{{draft.productType === 'PACKAGE' || draft.productType === 'MULTI_USE'}}">
+        <view class="subsection-heading">
+          <text>{{draft.productType === 'PACKAGE' ? '套餐明细' : '服务明细'}}</text>
+          <text>{{draft.packageItems.length}}/50</text>
+        </view>
+        <view wx:if="{{draft.packageItems.length === 0}}" class="inline-empty">尚未添加明细</view>
+        <view wx:for="{{draft.packageItems}}" wx:key="index" class="package-row">
+          <view class="package-row-head">
+            <text>明细 {{index + 1}}</text>
+            <button wx:if="{{!readonly}}" class="remove-line" data-index="{{index}}" bindtap="removePackageItem">删除</button>
+          </view>
+          <input value="{{item.name}}" disabled="{{readonly}}" data-index="{{index}}" data-field="name" bindinput="packageItemInput" maxlength="80" placeholder="商品或服务名称" />
+          <view class="package-fields">
+            <input value="{{item.quantity}}" disabled="{{readonly}}" data-index="{{index}}" data-field="quantity" bindinput="packageItemInput" type="number" maxlength="3" placeholder="数量" />
+            <input value="{{item.unit}}" disabled="{{readonly}}" data-index="{{index}}" data-field="unit" bindinput="packageItemInput" maxlength="16" placeholder="单位" />
+            <input value="{{item.unitPriceYuan}}" disabled="{{readonly}}" data-index="{{index}}" data-field="unitPriceYuan" bindinput="packageItemInput" type="digit" placeholder="单项门市价" />
+          </view>
+        </view>
+        <button wx:if="{{!readonly && draft.packageItems.length < 50}}" class="outline-action" bindtap="addPackageItem">+ 添加明细</button>
+      </block>
+    </view>
+
+    <view wx:elif="{{currentStep === 1}}" class="form-section">
+      <view class="section-heading">价格、库存与销售期</view>
+      <view class="field-grid">
+        <label class="field"><text>售价（元）</text><input value="{{draft.priceYuan}}" disabled="{{readonly}}" data-field="priceYuan" bindinput="fieldInput" type="digit" placeholder="0.00" /></label>
+        <label class="field"><text>门市价（元）</text><input value="{{draft.marketYuan}}" disabled="{{readonly}}" data-field="marketYuan" bindinput="fieldInput" type="digit" placeholder="0.00" /></label>
+        <label class="field"><text>总库存</text><input value="{{draft.totalStock}}" disabled="{{readonly}}" data-field="totalStock" bindinput="fieldInput" type="number" maxlength="7" placeholder="0" /></label>
+        <label class="field"><text>每人限购</text><input value="{{draft.purchaseLimit}}" disabled="{{readonly}}" data-field="purchaseLimit" bindinput="fieldInput" type="number" maxlength="3" placeholder="1" /></label>
+      </view>
+
+      <view wx:if="{{draft.productType === 'CASH'}}" class="special-fields">
+        <label class="field"><text>抵扣金额（元）</text><input value="{{draft.faceValueYuan}}" disabled="{{readonly}}" data-field="faceValueYuan" bindinput="fieldInput" type="digit" placeholder="0.00" /></label>
+        <label class="field"><text>最低消费（元）</text><input value="{{draft.minimumSpendYuan}}" disabled="{{readonly}}" data-field="minimumSpendYuan" bindinput="fieldInput" type="digit" placeholder="0.00" /></label>
+      </view>
+      <view wx:if="{{draft.productType === 'DISCOUNT'}}" class="special-fields">
+        <label class="field"><text>折扣</text><input value="{{draft.discountRate}}" disabled="{{readonly}}" data-field="discountRate" bindinput="fieldInput" type="digit" placeholder="例如 8.5" /></label>
+        <label class="field"><text>最低消费（元）</text><input value="{{draft.minimumSpendYuan}}" disabled="{{readonly}}" data-field="minimumSpendYuan" bindinput="fieldInput" type="digit" placeholder="0.00" /></label>
+        <label class="field"><text>最高优惠（元）</text><input value="{{draft.maximumDiscountYuan}}" disabled="{{readonly}}" data-field="maximumDiscountYuan" bindinput="fieldInput" type="digit" placeholder="0.00" /></label>
+      </view>
+      <label wx:if="{{draft.productType === 'MULTI_USE'}}" class="field"><text>总使用次数</text><input value="{{draft.totalUseCount}}" disabled="{{readonly}}" data-field="totalUseCount" bindinput="fieldInput" type="number" maxlength="3" placeholder="2 至 100" /></label>
+
+      <view class="subsection-heading"><text>销售时间</text></view>
+      <view class="datetime-row">
+        <text class="datetime-label">开始</text>
+        <picker mode="date" disabled="{{readonly}}" value="{{dateTime.saleBeginDate}}" data-target="saleBegin" data-part="Date" bindchange="changeDateTime"><view class="picker-cell">{{dateTime.saleBeginDate || '选择日期'}}</view></picker>
+        <picker mode="time" disabled="{{readonly}}" value="{{dateTime.saleBeginClock}}" data-target="saleBegin" data-part="Clock" bindchange="changeDateTime"><view class="picker-cell">{{dateTime.saleBeginClock}}</view></picker>
+      </view>
+      <view class="datetime-row">
+        <text class="datetime-label">结束</text>
+        <picker mode="date" disabled="{{readonly}}" value="{{dateTime.saleEndDate}}" data-target="saleEnd" data-part="Date" bindchange="changeDateTime"><view class="picker-cell">{{dateTime.saleEndDate || '选择日期'}}</view></picker>
+        <picker mode="time" disabled="{{readonly}}" value="{{dateTime.saleEndClock}}" data-target="saleEnd" data-part="Clock" bindchange="changeDateTime"><view class="picker-cell">{{dateTime.saleEndClock}}</view></picker>
+      </view>
+    </view>
+
+    <view wx:elif="{{currentStep === 2}}" class="form-section">
+      <view class="section-heading">有效期与使用规则</view>
+      <label class="field">
+        <text>有效期类型</text>
+        <picker mode="selector" disabled="{{readonly}}" range="{{validityNames}}" value="{{validityIndex}}" bindchange="changeValidity"><view class="picker-value">{{validityNames[validityIndex]}}<text class="picker-arrow">›</text></view></picker>
+      </label>
+      <label wx:if="{{draft.validityType === 'DAYS_AFTER_PURCHASE'}}" class="field">
+        <text>购买后有效天数</text>
+        <input value="{{draft.validDays}}" disabled="{{readonly}}" data-field="validDays" bindinput="fieldInput" type="number" maxlength="3" placeholder="1 至 365" />
+      </label>
+      <block wx:else>
+        <view class="datetime-row fixed-date-row">
+          <text class="datetime-label">开始</text>
+          <picker mode="date" disabled="{{readonly}}" value="{{dateTime.validBeginDate}}" data-target="validBegin" data-part="Date" bindchange="changeDateTime"><view class="picker-cell">{{dateTime.validBeginDate || '选择日期'}}</view></picker>
+          <picker mode="time" disabled="{{readonly}}" value="{{dateTime.validBeginClock}}" data-target="validBegin" data-part="Clock" bindchange="changeDateTime"><view class="picker-cell">{{dateTime.validBeginClock}}</view></picker>
+        </view>
+        <view class="datetime-row">
+          <text class="datetime-label">结束</text>
+          <picker mode="date" disabled="{{readonly}}" value="{{dateTime.validEndDate}}" data-target="validEnd" data-part="Date" bindchange="changeDateTime"><view class="picker-cell">{{dateTime.validEndDate || '选择日期'}}</view></picker>
+          <picker mode="time" disabled="{{readonly}}" value="{{dateTime.validEndClock}}" data-target="validEnd" data-part="Clock" bindchange="changeDateTime"><view class="picker-cell">{{dateTime.validEndClock}}</view></picker>
+        </view>
+      </block>
+
+      <view class="subsection-heading"><text>每周可用时段</text><text>每天最多三段</text></view>
+      <view wx:for="{{usageRulesView}}" wx:for-index="dayIndex" wx:key="dayOfWeek" class="hours-row">
+        <view class="hours-head">
+          <text>{{item.label}}</text>
+          <view class="switch-control"><text>{{item.closed ? '不可用' : '可用'}}</text><switch checked="{{!item.closed}}" disabled="{{readonly}}" color="#ff5f57" data-day="{{dayIndex}}" bindchange="toggleUsageDay" /></view>
+        </view>
+        <block wx:if="{{!item.closed}}">
+          <view wx:for="{{item.periods}}" wx:for-item="period" wx:for-index="periodIndex" wx:key="periodIndex" class="period-row">
+            <picker mode="time" disabled="{{readonly}}" value="{{period.open}}" data-day="{{dayIndex}}" data-period="{{periodIndex}}" data-field="open" bindchange="changeUsagePeriod"><view class="time-cell">{{period.open}}</view></picker>
+            <text class="time-separator">至</text>
+            <picker mode="time" disabled="{{readonly}}" value="{{period.close}}" data-day="{{dayIndex}}" data-period="{{periodIndex}}" data-field="close" bindchange="changeUsagePeriod"><view class="time-cell">{{period.close}}</view></picker>
+            <button wx:if="{{!readonly}}" class="icon-action" data-day="{{dayIndex}}" data-period="{{periodIndex}}" bindtap="removeUsagePeriod">×</button>
+          </view>
+          <button wx:if="{{!readonly && item.periods.length < 3}}" class="small-outline" data-day="{{dayIndex}}" bindtap="addUsagePeriod">+ 添加时段</button>
+        </block>
+      </view>
+
+      <view class="subsection-heading"><text>不可用日期</text><text>{{draft.excludedDates.length}} 个</text></view>
+      <view class="date-tags">
+        <view wx:for="{{draft.excludedDates}}" wx:key="*this" class="date-tag"><text>{{item}}</text><button wx:if="{{!readonly}}" data-index="{{index}}" bindtap="removeExcludedDate">×</button></view>
+        <picker wx:if="{{!readonly}}" mode="date" start="{{today}}" bindchange="addExcludedDate"><view class="add-date">+ 添加日期</view></picker>
+      </view>
+
+      <view class="rule-switch"><view><text>需要预约</text><text class="rule-note">开启后必须填写预约说明</text></view><switch checked="{{draft.reservationRequired}}" disabled="{{readonly}}" color="#ff5f57" data-field="reservationRequired" bindchange="switchField" /></view>
+      <label wx:if="{{draft.reservationRequired}}" class="field"><text>预约说明</text><textarea value="{{draft.reservationNotice}}" disabled="{{readonly}}" data-field="reservationNotice" bindinput="fieldInput" maxlength="500" auto-height placeholder="例如：请至少提前两小时预约" /></label>
+      <view class="rule-switch"><view><text>可叠加店内优惠</text></view><switch checked="{{draft.stackable}}" disabled="{{readonly}}" color="#ff5f57" data-field="stackable" bindchange="switchField" /></view>
+      <view class="rule-switch"><view><text>支持随时退</text></view><switch checked="{{draft.refundAnytime}}" disabled="{{readonly}}" color="#ff5f57" data-field="refundAnytime" bindchange="switchField" /></view>
+      <view class="rule-switch"><view><text>支持过期退</text></view><switch checked="{{draft.refundExpired}}" disabled="{{readonly}}" color="#ff5f57" data-field="refundExpired" bindchange="switchField" /></view>
+    </view>
+
+    <view wx:else class="form-section">
+      <view class="section-heading">图片与预览</view>
+      <view class="media-heading"><text>券封面</text><text>1 张</text></view>
+      <view class="cover-editor">
+        <view wx:if="{{draft.coverMedia}}" class="cover-media">
+          <image wx:if="{{draft.coverMedia.localPath}}" src="{{draft.coverMedia.localPath}}" mode="aspectFill" />
+          <view wx:else class="media-unavailable">私有图片暂未加载</view>
+          <button wx:if="{{!readonly}}" class="media-remove" bindtap="removeCover">×</button>
+        </view>
+        <button wx:else class="media-add cover-add" disabled="{{readonly}}" bindtap="chooseCover">+ 添加封面</button>
+      </view>
+
+      <view class="media-heading"><text>详情图</text><text>{{draft.detailMedia.length}}/9</text></view>
+      <view class="media-grid">
+        <view wx:for="{{draft.detailMedia}}" wx:key="id" class="media-item">
+          <image wx:if="{{item.localPath}}" src="{{item.localPath}}" mode="aspectFill" />
+          <view wx:else class="media-unavailable">加载失败</view>
+          <button wx:if="{{!readonly}}" class="media-remove" data-index="{{index}}" bindtap="removeDetail">×</button>
+        </view>
+        <button wx:if="{{!readonly && draft.detailMedia.length < 9}}" class="media-add" bindtap="chooseDetails">+</button>
+      </view>
+      <view wx:if="{{uploading}}" class="upload-state">图片上传中...</view>
+
+      <view class="preview-callout">
+        <view class="preview-callout-title">消费者视角</view>
+        <view class="preview-callout-copy">{{draft.title || '未命名团购券'}} · {{productTypeLabel}}</view>
+        <button class="primary-action preview-action" disabled="{{saving || uploading}}" bindtap="openPreview">打开预览</button>
+      </view>
+    </view>
+
+    <view class="footer-actions">
+      <button wx:if="{{currentStep > 0}}" class="secondary-action" bindtap="previousStep">上一步</button>
+      <button wx:if="{{!readonly}}" class="secondary-action" loading="{{saving}}" disabled="{{saving || uploading}}" bindtap="saveOnly">保存</button>
+      <button wx:if="{{currentStep < 3}}" class="primary-action" loading="{{saving}}" disabled="{{saving || uploading}}" bindtap="nextStep">下一步</button>
+      <button wx:else class="primary-action" loading="{{saving}}" disabled="{{saving || uploading}}" bindtap="openPreview">预览</button>
+    </view>
+  </block>
+</view>

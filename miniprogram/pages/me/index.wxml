@@ -56,9 +56,9 @@
 
     <view class="section-block">
       <view class="section-title">经营入口</view>
-      <view class="menu-row {{canOperate ? '' : 'menu-row-disabled'}}">
-        <view><view class="menu-name">门店与团购券</view><view class="menu-note">管理门店资料与团购商品</view></view>
-        <view class="menu-state">{{canOperate ? '可用' : '待激活'}}</view>
+      <view wx:if="{{canManageVouchers}}" class="menu-row" bindtap="openVouchers">
+        <view><view class="menu-name">团购券</view><view class="menu-note">创建、预览和提交四类团购券</view></view>
+        <view class="menu-state">进入 ›</view>
       </view>
       <view class="menu-row {{canOperate ? '' : 'menu-row-disabled'}}">
         <view><view class="menu-name">员工与权限</view><view class="menu-note">邀请店长和核销员</view></view>

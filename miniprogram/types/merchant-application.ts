@@ -18,7 +18,11 @@ export const businessDays = [
 ] as const;
 export type BusinessDayOfWeek = (typeof businessDays)[number];
 
-export type BusinessMediaPurpose = "LICENSE" | "GALLERY";
+export type BusinessMediaPurpose =
+  | "LICENSE"
+  | "GALLERY"
+  | "VOUCHER_COVER"
+  | "VOUCHER_DETAIL";
 
 export interface BusinessPeriod {
   open: string;

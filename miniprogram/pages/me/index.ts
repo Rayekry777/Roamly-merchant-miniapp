@@ -15,6 +15,7 @@ Page({
     error: "",
     canOnboard: false,
     onboardingLabel: "",
+    canManageVouchers: false,
   },
   onShow() {
     void this.loadCurrent();
@@ -44,6 +45,9 @@ Page({
             : current.status === "REJECTED"
               ? "修改入驻资料"
               : "开始商户入驻",
+        canManageVouchers:
+          current.status === "ACTIVE" &&
+          current.permissions.includes("merchant:voucher:manage"),
       });
     } catch (error) {
       this.setData({
@@ -63,6 +67,13 @@ Page({
   },
   openOnboarding() {
     wx.navigateTo({ url: "/pages/onboarding/index" });
+  },
+  openVouchers() {
+    if (!this.data.canManageVouchers) {
+      wx.showToast({ title: "当前账号暂不能管理团购券", icon: "none" });
+      return;
+    }
+    wx.navigateTo({ url: "/pages/vouchers/index" });
   },
   async logout() {
     const confirmed = await new Promise<boolean>((resolve) => {

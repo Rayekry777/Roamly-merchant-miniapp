@@ -14,3 +14,12 @@ export async function guardActiveMerchant(): Promise<boolean> {
     return false;
   }
 }
+
+export async function guardVoucherManager(): Promise<boolean> {
+  if (!(await guardActiveMerchant())) return false;
+  const current = merchantStore.current;
+  if (current?.permissions.includes("merchant:voucher:manage")) return true;
+  wx.showToast({ title: "当前角色无权管理团购券", icon: "none" });
+  wx.switchTab({ url: "/pages/me/index" });
+  return false;
+}

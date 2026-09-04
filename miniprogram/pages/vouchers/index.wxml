@@ -1,0 +1,66 @@
+<view class="page-shell voucher-list-page">
+  <view class="page-kicker">VOUCHER STUDIO</view>
+  <view class="heading-row">
+    <view>
+      <view class="page-heading">团购券</view>
+      <view class="heading-copy">草稿、审核和销售状态分开管理</view>
+    </view>
+    <button class="create-button" loading="{{commandBusy}}" bindtap="createVoucher">新建</button>
+  </view>
+  <view class="page-rule" aria-hidden="true"></view>
+
+  <scroll-view class="review-tabs" scroll-x enhanced show-scrollbar="{{false}}">
+    <view class="review-tabs-inner">
+      <view wx:for="{{reviewFilters}}" wx:key="value" class="review-tab {{reviewStatus === item.value ? 'review-tab-active' : ''}}" data-value="{{item.value}}" bindtap="selectReview">{{item.label}}</view>
+    </view>
+  </scroll-view>
+
+  <view class="filter-row">
+    <view class="search-field">
+      <input value="{{keyword}}" maxlength="120" placeholder="搜索券标题" confirm-type="search" bindinput="keywordInput" bindconfirm="search" />
+      <button bindtap="search">搜索</button>
+    </view>
+    <picker mode="selector" range="{{typeNames}}" value="{{typeIndex}}" bindchange="changeType">
+      <view class="type-picker">{{typeNames[typeIndex]}}⌄</view>
+    </picker>
+  </view>
+
+  <view wx:if="{{loading}}" class="state-panel">正在同步团购券...</view>
+  <view wx:elif="{{error}}" class="state-panel error-panel">
+    <view>{{error}}</view>
+    <button class="retry-action" bindtap="load">重新加载</button>
+  </view>
+  <view wx:elif="{{items.length === 0}}" class="state-panel empty-panel">
+    <view class="empty-mark">券</view>
+    <view class="empty-title">还没有符合条件的团购券</view>
+    <view class="empty-copy">新建后可随时保存草稿，再提交平台审核。</view>
+    <button class="empty-action" bindtap="createVoucher">新建团购券</button>
+  </view>
+
+  <view wx:else class="voucher-list">
+    <view wx:for="{{items}}" wx:key="id" class="voucher-row">
+      <view class="voucher-main" data-id="{{item.id}}" bindtap="preview">
+        <view class="voucher-cover">
+          <image wx:if="{{item.coverPath}}" src="{{item.coverPath}}" mode="aspectFill" />
+          <view wx:else class="cover-placeholder">{{item.productTypeLabel.slice(0, 1)}}</view>
+        </view>
+        <view class="voucher-copy">
+          <view class="voucher-meta">
+            <text class="type-label">{{item.productTypeLabel}}</text>
+            <text class="status-label status-{{item.statusTone}}">{{item.statusText}}</text>
+          </view>
+          <view class="voucher-title">{{item.displayTitle}}</view>
+          <view class="voucher-price">{{item.priceText}}</view>
+          <view class="voucher-note">库存 {{item.availableStock}} / {{item.totalStock}} · {{item.updatedText}}</view>
+        </view>
+      </view>
+      <view wx:if="{{item.rejectionReason}}" class="reject-reason">审核意见：{{item.rejectionReason}}</view>
+      <view class="row-actions">
+        <button wx:if="{{item.editable}}" data-id="{{item.id}}" bindtap="edit">编辑</button>
+        <button data-id="{{item.id}}" bindtap="preview">预览</button>
+        <button data-id="{{item.id}}" bindtap="copy">复制</button>
+        <button wx:if="{{item.canDelete}}" class="danger-action" data-id="{{item.id}}" bindtap="remove">删除</button>
+      </view>
+    </view>
+  </view>
+</view>
