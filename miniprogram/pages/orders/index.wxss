@@ -1,2 +1,32 @@
 /* 页面样式由全局 Roamly 设计基线提供。 */
-.order-filters{display:flex;white-space:nowrap;margin:18rpx 0}.order-filter{display:inline-block;margin-right:28rpx;color:var(--roamly-muted);font-size:24rpx}.order-filter--active{color:var(--roamly-primary);font-weight:700}.order-card{margin-top:16rpx;padding:24rpx;background:#fff;border:1rpx solid var(--roamly-border);border-radius:16rpx}.order-status{color:var(--roamly-primary);font-size:24rpx;white-space:nowrap}
+.order-filters {
+  display: flex;
+  white-space: nowrap;
+  margin: 18rpx 0;
+}
+
+.order-filter {
+  display: inline-block;
+  margin-right: 28rpx;
+  color: var(--roamly-muted);
+  font-size: 24rpx;
+}
+
+.order-filter--active {
+  color: var(--roamly-primary);
+  font-weight: 700;
+}
+
+.order-card {
+  margin-top: 16rpx;
+  padding: 24rpx;
+  background: #fff;
+  border: 1rpx solid var(--roamly-border);
+  border-radius: 16rpx;
+}
+
+.order-status {
+  color: var(--roamly-primary);
+  font-size: 24rpx;
+  white-space: nowrap;
+}

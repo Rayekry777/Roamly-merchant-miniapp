@@ -1,2 +1,74 @@
-.invite-panel{display:grid;gap:16rpx;margin:24rpx 0;padding:24rpx;background:#fff;border:1rpx solid var(--roamly-border);border-radius:20rpx}.invite-panel input,.picker{padding:22rpx;background:var(--roamly-bg);border-radius:12rpx}.section-block{display:flex;align-items:center;justify-content:space-between}
-.qr-mask{position:fixed;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;padding:40rpx;background:rgb(36 35 49 / 52%)}.qr-dialog{width:min(620rpx,100%);padding:32rpx;border-radius:20rpx;background:#fff;text-align:center}.qr-dialog__head{display:flex;align-items:center;justify-content:space-between;font-size:32rpx;font-weight:700}.qr-close{color:var(--roamly-muted);font-size:24rpx;font-weight:400}.qr-dialog t-qrcode{display:block;width:288px;height:288px;margin:32rpx auto 20rpx}.qr-token{overflow-wrap:anywhere;color:var(--roamly-primary);font-size:24rpx}.qr-tip{margin-top:18rpx;color:var(--roamly-muted);font-size:23rpx}
+.invite-panel {
+  display: grid;
+  gap: 16rpx;
+  margin: 24rpx 0;
+  padding: 24rpx;
+  background: #fff;
+  border: 1rpx solid var(--roamly-border);
+  border-radius: 20rpx;
+}
+
+.invite-panel input,
+.picker {
+  padding: 22rpx;
+  background: var(--roamly-bg);
+  border-radius: 12rpx;
+}
+
+.section-block {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.qr-mask {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40rpx;
+  background: rgb(36 35 49 / 52%);
+}
+
+.qr-dialog {
+  width: min(620rpx, 100%);
+  padding: 32rpx;
+  border-radius: 20rpx;
+  background: #fff;
+  text-align: center;
+}
+
+.qr-dialog__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 32rpx;
+  font-weight: 700;
+}
+
+.qr-close {
+  color: var(--roamly-muted);
+  font-size: 24rpx;
+  font-weight: 400;
+}
+
+.qr-dialog t-qrcode {
+  display: block;
+  width: 288px;
+  height: 288px;
+  margin: 32rpx auto 20rpx;
+}
+
+.qr-token {
+  overflow-wrap: anywhere;
+  color: var(--roamly-primary);
+  font-size: 24rpx;
+}
+
+.qr-tip {
+  margin-top: 18rpx;
+  color: var(--roamly-muted);
+  font-size: 23rpx;
+}

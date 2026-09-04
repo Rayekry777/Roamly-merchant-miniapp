@@ -77,8 +77,16 @@ Page({
     }
     wx.navigateTo({ url: "/pages/vouchers/index" });
   },
-  openStaff() { if (this.data.current?.role !== "OWNER") { wx.showToast({ title: "仅店主管理员工", icon: "none" }); return; } wx.navigateTo({ url: "/pages/staff/index" }); },
-  openStaffAcceptance() { wx.navigateTo({ url: "/pages/staff/acceptance" }); },
+  openStaff() {
+    if (this.data.current?.role !== "OWNER") {
+      wx.showToast({ title: "仅店主管理员工", icon: "none" });
+      return;
+    }
+    wx.navigateTo({ url: "/pages/staff/index" });
+  },
+  openStaffAcceptance() {
+    wx.navigateTo({ url: "/pages/staff/acceptance" });
+  },
   async logout() {
     const confirmed = await new Promise<boolean>((resolve) => {
       wx.showModal({

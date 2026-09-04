@@ -52,7 +52,11 @@ function openSocket(): void {
   socket.onOpen(() => {
     retryCount = 0;
     heartbeatTimer = setInterval(() => {
-      try { socket?.send({ data: JSON.stringify({ type: "PING" }) }); } catch { /* 连接关闭时由 close 回调重连 */ }
+      try {
+        socket?.send({ data: JSON.stringify({ type: "PING" }) });
+      } catch {
+        /* 连接关闭时由 close 回调重连 */
+      }
     }, 15_000);
   });
   socket.onMessage((message) => {
@@ -60,7 +64,9 @@ function openSocket(): void {
       const payload = typeof message.data === "string" ? message.data : "";
       const event = JSON.parse(payload) as MerchantRealtimeEvent;
       if (event.type) listeners.forEach((listener) => listener(event));
-    } catch { /* 非事件消息不影响当前页面 */ }
+    } catch {
+      /* 非事件消息不影响当前页面 */
+    }
   });
   socket.onClose(() => {
     socket = undefined;
@@ -68,7 +74,9 @@ function openSocket(): void {
     heartbeatTimer = undefined;
     if (!stopped) scheduleReconnect();
   });
-  socket.onError(() => { /* close 回调统一处理重连 */ });
+  socket.onError(() => {
+    /* close 回调统一处理重连 */
+  });
 }
 
 function scheduleReconnect(): void {
