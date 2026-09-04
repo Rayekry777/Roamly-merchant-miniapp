@@ -2,5 +2,7 @@
   <view class="page-kicker">ROAMLY MERCHANT</view>
   <view class="page-heading">核销</view>
   <view class="page-rule" aria-hidden="true"></view>
+  <view class="verify-panel"><input maxlength="12" type="number" placeholder="输入12位券码" value="{{code}}" bindinput="onCode"/><button bindtap="scan">扫码</button><button class="primary-action" loading="{{loading}}" bindtap="preview">预览核销</button></view>
+  <view wx:if="{{error}}" class="error-panel">{{error}}</view>
+  <view wx:if="{{preview}}" class="section-block"><view><view class="section-title">{{preview.productTitle}}</view><view class="onboarding-note">券尾号 {{preview.codeLast4}} · 剩余 {{preview.remainingUseCount}} 次</view><view class="onboarding-note">抵扣 ¥{{preview.discountAmount / 100}}</view></view><button class="primary-action" bindtap="confirm">确认核销</button></view>
 </view>
-
