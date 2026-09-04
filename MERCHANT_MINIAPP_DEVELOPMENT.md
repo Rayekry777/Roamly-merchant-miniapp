@@ -1,7 +1,7 @@
 # Roamly 商户小程序契约
 
 ```yaml
-version: 5
+version: 6
 updatedAt: 2026-09-05
 scope: 商户入驻、经营、员工、券、核销与结算展示
 reviewStatus: accepted
@@ -105,6 +105,7 @@ deviceAcceptanceStatus: 未确认
 
 - 仅调用 `/v1/merchant/**`；成功结构为 `Result`、`PageResult`，认证使用 `Authorization: Bearer <token>`。
 - 订单页调用 `GET /v1/merchant/orders`，按 `PENDING_PAYMENT`（待支付）、`PAID`（已支付）、`CANCELED`（已取消）、`REFUNDING`（退款中）、`REFUNDED`（已退款）筛选并分页；结果只读展示所属门店订单和脱敏消费者业务 ID。
+- 订单入口在客户端只对具备 `merchant:order:read`（商户订单查看）权限的 `OWNER`（店主）和 `MANAGER`（店长）显示；`VERIFIER`（核销员）不展示入口，若直接访问接口则展示后端 `MERCHANT_FORBIDDEN`（商户无权操作）错误，不伪装为空列表。
 - API 层统一处理 401、403、404、409、429、503；页面消费适配后的领域结果，不直接解析响应包装。
 - `MERCHANT_FORBIDDEN`（商户无权操作）、`VOUCHER_CODE_INVALID`（券码无效）、`VOUCHER_NOT_USABLE`（券当前不可用）、`VOUCHER_SHOP_MISMATCH`（券与门店不匹配）、`VERIFICATION_ALREADY_COMPLETED`（核销已完成）保留独立文案。
 - 不兼容消费者接口、管理员接口、若依数字响应码、旧字段或旧 Token 键。
@@ -118,6 +119,7 @@ deviceAcceptanceStatus: 未确认
 |   18 | 媒体上传、入驻草稿/预览/提交         | 已实现 |
 |   20 | 四类券编辑和草稿生命周期             | 已实现 |
 |   21 | 审核结果、销售状态和下架             | 已实现 |
+|   23 | 门店订单只读查询与权限适配           | 已实现 |
 |   25 | 员工邀请与账号管理                   | 已实现 |
 |   26 | 手输、扫码、预览、确认和撤销         | 已实现 |
 |   27 | 动态二维码解析与 WebSocket 刷新      | 已实现（自动化；真机未确认） |
