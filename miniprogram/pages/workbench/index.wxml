@@ -2,5 +2,5 @@
   <view class="page-kicker">ROAMLY MERCHANT</view>
   <view class="page-heading">经营工作台</view>
   <view class="page-rule" aria-hidden="true"></view>
+  <view wx:if="{{summary}}" class="section-block"><view><view class="section-title">经营资金</view><view class="onboarding-note">冻结 ¥{{summary.frozenAmount / 100}} · 已确认 ¥{{summary.recognizedAmount / 100}}</view></view><view class="menu-state">净额 ¥{{summary.netAmount / 100}}</view></view>
 </view>
-
