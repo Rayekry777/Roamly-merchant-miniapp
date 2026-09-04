@@ -75,6 +75,7 @@ Page({
     }
     wx.navigateTo({ url: "/pages/vouchers/index" });
   },
+  openStaff() { if (this.data.current?.role !== "OWNER") { wx.showToast({ title: "仅店主管理员工", icon: "none" }); return; } wx.navigateTo({ url: "/pages/staff/index" }); },
   async logout() {
     const confirmed = await new Promise<boolean>((resolve) => {
       wx.showModal({

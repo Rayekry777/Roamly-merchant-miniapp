@@ -60,7 +60,7 @@
         <view><view class="menu-name">团购券</view><view class="menu-note">创建、预览和提交四类团购券</view></view>
         <view class="menu-state">进入 ›</view>
       </view>
-      <view class="menu-row {{canOperate ? '' : 'menu-row-disabled'}}">
+      <view class="menu-row {{canOperate ? '' : 'menu-row-disabled'}}" bindtap="openStaff">
         <view><view class="menu-name">员工与权限</view><view class="menu-note">邀请店长和核销员</view></view>
         <view class="menu-state">{{canOperate ? '可用' : '待激活'}}</view>
       </view>
