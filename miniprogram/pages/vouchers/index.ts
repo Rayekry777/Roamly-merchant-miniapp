@@ -1,6 +1,7 @@
 import {
   createMerchantVoucherProduct,
   listMerchantVoucherProducts,
+  offSaleMerchantVoucherProduct,
 } from "../../api/merchant-voucher";
 import { downloadBusinessImage } from "../../api/merchant-application";
 import { voucherDraftStore } from "../../store/voucher-draft";
@@ -173,6 +174,51 @@ Page({
       this.setData({ commandBusy: false });
     }
   },
+  offSale(event: WechatMiniprogram.TouchEvent) {
+    if (this.data.commandBusy) return;
+    const id = String(event.currentTarget.dataset.id || "");
+    const product = (
+      this.data.items as unknown as Array<
+        MerchantVoucherProduct & { id: string }
+      >
+    ).find((item) => item.id === id);
+    if (
+      !product ||
+      product.reviewStatus !== "APPROVED" ||
+      !product.saleStatus ||
+      !["ON_SALE", "SCHEDULED"].includes(product.saleStatus)
+    )
+      return;
+    wx.showModal({
+      title: "下架团购券",
+      content: "下架后消费者将无法继续购买，后续修改规则需重新提交审核。",
+      confirmText: "确认下架",
+      confirmColor: "#ff5f57",
+      success: (result) => {
+        if (result.confirm) void this.confirmOffSale(product);
+      },
+    });
+  },
+  async confirmOffSale(product: MerchantVoucherProduct) {
+    this.setData({ commandBusy: true });
+    const key = `merchant-voucher-off-sale-${product.id}-${product.version}`;
+    try {
+      await offSaleMerchantVoucherProduct(
+        product.id,
+        product.version,
+        "商户主动下架",
+        key,
+      );
+      wx.showToast({ title: "已下架", icon: "success" });
+      await this.load();
+    } catch (error) {
+      wx.showToast({ title: message(error), icon: "none" });
+      if (error instanceof ApiError && error.statusCode === 409)
+        await this.load();
+    } finally {
+      this.setData({ commandBusy: false });
+    }
+  },
 });
 
 function toListItem(product: MerchantVoucherProduct) {
@@ -198,6 +244,9 @@ function toListItem(product: MerchantVoucherProduct) {
     editable:
       product.reviewStatus === "DRAFT" || product.reviewStatus === "REJECTED",
     canDelete: product.reviewStatus === "DRAFT" && !product.submittedAt,
+    canOffSale:
+      product.reviewStatus === "APPROVED" &&
+      (product.saleStatus === "ON_SALE" || product.saleStatus === "SCHEDULED"),
   };
 }
 

@@ -58,6 +58,7 @@
       <view class="row-actions">
         <button wx:if="{{item.editable}}" data-id="{{item.id}}" bindtap="edit">编辑</button>
         <button data-id="{{item.id}}" bindtap="preview">预览</button>
+        <button wx:if="{{item.canOffSale}}" class="danger-action" data-id="{{item.id}}" bindtap="offSale">下架</button>
         <button data-id="{{item.id}}" bindtap="copy">复制</button>
         <button wx:if="{{item.canDelete}}" class="danger-action" data-id="{{item.id}}" bindtap="remove">删除</button>
       </view>

@@ -7,7 +7,7 @@ scope: 商户入驻、经营、员工、券、核销与结算展示
 reviewStatus: accepted
 designStatus: 已冻结
 implementationStatus: 已实现
-projectStatus: 阶段 20 已实现
+projectStatus: 阶段 21 已实现
 deviceAcceptanceStatus: 未确认
 ```
 
@@ -75,7 +75,7 @@ deviceAcceptanceStatus: 未确认
 
 - 阶段 20 的跨端状态、字段、接口和事务以 [四类券模型与商户建券详细设计](../Roamly/docs/stages/STAGE_20_VOUCHER_AUTHORING.md) 为准；本节负责商户小程序页面、交互、客户端状态和自动化，四类券建券闭环已实现。
 - 页面固定为 `/pages/vouchers/index`（团购券列表）、`/pages/vouchers/editor`（建券编辑）和 `/pages/vouchers/preview`（消费者视角预览）；“我的”中的团购券入口只对拥有 `merchant:voucher:manage`（团购券管理）权限的活动账号可用。
-- 列表提供审核状态分段筛选、券型筛选、关键词、真实空态和错误重试；展示封面、标题、券型、售价、库存、更新时间、中文状态以及编辑、预览、复制、删除动作。
+- 列表提供审核状态分段筛选、券型筛选、关键词、真实空态和错误重试；展示封面、标题、券型、售价、库存、更新时间、中文状态以及编辑、预览、复制、删除动作；审核通过且处于 `SCHEDULED`（待开售）或 `ON_SALE`（销售中）的券提供下架命令。
 - 新建先选择 `PACKAGE`（套餐券）、`CASH`（代金券）、`DISCOUNT`（折扣券）或 `MULTI_USE`（次卡），服务端创建空草稿后进入四步编辑；券型创建后不可切换。
 - 四步依次为基础信息、价格库存与销售期、有效期与使用规则、图片与提交预览；无关券型字段不渲染也不提交。
 - 封面一张、详情图最多九张，上传使用 `VOUCHER_COVER`（券封面）与 `VOUCHER_DETAIL`（券详情图）；草稿恢复通过 Bearer 私有下载生成临时文件，退出时清理。
@@ -116,7 +116,7 @@ deviceAcceptanceStatus: 未确认
 |   17 | 登录、会话、五种状态和“我的”         | 已实现 |
 |   18 | 媒体上传、入驻草稿/预览/提交         | 已实现 |
 |   20 | 四类券编辑和草稿生命周期             | 已实现 |
-|   21 | 审核结果、销售状态和下架             | 未实现 |
+|   21 | 审核结果、销售状态和下架             | 已实现 |
 |   25 | 员工邀请与账号管理                   | 未实现 |
 |   26 | 手输、扫码、预览、确认和撤销         | 未实现 |
 |   27 | 动态二维码解析与 WebSocket 刷新      | 未实现 |

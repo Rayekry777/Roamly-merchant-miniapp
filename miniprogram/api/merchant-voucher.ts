@@ -121,6 +121,24 @@ export async function submitMerchantVoucherProduct(
   return parseVoucherProduct(result.data);
 }
 
+export async function offSaleMerchantVoucherProduct(
+  productId: string,
+  version: number,
+  reason: string,
+  idempotencyKey: string,
+): Promise<MerchantVoucherProduct> {
+  const result = await request<
+    MerchantVoucherProduct,
+    { version: number; reason?: string }
+  >(`/v1/merchant/voucher-products/${productId}/off-sale`, {
+    method: "POST",
+    data: { version, reason: reason.trim() || undefined },
+    headers: { "Idempotency-Key": idempotencyKey },
+    showError: false,
+  });
+  return parseVoucherProduct(result.data);
+}
+
 export async function uploadVoucherImage(
   filePath: string,
   purpose: "VOUCHER_COVER" | "VOUCHER_DETAIL",
