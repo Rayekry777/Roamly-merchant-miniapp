@@ -3,7 +3,8 @@
     "pages/workbench/index",
     "pages/orders/index",
     "pages/verification/index",
-    "pages/me/index"
+    "pages/me/index",
+    "pages/login/index"
   ],
   "window": {
     "navigationBarTitleText": "Roamly 商户",

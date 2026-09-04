@@ -1,0 +1,125 @@
+.login-page {
+  min-height: 100vh;
+  padding: 88rpx 32rpx calc(40rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+  background: var(--roamly-bg);
+}
+
+.login-header {
+  padding: 20rpx 8rpx 48rpx;
+}
+
+.brand-mark {
+  display: flex;
+  width: 80rpx;
+  height: 80rpx;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 28rpx;
+  border-radius: 24rpx;
+  color: #ffffff;
+  background: var(--roamly-primary);
+  font-size: 42rpx;
+  font-weight: 800;
+}
+
+.brand-name {
+  color: var(--roamly-text);
+  font-size: 52rpx;
+  font-weight: 750;
+  line-height: 1.2;
+}
+
+.brand-copy,
+.login-foot {
+  color: var(--roamly-muted);
+  font-size: 26rpx;
+}
+
+.brand-copy {
+  margin-top: 14rpx;
+}
+
+.login-surface {
+  padding: 40rpx 32rpx;
+  border: 1rpx solid var(--roamly-border);
+  border-radius: var(--roamly-card-radius);
+  background: var(--roamly-surface);
+  box-shadow: var(--roamly-shadow);
+}
+
+.field-label {
+  margin: 0 0 14rpx 4rpx;
+  color: var(--roamly-text);
+  font-size: 24rpx;
+  font-weight: 650;
+}
+
+.field-label-spaced {
+  margin-top: 30rpx;
+}
+
+.field-input {
+  width: 100%;
+  height: 92rpx;
+  padding: 0 26rpx;
+  border: 1rpx solid var(--roamly-border);
+  border-radius: var(--roamly-control-radius);
+  box-sizing: border-box;
+  color: var(--roamly-text);
+  background: #fafaff;
+  font-size: 28rpx;
+}
+
+.code-row {
+  display: flex;
+  min-width: 0;
+  gap: 16rpx;
+}
+
+.code-input {
+  min-width: 0;
+  flex: 1;
+}
+
+.code-button {
+  width: 210rpx;
+  height: 92rpx;
+  margin: 0;
+  border: 1rpx solid rgba(130, 117, 255, 0.24);
+  border-radius: var(--roamly-control-radius);
+  color: var(--roamly-accent);
+  background: rgba(130, 117, 255, 0.08);
+  font-size: 25rpx;
+  line-height: 90rpx;
+}
+
+.code-button::after,
+.primary-button::after,
+.logout-button::after {
+  border: 0;
+}
+
+.form-error {
+  margin: 22rpx 6rpx 0;
+  color: #d84d49;
+  font-size: 24rpx;
+  line-height: 1.5;
+}
+
+.primary-button {
+  height: 94rpx;
+  margin-top: 36rpx;
+  border: 0;
+  border-radius: var(--roamly-control-radius);
+  color: #ffffff;
+  background: var(--roamly-primary);
+  font-size: 29rpx;
+  font-weight: 700;
+  line-height: 94rpx;
+}
+
+.login-foot {
+  margin-top: 30rpx;
+  text-align: center;
+}

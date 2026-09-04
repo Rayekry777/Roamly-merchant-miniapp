@@ -1,1 +1,237 @@
-/* 页面样式由全局 Roamly 设计基线提供。 */
+.state-panel,
+.error-panel,
+.profile-panel,
+.status-panel,
+.section-block {
+  margin-top: 28rpx;
+  border: 1rpx solid var(--roamly-border);
+  border-radius: var(--roamly-card-radius);
+  background: var(--roamly-surface);
+}
+
+.state-panel,
+.error-panel {
+  padding: 36rpx;
+  color: var(--roamly-muted);
+  font-size: 26rpx;
+  text-align: center;
+}
+
+.error-panel {
+  color: #d84d49;
+}
+
+.profile-panel {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  padding: 34rpx 30rpx;
+  box-shadow: var(--roamly-shadow);
+}
+
+.logged-out {
+  margin-top: 44rpx;
+}
+
+.avatar {
+  width: 104rpx;
+  height: 104rpx;
+  flex: 0 0 104rpx;
+  border-radius: 34rpx;
+}
+
+.avatar-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  background: var(--roamly-primary);
+  font-size: 40rpx;
+  font-weight: 750;
+}
+
+.profile-main {
+  min-width: 0;
+  flex: 1;
+  margin-left: 24rpx;
+}
+
+.name-row {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 14rpx;
+}
+
+.profile-name {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--roamly-text);
+  font-size: 34rpx;
+  font-weight: 750;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.profile-subtitle {
+  margin-top: 10rpx;
+  color: var(--roamly-muted);
+  font-size: 24rpx;
+}
+
+.status-badge {
+  flex: none;
+  padding: 8rpx 14rpx;
+  border-radius: 18rpx;
+  font-size: 21rpx;
+  font-weight: 650;
+}
+
+.status-active {
+  color: #13795b;
+  background: #e7f7f0;
+}
+
+.status-pending {
+  color: #6c59d9;
+  background: #f0edff;
+}
+
+.status-warning {
+  color: #b14d39;
+  background: #fff0ec;
+}
+
+.status-disabled,
+.status-neutral {
+  color: #65636d;
+  background: #f0f0f4;
+}
+
+.status-panel {
+  padding: 28rpx 30rpx;
+  border-left: 8rpx solid var(--roamly-accent);
+  border-radius: 8rpx var(--roamly-card-radius) var(--roamly-card-radius) 8rpx;
+}
+
+.status-panel-active {
+  border-left-color: #39a47d;
+}
+
+.status-panel-warning,
+.status-panel-disabled {
+  border-left-color: var(--roamly-primary);
+}
+
+.status-title,
+.section-title {
+  color: var(--roamly-text);
+  font-size: 27rpx;
+  font-weight: 700;
+}
+
+.status-copy {
+  margin-top: 10rpx;
+  color: var(--roamly-muted);
+  font-size: 24rpx;
+  line-height: 1.6;
+}
+
+.section-block {
+  padding: 30rpx;
+}
+
+.shop-row {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  margin-top: 24rpx;
+}
+
+.shop-mark {
+  display: flex;
+  width: 72rpx;
+  height: 72rpx;
+  flex: 0 0 72rpx;
+  align-items: center;
+  justify-content: center;
+  border-radius: 24rpx;
+  color: var(--roamly-accent);
+  background: rgba(130, 117, 255, 0.1);
+  font-size: 27rpx;
+  font-weight: 750;
+}
+
+.shop-copy {
+  min-width: 0;
+  margin-left: 20rpx;
+}
+
+.shop-name,
+.menu-name {
+  color: var(--roamly-text);
+  font-size: 27rpx;
+  font-weight: 650;
+}
+
+.shop-address,
+.menu-note {
+  margin-top: 7rpx;
+  overflow: hidden;
+  color: var(--roamly-muted);
+  font-size: 23rpx;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.menu-row {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20rpx;
+  padding: 26rpx 0;
+  border-bottom: 1rpx solid var(--roamly-border);
+}
+
+.menu-row:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.menu-row-disabled {
+  opacity: 0.58;
+}
+
+.menu-state {
+  flex: none;
+  color: var(--roamly-accent);
+  font-size: 23rpx;
+}
+
+.primary-action,
+.logout-button {
+  height: 92rpx;
+  border-radius: var(--roamly-control-radius);
+  font-size: 28rpx;
+  font-weight: 700;
+  line-height: 92rpx;
+}
+
+.primary-action {
+  margin-top: 30rpx;
+  color: #ffffff;
+  background: var(--roamly-primary);
+}
+
+.logout-button {
+  margin-top: 32rpx;
+  border: 1rpx solid var(--roamly-border);
+  color: var(--roamly-text);
+  background: var(--roamly-surface);
+}
+
+.primary-action::after,
+.logout-button::after {
+  border: 0;
+}

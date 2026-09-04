@@ -2,5 +2,66 @@
   <view class="page-kicker">ROAMLY MERCHANT</view>
   <view class="page-heading">我的</view>
   <view class="page-rule" aria-hidden="true"></view>
-</view>
 
+  <view wx:if="{{loading}}" class="state-panel">正在同步商户身份...</view>
+
+  <block wx:elif="{{!loggedIn}}">
+    <view class="profile-panel logged-out">
+      <view class="avatar avatar-empty">商</view>
+      <view class="profile-main">
+        <view class="profile-name">登录商户账号</view>
+        <view class="profile-subtitle">查看入驻进度与门店经营状态</view>
+      </view>
+    </view>
+    <view wx:if="{{error}}" class="error-panel">{{error}}</view>
+    <button class="primary-action" bindtap="openLogin">手机号登录</button>
+  </block>
+
+  <block wx:else>
+    <view class="profile-panel">
+      <image wx:if="{{current.avatarUrl}}" class="avatar" src="{{current.avatarUrl}}" mode="aspectFill" />
+      <view wx:else class="avatar avatar-empty">{{avatarText}}</view>
+      <view class="profile-main">
+        <view class="name-row">
+          <view class="profile-name">{{current.nickname}}</view>
+          <view class="status-badge status-{{statusTone}}">{{current.statusLabel}}</view>
+        </view>
+        <view class="profile-subtitle">{{current.maskedPhone}} · {{current.roleLabel}}</view>
+      </view>
+    </view>
+
+    <view class="status-panel status-panel-{{statusTone}}">
+      <view class="status-title">账号状态</view>
+      <view class="status-copy">{{guidance}}</view>
+    </view>
+
+    <view wx:if="{{current.shop}}" class="section-block">
+      <view class="section-title">当前门店</view>
+      <view class="shop-row">
+        <view class="shop-mark">店</view>
+        <view class="shop-copy">
+          <view class="shop-name">{{current.shop.name}}</view>
+          <view class="shop-address">{{current.shop.address}}</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="section-block">
+      <view class="section-title">经营入口</view>
+      <view class="menu-row {{canOperate ? '' : 'menu-row-disabled'}}">
+        <view><view class="menu-name">门店与团购券</view><view class="menu-note">管理门店资料与团购商品</view></view>
+        <view class="menu-state">{{canOperate ? '可用' : '待激活'}}</view>
+      </view>
+      <view class="menu-row {{canOperate ? '' : 'menu-row-disabled'}}">
+        <view><view class="menu-name">员工与权限</view><view class="menu-note">邀请店长和核销员</view></view>
+        <view class="menu-state">{{canOperate ? '可用' : '待激活'}}</view>
+      </view>
+      <view class="menu-row {{canOperate ? '' : 'menu-row-disabled'}}">
+        <view><view class="menu-name">经营与结算</view><view class="menu-note">查看经营摘要和结算记录</view></view>
+        <view class="menu-state">{{canOperate ? '可用' : '待激活'}}</view>
+      </view>
+    </view>
+
+    <button class="logout-button" bindtap="logout">退出登录</button>
+  </block>
+</view>

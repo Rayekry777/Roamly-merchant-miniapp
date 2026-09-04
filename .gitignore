@@ -7,4 +7,5 @@ coverage/
 .env
 .env.*
 !.env.example
+project.private.config.json
 *.log
