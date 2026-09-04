@@ -1,7 +1,7 @@
 # Roamly 商户小程序契约
 
 ```yaml
-version: 2
+version: 3
 updatedAt: 2026-09-04
 scope: 商户入驻、经营、员工、券、核销与结算展示
 reviewStatus: accepted
@@ -57,6 +57,12 @@ deviceAcceptanceStatus: 未确认
 - 草稿可保存；提交前提供完整预览。审核中锁定编辑，驳回后展示原因并恢复编辑。
 - 图片先上传再绑定，失败项允许单独重试；离开页面保留未提交草稿。
 - 本端只展示审核结果，不提供平台审核、门店强制激活或停用操作。
+- 阶段 18 页面固定为 `/pages/onboarding/index` 与 `/pages/onboarding/preview`。编辑页使用四步表单：主体与联系人、门店与地图、营业时间与图片、Mock 结算；预览页按相同顺序只读展示并在底部提供提交确认。
+- 门店字典只消费 `/v1/merchant/reference/cities` 与 `/v1/merchant/reference/shop-types`；地图通过 `wx.chooseLocation` 取得地址、经纬度，取消选择不清空已有值。
+- 营业时间使用星期一至星期日七行，每日可设休息或一至三个时段；页面显示中文星期，接口提交 `MONDAY`（星期一）至 `SUNDAY`（星期日）。
+- 营业执照只允许一张，经营图片最多九张。编辑期间优先展示本地临时路径，草稿恢复后通过带 Bearer 的内容下载接口生成临时文件，不把证件 URL 写入持久缓存。
+- 草稿保存携带服务端 `version`；409 时放弃本地旧版本并重新加载。提交按钮生成并复用一次 `Idempotency-Key`，成功或资料发生变化后才清除。
+- `PENDING`（审核中）进入预览只读态；`REJECTED`（审核未通过）在“我的”和入驻页展示驳回原因并允许恢复编辑；`ACTIVE`（已激活）不显示重复入驻入口。
 
 ## 团购券
 
