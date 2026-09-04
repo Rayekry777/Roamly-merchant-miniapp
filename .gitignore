@@ -1,0 +1,9 @@
+.idea/
+.vscode/
+node_modules/
+miniprogram_npm/
+coverage/
+.env
+.env.*
+!.env.example
+*.log
