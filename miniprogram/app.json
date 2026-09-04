@@ -9,8 +9,9 @@
     "pages/onboarding/preview",
     "pages/vouchers/index",
     "pages/vouchers/editor",
-    "pages/vouchers/preview"
-    ,"pages/staff/index"
+    "pages/vouchers/preview",
+    "pages/staff/index",
+    "pages/staff/acceptance"
   ],
   "window": {
     "navigationBarTitleText": "Roamly 商户",

@@ -56,6 +56,10 @@
 
     <view class="section-block">
       <view class="section-title">经营入口</view>
+      <view wx:if="{{canAcceptInvitation}}" class="menu-row" bindtap="openStaffAcceptance">
+        <view><view class="menu-name">接受员工邀请</view><view class="menu-note">使用店主发来的邀请码加入门店</view></view>
+        <view class="menu-state">进入 ›</view>
+      </view>
       <view wx:if="{{canManageVouchers}}" class="menu-row" bindtap="openVouchers">
         <view><view class="menu-name">团购券</view><view class="menu-note">创建、预览和提交四类团购券</view></view>
         <view class="menu-state">进入 ›</view>
