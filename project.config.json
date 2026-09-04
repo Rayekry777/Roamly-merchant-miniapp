@@ -1,0 +1,24 @@
+{
+  "appid": "touristappid",
+  "projectname": "roamly-merchant-miniapp",
+  "compileType": "miniprogram",
+  "miniprogramRoot": "miniprogram/",
+  "srcMiniprogramRoot": "miniprogram/",
+  "libVersion": "3.16.1",
+  "setting": {
+    "es6": true,
+    "enhance": true,
+    "postcss": true,
+    "minified": true,
+    "minifyWXSS": true,
+    "minifyWXML": true,
+    "packNpmManually": true,
+    "packNpmRelationList": [
+      {
+        "packageJsonPath": "./package.json",
+        "miniprogramNpmDistDir": "./miniprogram/"
+      }
+    ],
+    "useCompilerPlugins": ["typescript"]
+  }
+}

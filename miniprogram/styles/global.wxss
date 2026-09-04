@@ -1,0 +1,51 @@
+page {
+  min-height: 100%;
+  color: var(--roamly-text);
+  background: var(--roamly-bg);
+  font-family:
+    -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei",
+    sans-serif;
+}
+
+.page-shell {
+  min-height: 100vh;
+  padding: 36rpx 28rpx calc(40rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+}
+
+.page-heading {
+  margin: 0;
+  font-size: 48rpx;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.page-kicker {
+  margin-bottom: 12rpx;
+  color: var(--roamly-accent);
+  font-size: 22rpx;
+  font-weight: 600;
+}
+
+.page-rule {
+  display: flex;
+  gap: 12rpx;
+  margin-top: 32rpx;
+}
+
+.page-rule::before,
+.page-rule::after {
+  height: 8rpx;
+  border-radius: 4rpx;
+  content: "";
+}
+
+.page-rule::before {
+  width: 160rpx;
+  background: var(--roamly-primary);
+}
+
+.page-rule::after {
+  width: 72rpx;
+  background: var(--roamly-accent);
+}

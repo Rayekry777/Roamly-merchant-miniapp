@@ -1,0 +1,4 @@
+{
+  "desc": "Roamly 商户小程序页面索引",
+  "rules": [{ "action": "disallow", "page": "*" }]
+}

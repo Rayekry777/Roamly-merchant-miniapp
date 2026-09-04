@@ -3,6 +3,7 @@
 node_modules/
 miniprogram_npm/
 coverage/
+.miniprogram-ci/
 .env
 .env.*
 !.env.example

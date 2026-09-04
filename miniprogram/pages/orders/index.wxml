@@ -1,0 +1,6 @@
+<view class="page-shell">
+  <view class="page-kicker">ROAMLY MERCHANT</view>
+  <view class="page-heading">订单</view>
+  <view class="page-rule" aria-hidden="true"></view>
+</view>
+
