@@ -104,6 +104,7 @@ deviceAcceptanceStatus: 未确认
 ## 接口消费
 
 - 仅调用 `/v1/merchant/**`；成功结构为 `Result`、`PageResult`，认证使用 `Authorization: Bearer <token>`。
+- 订单页调用 `GET /v1/merchant/orders`，按 `PENDING_PAYMENT`（待支付）、`PAID`（已支付）、`CANCELED`（已取消）、`REFUNDING`（退款中）、`REFUNDED`（已退款）筛选并分页；结果只读展示所属门店订单和脱敏消费者业务 ID。
 - API 层统一处理 401、403、404、409、429、503；页面消费适配后的领域结果，不直接解析响应包装。
 - `MERCHANT_FORBIDDEN`（商户无权操作）、`VOUCHER_CODE_INVALID`（券码无效）、`VOUCHER_NOT_USABLE`（券当前不可用）、`VOUCHER_SHOP_MISMATCH`（券与门店不匹配）、`VERIFICATION_ALREADY_COMPLETED`（核销已完成）保留独立文案。
 - 不兼容消费者接口、管理员接口、若依数字响应码、旧字段或旧 Token 键。

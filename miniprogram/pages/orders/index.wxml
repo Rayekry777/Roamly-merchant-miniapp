@@ -1,6 +1,1 @@
-<view class="page-shell">
-  <view class="page-kicker">ROAMLY MERCHANT</view>
-  <view class="page-heading">订单</view>
-  <view class="page-rule" aria-hidden="true"></view>
-</view>
-
+<view class="page-shell"><view class="page-kicker">ROAMLY MERCHANT</view><view class="page-heading">订单</view><view class="page-rule" aria-hidden="true"></view><scroll-view class="order-filters" scroll-x><view wx:for="{{statuses}}" wx:key="value" class="order-filter {{status === item.value ? 'order-filter--active' : ''}}" data-status="{{item.value}}" bindtap="selectStatus">{{item.label}}</view></scroll-view><view wx:if="{{loading && !orders.length}}" class="state-panel">正在加载订单...</view><view wx:elif="{{error && !orders.length}}" class="error-panel">{{error}}</view><view wx:elif="{{!orders.length}}" class="state-panel">暂无订单</view><view wx:else><view wx:for="{{orders}}" wx:key="id" class="order-card section-block"><view><view class="section-title">{{item.productTitle}}</view><view class="onboarding-note">订单 {{item.orderNo}} · 消费者 {{item.userId}}</view><view class="onboarding-note">数量 {{item.quantity}} · ¥{{item.payAmount / 100}}</view></view><view class="order-status">{{item.status === 'PENDING_PAYMENT' ? '待支付' : item.status === 'PAID' ? '已支付' : item.status === 'CANCELED' ? '已取消' : item.status === 'REFUNDING' ? '退款中' : '已退款'}}</view></view><view wx:if="{{loading}}" class="state-panel">加载中...</view></view></view>
