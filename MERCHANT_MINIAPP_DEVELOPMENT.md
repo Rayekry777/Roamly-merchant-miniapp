@@ -7,7 +7,7 @@ scope: 商户入驻、经营、员工、券、核销与结算展示
 reviewStatus: accepted
 designStatus: 已冻结
 implementationStatus: 已实现
-projectStatus: 阶段 29 已实现
+projectStatus: 阶段 30 已实现
 deviceAcceptanceStatus: 未确认
 ```
 
