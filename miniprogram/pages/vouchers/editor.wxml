@@ -1,7 +1,6 @@
 <app-navbar title="编辑团购券" />
 
 <view class="page-shell page-shell--subpage editor-page page-enter">
-  <view class="page-kicker">VOUCHER STUDIO</view>
   <view class="heading-row">
     <view class="heading-copy">
       <view class="page-heading">编辑团购券</view>

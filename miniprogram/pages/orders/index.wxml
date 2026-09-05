@@ -1,7 +1,6 @@
 <app-navbar title="门店订单" />
 
 <view class="page-shell page-shell--subpage orders-page page-enter">
-  <view class="page-kicker">STORE ORDERS</view>
   <view class="page-heading">门店订单</view>
   <view class="page-copy">订单状态和金额均以服务端结果为准</view>
 

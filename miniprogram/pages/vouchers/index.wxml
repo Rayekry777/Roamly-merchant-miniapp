@@ -1,7 +1,6 @@
 <app-navbar title="团购券" />
 
 <view class="page-shell page-shell--subpage voucher-list-page page-enter">
-  <view class="page-kicker">VOUCHER STUDIO</view>
   <view class="heading-row">
     <view>
       <view class="page-heading">团购券</view>

@@ -35,10 +35,7 @@ button::after {
   max-width: 100%;
   min-height: 100vh;
   overflow-x: hidden;
-  padding-top: 28rpx;
-  padding-right: 28rpx;
-  padding-bottom: calc(148rpx + env(safe-area-inset-bottom));
-  padding-left: 28rpx;
+  padding: 28rpx 28rpx calc(148rpx + env(safe-area-inset-bottom));
   box-sizing: border-box;
 }
 
@@ -55,14 +52,6 @@ button::after {
   font-size: 48rpx;
   font-weight: 750;
   line-height: 1.25;
-}
-
-.page-kicker {
-  margin-bottom: 10rpx;
-  color: var(--roamly-accent);
-  font-size: 21rpx;
-  font-weight: 700;
-  letter-spacing: 2rpx;
 }
 
 .page-rule {

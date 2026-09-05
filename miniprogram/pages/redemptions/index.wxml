@@ -1,7 +1,6 @@
 <app-navbar title="核销记录" />
 
 <view class="page-shell page-shell--subpage redemption-page page-enter">
-  <view class="page-kicker">REDEMPTION HISTORY</view>
   <view class="page-heading">核销记录</view>
   <view class="page-copy">实时展示当前门店的核销与撤销结果</view>
 
@@ -37,4 +36,3 @@
 </view>
 
 <success-motion id="success-motion" message="撤销成功" />
-

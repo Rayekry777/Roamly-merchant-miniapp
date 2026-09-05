@@ -1,7 +1,6 @@
 <app-navbar title="结算记录" />
 
 <view class="page-shell page-shell--subpage settlement-page page-enter">
-  <view class="page-kicker">SETTLEMENTS</view>
   <view class="page-heading">结算记录</view>
   <view class="page-copy">结算数据以服务端批次结果为准</view>
 
@@ -29,4 +28,3 @@
     <view wx:elif="{{!hasMore}}" class="list-footer">没有更多结算记录了</view>
   </view>
 </view>
-

@@ -2,7 +2,6 @@
 
 <view class="page-shell operations page-enter">
   <view class="operations-hero">
-    <view class="page-kicker">BUSINESS CENTER</view>
     <view class="page-heading">经营中心</view>
     <view class="operations-hero__copy">{{shopName}} · {{roleLabel}}</view>
   </view>

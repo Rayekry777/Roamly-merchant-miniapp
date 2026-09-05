@@ -2,7 +2,6 @@
 
 <view class="page-shell page-shell--subpage verify-page page-enter">
   <view class="verify-heading">
-    <view class="page-kicker">VOUCHER REDEMPTION</view>
     <view class="page-heading">核销服务</view>
     <view class="verify-copy">扫码或输入 12 位券码，核对信息后再确认</view>
   </view>
