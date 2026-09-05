@@ -3,19 +3,6 @@ export function formatFen(value?: number | null): string {
   return (amount / 100).toFixed(2);
 }
 
-export function yuanToFen(value: string): number {
-  const normalized = value.trim();
-  if (!normalized) return 0;
-  if (!/^\d+(?:\.\d{1,2})?$/.test(normalized)) {
-    throw new Error("消费金额最多保留两位小数");
-  }
-  const amount = Math.round(Number(normalized) * 100);
-  if (!Number.isSafeInteger(amount) || amount < 0) {
-    throw new Error("请输入正确的消费金额");
-  }
-  return amount;
-}
-
 export function formatDateTime(value?: string | null): string {
   if (!value) return "--";
   const normalized = value.replace("T", " ");

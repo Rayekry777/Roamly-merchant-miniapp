@@ -4,14 +4,12 @@ import {
   type Redemption,
 } from "../../api/redemption";
 import { merchantStore } from "../../store/merchant";
-import { formatDateTime, formatFen } from "../../utils/format";
+import { formatDateTime } from "../../utils/format";
 import { guardMerchantPermission } from "../../utils/merchant-guard";
 import { connectMerchantRealtime } from "../../utils/realtime";
 
 type RedemptionView = Redemption & {
   voucherLast4: string;
-  consumptionAmountText: string;
-  discountAmountText: string;
   redeemedTimeText: string;
   statusText: string;
   statusTone: string;
@@ -23,8 +21,6 @@ function toView(item: Redemption): RedemptionView {
   return {
     ...item,
     voucherLast4: item.voucherId.slice(-4),
-    consumptionAmountText: formatFen(item.consumptionAmount),
-    discountAmountText: formatFen(item.discountAmount),
     redeemedTimeText: formatDateTime(item.redeemedTime),
     statusText: item.status === "REVERSED" ? "已撤销" : "核销成功",
     statusTone: item.status === "REVERSED" ? "muted" : "success",

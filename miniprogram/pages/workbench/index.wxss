@@ -271,6 +271,12 @@
   font-weight: 400;
 }
 
+.receipt-note {
+  margin-top: 4rpx;
+  color: #9b99a3;
+  font-size: 21rpx;
+}
+
 .receipt-link {
   margin-top: 8rpx;
   color: var(--roamly-accent);

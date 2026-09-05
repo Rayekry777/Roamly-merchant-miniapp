@@ -5,6 +5,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   confirmRedemption,
   listMerchantRedemptions,
+  previewRedemption,
   reverseRedemption,
 } from "../miniprogram/api/redemption";
 import {
@@ -14,7 +15,6 @@ import {
 import {
   formatFen,
   settlementStatus,
-  yuanToFen,
 } from "../miniprogram/utils/format";
 
 const root = resolve(process.cwd(), "miniprogram");
@@ -55,6 +55,7 @@ describe("商户端三栏体验与动效", () => {
     expect(template).toContain("扫码验券");
     expect(template).toContain("输码验券");
     expect(template).toContain("本店经营资金总计");
+    expect(template).toContain("结算记录包含历史批次和冲回调整");
     expect(template).toContain("去管理版");
     expect(styles).toContain("var(--roamly-primary)");
     expect(styles).toContain("var(--roamly-accent)");
@@ -106,8 +107,6 @@ describe("商户端三栏体验与动效", () => {
 
   it("金额和结算状态使用统一展示规则", () => {
     expect(formatFen(5380)).toBe("53.80");
-    expect(yuanToFen("53.80")).toBe(5380);
-    expect(() => yuanToFen("1.234")).toThrowError("消费金额最多保留两位小数");
     expect(settlementStatus("SUCCEEDED")).toEqual({
       text: "已结算",
       tone: "success",
@@ -142,8 +141,6 @@ describe("核销与结算现有接口封装", () => {
                 status: "SUCCEEDED",
                 useCount: 1,
                 remainingUseCount: 0,
-                consumptionAmount: 0,
-                discountAmount: 5380,
                 redeemedTime: "2026-09-05T12:00:00",
               };
         options.success?.({
@@ -165,6 +162,13 @@ describe("核销与结算现有接口封装", () => {
     });
     expect(calls[1]?.[0].header).toMatchObject({
       "Idempotency-Key": "reverse-fixed-key",
+    });
+  });
+
+  it("核销预览请求只提交券码", async () => {
+    await previewRedemption("123456789012");
+    expect(vi.mocked(wx.request).mock.calls[0]?.[0].data).toEqual({
+      code: "123456789012",
     });
   });
 

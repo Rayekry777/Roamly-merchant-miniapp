@@ -4,20 +4,17 @@ import {
   confirmRedemption,
   type RedemptionPreview,
 } from "../../api/redemption";
-import { formatDateTime, formatFen, yuanToFen } from "../../utils/format";
+import { formatDateTime } from "../../utils/format";
 import { guardMerchantPermission } from "../../utils/merchant-guard";
 import { connectMerchantRealtime } from "../../utils/realtime";
 
 type RedemptionPreviewView = RedemptionPreview & {
-  consumptionAmountText: string;
-  discountAmountText: string;
   expiresAtText: string;
 };
 
 Page({
   data: {
     code: "",
-    consumptionYuan: "",
     loading: false,
     preview: null as RedemptionPreviewView | null,
     error: "",
@@ -68,9 +65,6 @@ Page({
   onCode(e: WechatMiniprogram.Input) {
     this.setData({ code: e.detail.value.replace(/\D/g, "").slice(0, 12) });
   },
-  onConsumption(e: WechatMiniprogram.Input) {
-    this.setData({ consumptionYuan: e.detail.value.trim() });
-  },
   async scan() {
     wx.scanCode({
       onlyFromCamera: true,
@@ -99,18 +93,9 @@ Page({
   async previewCode() {
     if (!/^\d{12}$/.test(this.data.code))
       return wx.showToast({ title: "请输入12位券码或扫码", icon: "none" });
-    let consumptionAmount = 0;
-    try {
-      consumptionAmount = yuanToFen(this.data.consumptionYuan);
-    } catch (error) {
-      return wx.showToast({
-        title: error instanceof Error ? error.message : "消费金额格式错误",
-        icon: "none",
-      });
-    }
     this.setData({ loading: true, error: "", preview: null });
     try {
-      const r = await previewRedemption(this.data.code, consumptionAmount);
+      const r = await previewRedemption(this.data.code);
       if (!r.data) throw new Error("券码预览响应格式异常");
       this.applyPreview(r.data);
     } catch (e) {
@@ -134,7 +119,6 @@ Page({
       this.setData({
         preview: null,
         code: "",
-        consumptionYuan: "",
         success: true,
         error: "",
       });
@@ -150,8 +134,6 @@ Page({
     this.setData({
       preview: {
         ...value,
-        consumptionAmountText: formatFen(value.consumptionAmount),
-        discountAmountText: formatFen(value.discountAmount),
         expiresAtText: formatDateTime(value.expiresAt),
       },
       success: false,

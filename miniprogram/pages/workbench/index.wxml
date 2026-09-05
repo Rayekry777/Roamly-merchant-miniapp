@@ -71,8 +71,9 @@
       </view>
     </view>
     <view wx:if="{{financeExpanded}}" class="receipt-body">
-      <view class="receipt-row"><text>已确认金额</text><strong>{{summary.recognizedAmountText}}<small wx:if="{{summary.recognizedAmountText !== '--'}}">元</small></strong></view>
-      <view class="receipt-row"><text>商户净额</text><strong>{{summary.netAmountText}}<small wx:if="{{summary.netAmountText !== '--'}}">元</small></strong></view>
+      <view class="receipt-row"><text>当前确认收入</text><strong>{{summary.recognizedAmountText}}<small wx:if="{{summary.recognizedAmountText !== '--'}}">元</small></strong></view>
+      <view class="receipt-row"><text>当前商户净额</text><strong>{{summary.netAmountText}}<small wx:if="{{summary.netAmountText !== '--'}}">元</small></strong></view>
+      <view class="receipt-note">结算记录包含历史批次和冲回调整</view>
       <view wx:if="{{financeError}}" class="receipt-error">{{financeError}}</view>
       <view wx:if="{{canFinance}}" class="receipt-link pressable" bind:tap="openSettlements">查看结算记录</view>
     </view>

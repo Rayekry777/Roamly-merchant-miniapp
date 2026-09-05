@@ -5,9 +5,12 @@ export type RedemptionPreview = {
   voucherId: string;
   codeLast4: string;
   productTitle: string;
+  productType?: string;
+  productTypeLabel?: string;
+  benefitText?: string;
+  validityText?: string;
+  usageRules?: string;
   remainingUseCount: number;
-  consumptionAmount: number;
-  discountAmount: number;
   expiresAt: string;
 };
 export type Redemption = {
@@ -18,16 +21,14 @@ export type Redemption = {
   status: string;
   useCount: number;
   remainingUseCount: number;
-  consumptionAmount: number;
-  discountAmount: number;
   redeemedTime: string;
   reversedTime?: string;
   reversalReason?: string;
 };
-export function previewRedemption(code: string, consumptionAmount = 0) {
+export function previewRedemption(code: string) {
   return request<RedemptionPreview>(
     "/v1/merchant/redemptions/previews/by-code",
-    { method: "POST", data: { code, consumptionAmount } },
+    { method: "POST", data: { code } },
   );
 }
 export function previewRedemptionByQrToken(token: string) {

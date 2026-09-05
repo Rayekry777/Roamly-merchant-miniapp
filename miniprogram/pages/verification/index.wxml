@@ -11,10 +11,6 @@
       <text>券码</text>
       <input maxlength="12" type="number" placeholder="请输入 12 位券码" value="{{code}}" bindinput="onCode" focus="{{manualFocus}}" />
     </label>
-    <label class="verify-field">
-      <text>本次消费金额（选填）</text>
-      <input type="digit" placeholder="未填写则按 0 元预览" value="{{consumptionYuan}}" bindinput="onConsumption" />
-    </label>
     <view class="verify-actions">
       <button class="secondary-action" disabled="{{loading}}" bindtap="scan"><t-icon name="scan" size="34rpx" /> 扫码</button>
       <button class="primary-action" loading="{{loading}}" disabled="{{loading}}" bindtap="previewCode">预览核销</button>
@@ -34,16 +30,17 @@
     <view class="preview-grid">
       <view><text>券码尾号</text><strong>{{preview.codeLast4}}</strong></view>
       <view><text>预览有效期</text><strong>{{preview.expiresAtText}}</strong></view>
-      <view><text>消费金额</text><strong>¥{{preview.consumptionAmountText}}</strong></view>
-      <view><text>本次抵扣</text><strong class="coral">¥{{preview.discountAmountText}}</strong></view>
+      <view><text>券型</text><strong>{{preview.productTypeLabel || '团购券'}}</strong></view>
+      <view><text>券面权益</text><strong>{{preview.benefitText || '--'}}</strong></view>
     </view>
+    <view wx:if="{{preview.usageRules}}" class="preview-rules">{{preview.usageRules}}</view>
     <button class="confirm-action primary-action" loading="{{loading}}" disabled="{{loading}}" bindtap="confirm">确认核销</button>
   </view>
 
   <view wx:if="{{success}}" class="success-card surface-card">
     <view class="success-mark">✓</view>
     <view class="success-title">核销成功</view>
-    <view class="success-copy">本次核销已由服务端确认，请勿重复操作</view>
+    <view class="success-copy">本次核销已由服务端确认，请勿重复操作；如有额外消费，请由顾客与商户线下微信支付。</view>
     <view class="success-actions">
       <button class="secondary-action" bindtap="openRecords">查看记录</button>
       <button class="primary-action" bindtap="continueRedemption">继续核销</button>

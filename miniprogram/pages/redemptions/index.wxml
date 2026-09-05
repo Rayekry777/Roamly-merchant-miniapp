@@ -21,8 +21,7 @@
         <view class="record-status record-status--{{item.statusTone}}">{{item.statusText}}</view>
       </view>
       <view class="record-grid">
-        <view><text>消费金额</text><strong>¥{{item.consumptionAmountText}}</strong></view>
-        <view><text>抵扣金额</text><strong>¥{{item.discountAmountText}}</strong></view>
+        <view><text>使用次数</text><strong>{{item.useCount}}</strong></view>
         <view><text>剩余次数</text><strong>{{item.remainingUseCount}}</strong></view>
         <view><text>核销时间</text><strong>{{item.redeemedTimeText}}</strong></view>
       </view>
