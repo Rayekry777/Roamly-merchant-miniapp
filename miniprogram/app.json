@@ -11,7 +11,7 @@
     "pages/vouchers/editor",
     "pages/vouchers/preview",
     "pages/staff/index",
-    "pages/staff/acceptance"
+    "pages/staff/acceptance/index"
   ],
   "window": {
     "navigationBarTitleText": "Roamly 商户",

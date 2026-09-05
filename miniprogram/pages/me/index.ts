@@ -85,7 +85,7 @@ Page({
     wx.navigateTo({ url: "/pages/staff/index" });
   },
   openStaffAcceptance() {
-    wx.navigateTo({ url: "/pages/staff/acceptance" });
+    wx.navigateTo({ url: "/pages/staff/acceptance/index" });
   },
   async logout() {
     const confirmed = await new Promise<boolean>((resolve) => {
