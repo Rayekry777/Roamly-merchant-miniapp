@@ -1,9 +1,66 @@
-# Roamly Merchant Miniapp
+# Roamly 商户小程序｜技术栈与解决方案
 
-Roamly 商户经营与核销微信小程序，用于商户入驻、店铺资料、团购券、订单、员工、扫码/手输核销、经营数据和结算查询。
+Roamly 商户端是原生微信小程序，面向店主、店长和核销员，覆盖商户入驻、门店资料、团购券、订单、员工、扫码/手输核销、经营数据和结算查询。客户端负责流程引导和数据展示，审核、库存、券状态、资金和权限由后端统一裁决。
 
-阶段 15 至 30 的商户 Demo 能力已完成闭环：登录、五种账号状态、入驻、经营媒体、四类券、订单、员工邀请、扫码/手输核销、动态二维码实时刷新、经营数据和结算查询。本目录是独立 Git 仓库，采用原生 TypeScript、TDesign、Roamly 设计令牌和自动化测试基座。
+## 技术栈
 
-开发命令为 `npm install`、`npm run build:npm`、`npm run verify` 和 `npm run format:check`。实现范围与验收要求见 [商户小程序契约](MERCHANT_MINIAPP_DEVELOPMENT.md)，实施顺序见 [四端交付路线图](../Roamly/docs/roadmap/FOUR_END_DELIVERY_ROADMAP.md)。
+| 领域 | 技术与版本 | 用途 |
+|---|---|---|
+| 小程序运行时 | 微信原生小程序、WXML/WXSS | 商户工作台、表单和核销页面 |
+| 业务语言 | TypeScript 5.9.3、miniprogram-api-typings 5.2.3 | API、Store、页面模型和状态机类型 |
+| UI 与动效 | TDesign Miniprogram 1.16.0、Lottie Miniprogram 1.0.12 | 表单、列表、反馈和主题令牌 |
+| 构建与交付 | npm、miniprogram-ci 2.1.31、自定义 `build-npm` 脚本 | 依赖构建和上传准备 |
+| 质量保障 | ESLint 9.39、Stylelint 16.23、Prettier 3.8、Vitest 4.0 | 类型、脚本、样式、格式和单元测试 |
+| 自动化检查 | miniprogram-automator、Sharp | 页面验收和视觉检查 |
 
-商户端视觉沿用现有 Roamly 消费者小程序的珊瑚红、柔紫和紫灰中性色体系；竞品页面只参考经营流程，不作为视觉样稿。
+## 核心解决方案
+
+### 商户身份与门店数据范围
+
+- 商户端使用独立的登录域和 `Bearer` 会话，登录后由 `merchant` Store 保存当前商户、角色和门店上下文。
+- 页面根据店主、店长、核销员能力显示操作入口，但真正的权限和门店数据范围由服务端强制校验。
+- `merchant-guard` 统一处理未登录、账号状态不允许操作、无门店和会话过期等场景，避免每个页面重复实现跳转逻辑。
+
+### 入驻与团购券草稿状态机
+
+- 入驻表单和团购券编辑器分别使用 `onboarding`、`voucher-draft` Store 管理草稿、媒体和预览，页面切换不会丢失未提交内容。
+- 提交前执行字段、图片和营业信息校验；提交请求生成稳定的 `Idempotency-Key`，网络重试不会重复创建申请或商品。
+- 申请、商品审核、上下架等状态只由服务端推进，客户端以接口返回状态刷新按钮和下一步动作，不在本地伪造审核结果。
+
+### 核销与实时经营反馈
+
+- 扫码和手输券码共用预览 → 确认 → 核销/撤销流程；预览只读，真正核销携带幂等键并由服务端校验有效期、门店范围和券状态。
+- 使用微信 SocketTask 建立商户实时连接，接收订单、核销等资源失效事件；事件只触发列表和经营数据回查，网络断开时页面仍可手动刷新。
+- 动态二维码采用短期票据，页面定时刷新并在离开页面时关闭连接和计时器，降低泄露和资源占用风险。
+
+### 统一请求与错误处理
+
+- `api` 按入驻、券、订单、员工、核销和结算拆分，`utils/request` 统一处理 Base URL、Authorization、Result/ErrorResult、超时和 401 清会话。
+- 分页统一使用后端 `PageResult`，金额、结算批次和订单状态按字符串/枚举模型消费，避免页面散落格式化和状态判断。
+- 提交类操作统一显示 loading、失败原因和可重试入口；成功后回查详情或列表，确保 UI 与服务端事实一致。
+
+## 工程结构
+
+```text
+miniprogram
+├─ api             入驻、券、订单、员工、核销、财务和结算接口
+├─ store           商户会话、入驻草稿、团购券草稿
+├─ types           商户、订单、券、核销和结算模型
+├─ utils           请求、权限守卫、实时连接、上传和格式化
+├─ components      商户端复用组件
+└─ pages           工作台、入驻、券管理、订单、核销、员工和我的
+```
+
+接口边界和验收要求见[商户小程序契约](docs/MERCHANT_MINIAPP_DEVELOPMENT.md)；后端状态机、幂等和资金规则见[后端 README](../Roamly/README.md)，整体实施顺序见[四端交付路线图](../Roamly/docs/roadmap/FOUR_END_DELIVERY_ROADMAP.md)。
+
+## 本地开发与验证
+
+```text
+npm install
+npm run build:npm
+npm run verify
+npm run format:check
+npm run visual:check
+```
+
+`build:npm` 会生成 `miniprogram/miniprogram_npm`。真实 AppID 和环境地址写入本地私有配置，不要提交凭据。联调时确保微信开发者工具能访问后端 `/v1`，并按环境配置合法域名或开发调试选项。

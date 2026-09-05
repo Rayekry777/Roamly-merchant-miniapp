@@ -2,7 +2,6 @@
   <view class="mode-bar" style="top: {{statusBarHeight}}px; padding-right: {{capsuleInset}}px;">
     <view class="mode-tabs">
       <view class="mode-tab mode-tab--active">到店</view>
-      <view class="mode-tab pressable" data-label="外卖" bind:tap="unavailable">外卖</view>
     </view>
     <view class="manage-link pressable" bind:tap="openManagement">
       <t-icon name="swap" size="36rpx" />

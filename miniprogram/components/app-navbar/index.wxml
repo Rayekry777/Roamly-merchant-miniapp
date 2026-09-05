@@ -1,4 +1,4 @@
-<view class="navbar" style="padding-top: {{statusBarHeight}}px;">
+<view class="navbar {{transparent ? 'navbar--transparent' : ''}}" style="padding-top: {{statusBarHeight}}px;">
   <view class="navbar__body" style="height: {{navigationHeight}}px;">
     <view wx:if="{{back}}" class="navbar__side pressable" bind:tap="goBack" aria-role="button" aria-label="返回">
       <t-icon name="chevron-left" size="48rpx" />
@@ -8,4 +8,3 @@
     <view class="navbar__side navbar__right"><slot name="right" /></view>
   </view>
 </view>
-

@@ -1,125 +1,95 @@
 .login-page {
+  position: relative;
+  width: 100%;
   min-height: 100vh;
-  padding: 88rpx 32rpx calc(40rpx + env(safe-area-inset-bottom));
-  box-sizing: border-box;
-  background: var(--roamly-bg);
+  overflow: hidden;
+  background: linear-gradient(150deg, #f9faff, #e9e9fb);
 }
 
-.login-header {
-  padding: 20rpx 8rpx 48rpx;
-}
-
-.brand-mark {
-  display: flex;
-  width: 80rpx;
-  height: 80rpx;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 28rpx;
-  border-radius: 24rpx;
-  color: #ffffff;
-  background: var(--roamly-primary);
-  font-size: 42rpx;
-  font-weight: 800;
-}
-
-.brand-name {
-  color: var(--roamly-text);
-  font-size: 52rpx;
-  font-weight: 750;
-  line-height: 1.2;
-}
-
-.brand-copy,
-.login-foot {
-  color: var(--roamly-muted);
-  font-size: 26rpx;
-}
-
-.brand-copy {
-  margin-top: 14rpx;
-}
-
-.login-surface {
-  padding: 40rpx 32rpx;
+.login-panel {
+  position: relative;
+  z-index: 2;
+  margin: 80rpx 34rpx 0;
+  padding: 56rpx 42rpx;
   border: 1rpx solid var(--roamly-border);
   border-radius: var(--roamly-card-radius);
-  background: var(--roamly-surface);
+  background: rgba(255, 255, 255, 0.94);
   box-shadow: var(--roamly-shadow);
 }
 
-.field-label {
-  margin: 0 0 14rpx 4rpx;
-  color: var(--roamly-text);
-  font-size: 24rpx;
-  font-weight: 650;
+.brand-logo {
+  display: block;
+  width: 96rpx;
+  height: 96rpx;
+  margin-bottom: 44rpx;
 }
 
-.field-label-spaced {
-  margin-top: 30rpx;
+.fields {
+  overflow: hidden;
+  margin: 0 0 28rpx;
+  padding: 10rpx 18rpx;
+  border-radius: 32rpx;
+  background: rgba(255, 255, 255, 0.82);
 }
 
-.field-input {
-  width: 100%;
-  height: 92rpx;
-  padding: 0 26rpx;
-  border: 1rpx solid var(--roamly-border);
-  border-radius: var(--roamly-control-radius);
-  box-sizing: border-box;
-  color: var(--roamly-text);
-  background: #fafaff;
-  font-size: 28rpx;
+.field-line {
+  height: 1rpx;
+  background: var(--roamly-border);
 }
 
 .code-row {
   display: flex;
   min-width: 0;
-  gap: 16rpx;
+  align-items: center;
+  gap: 8rpx;
 }
 
 .code-input {
+  width: 0;
   min-width: 0;
   flex: 1;
 }
 
 .code-button {
-  width: 210rpx;
-  height: 92rpx;
-  margin: 0;
-  border: 1rpx solid rgba(130, 117, 255, 0.24);
-  border-radius: var(--roamly-control-radius);
-  color: var(--roamly-accent);
-  background: rgba(130, 117, 255, 0.08);
-  font-size: 25rpx;
-  line-height: 90rpx;
-}
-
-.code-button::after,
-.primary-button::after,
-.logout-button::after {
-  border: 0;
+  min-width: 178rpx;
+  flex: 0 0 178rpx;
+  white-space: nowrap;
 }
 
 .form-error {
-  margin: 22rpx 6rpx 0;
-  color: #d84d49;
-  font-size: 24rpx;
+  margin: -10rpx 8rpx 24rpx;
+  color: var(--roamly-danger);
+  font-size: 23rpx;
   line-height: 1.5;
 }
 
-.primary-button {
-  height: 94rpx;
-  margin-top: 36rpx;
-  border: 0;
-  border-radius: var(--roamly-control-radius);
-  color: #ffffff;
-  background: var(--roamly-primary);
-  font-size: 29rpx;
-  font-weight: 700;
-  line-height: 94rpx;
+.login-foot {
+  position: absolute;
+  right: 0;
+  bottom: calc(30rpx + env(safe-area-inset-bottom));
+  left: 0;
+  z-index: 2;
+  color: #aaa8b5;
+  font-size: 20rpx;
+  text-align: center;
 }
 
-.login-foot {
-  margin-top: 30rpx;
-  text-align: center;
+.orb {
+  position: absolute;
+  width: 500rpx;
+  height: 500rpx;
+  border-radius: 50%;
+  opacity: 0.5;
+}
+
+.orb--one {
+  top: -220rpx;
+  right: -160rpx;
+  background: #ffd9d5;
+}
+
+.orb--two {
+  bottom: -260rpx;
+  left: -180rpx;
+  background: #dcd7ff;
 }

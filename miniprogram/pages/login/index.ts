@@ -24,6 +24,7 @@ Page({
   },
   onUnload() {
     if (this.timer) clearInterval(this.timer);
+    if (this.redirectTimer) clearTimeout(this.redirectTimer);
   },
   onPhone(event: WechatMiniprogram.CustomEvent) {
     this.setData({ phone: this.eventText(event), error: "" });
@@ -34,7 +35,7 @@ Page({
   async sendCode() {
     if (this.data.sending || this.data.countdown > 0) return;
     if (!/^1[3-9]\d{9}$/.test(this.data.phone)) {
-      this.setData({ error: "请输入正确的手机号" });
+      wx.showToast({ title: "请输入正确的手机号", icon: "none" });
       return;
     }
     this.setData({ sending: true, error: "" });
@@ -43,33 +44,37 @@ Page({
       this.beginCountdown(60);
       wx.showToast({ title: "验证码已发送", icon: "success" });
     } catch (error) {
-      this.setData({ error: this.errorMessage(error) });
+      const message = this.errorMessage(error);
+      this.setData({ error: message });
+      wx.showToast({ title: message, icon: "none" });
     } finally {
       this.setData({ sending: false });
     }
   },
   async submit() {
-    if (this.data.loggingIn) return;
+    if (this.data.loggingIn || this.redirecting) return;
     if (
       !/^1[3-9]\d{9}$/.test(this.data.phone) ||
       !/^\d{6}$/.test(this.data.code)
     ) {
-      this.setData({ error: "请填写正确的手机号和六位验证码" });
+      wx.showToast({
+        title: "请填写正确的手机号和验证码",
+        icon: "none",
+      });
       return;
     }
     this.setData({ loggingIn: true, error: "" });
     try {
-      const current = await merchantStore.login(
-        this.data.phone,
-        this.data.code,
-      );
-      wx.showToast({ title: "登录成功", icon: "success" });
-      void current;
-      resumeAfterLogin();
+      await merchantStore.login(this.data.phone, this.data.code);
+      this.selectComponent("#login-motion")?.show(1000);
+      this.redirecting = true;
+      this.redirectTimer = setTimeout(() => resumeAfterLogin(), 700);
     } catch (error) {
-      this.setData({ error: this.errorMessage(error) });
+      const message = this.errorMessage(error);
+      this.setData({ error: message });
+      wx.showToast({ title: message, icon: "none" });
     } finally {
-      this.setData({ loggingIn: false });
+      if (!this.redirecting) this.setData({ loggingIn: false });
     }
   },
   beginCountdown(seconds: number) {
@@ -91,4 +96,6 @@ Page({
       : "服务暂时不可用，请稍后重试";
   },
   timer: undefined as ReturnType<typeof setInterval> | undefined,
+  redirectTimer: undefined as ReturnType<typeof setTimeout> | undefined,
+  redirecting: false,
 });

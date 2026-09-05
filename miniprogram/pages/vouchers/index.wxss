@@ -13,6 +13,10 @@
 }
 
 .heading-row {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 24rpx;
 }
@@ -34,9 +38,19 @@
 }
 
 .create-button {
-  width: 132rpx;
-  height: 72rpx;
-  line-height: 72rpx;
+  display: flex;
+  width: 124rpx;
+  min-width: 124rpx;
+  max-width: 124rpx;
+  height: 64rpx;
+  flex: 0 0 124rpx;
+  align-items: center;
+  justify-content: center;
+  margin-top: 8rpx;
+  padding: 0;
+  box-sizing: border-box;
+  font-size: 23rpx;
+  line-height: 1;
 }
 
 .create-button::after,

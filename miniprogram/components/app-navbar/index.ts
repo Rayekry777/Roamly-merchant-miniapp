@@ -3,6 +3,7 @@ Component({
   properties: {
     title: { type: String, value: "Roamly 商户" },
     back: { type: Boolean, value: true },
+    transparent: { type: Boolean, value: false },
   },
   data: { statusBarHeight: 24, navigationHeight: 44 },
   lifetimes: {

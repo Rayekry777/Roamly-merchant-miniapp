@@ -1,6 +1,9 @@
 {
-  "navigationBarTitleText": "商户登录",
+  "navigationStyle": "custom",
   "usingComponents": {
-    "app-navbar": "/components/app-navbar/index"
+    "app-navbar": "/components/app-navbar/index",
+    "success-motion": "/components/success-motion/index",
+    "t-button": "tdesign-miniprogram/button/button",
+    "t-input": "tdesign-miniprogram/input/input"
   }
 }

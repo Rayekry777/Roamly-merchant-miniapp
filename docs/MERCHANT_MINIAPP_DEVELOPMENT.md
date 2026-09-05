@@ -13,7 +13,7 @@ deviceAcceptanceStatus: 未确认
 
 ## 契约职责
 
-本文只管理 `Roamly-merchant-miniapp` 的商户体验、客户端权限、接口消费和验收。HTTP 线协议由后端运行时 OpenAPI 管理，阶段顺序参考 [四端交付路线图](../Roamly/docs/roadmap/FOUR_END_DELIVERY_ROADMAP.md)。本文不定义数据库事务、平台审核内部操作、消费者页面或管理员账号。
+本文只管理 `Roamly-merchant-miniapp` 的商户体验、客户端权限、接口消费和验收。HTTP 线协议由后端运行时 OpenAPI 管理，阶段顺序参考 [四端交付路线图](../../Roamly/docs/roadmap/FOUR_END_DELIVERY_ROADMAP.md)。本文不定义数据库事务、平台审核内部操作、消费者页面或管理员账号。
 
 ## 技术与视觉
 
@@ -81,7 +81,7 @@ deviceAcceptanceStatus: 未确认
 
 ## 阶段 20 商户端实现
 
-- 阶段 20 的跨端状态、字段、接口和事务以 [四类券模型与商户建券详细设计](../Roamly/docs/stages/STAGE_20_VOUCHER_AUTHORING.md) 为准；本节负责商户小程序页面、交互、客户端状态和自动化，四类券建券闭环已实现。
+- 阶段 20 的跨端状态、字段、接口和事务以 [四类券模型与商户建券详细设计](../../Roamly/docs/stages/STAGE_20_VOUCHER_AUTHORING.md) 为准；本节负责商户小程序页面、交互、客户端状态和自动化，四类券建券闭环已实现。
 - 页面固定为 `/pages/vouchers/index`（团购券列表）、`/pages/vouchers/editor`（建券编辑）和 `/pages/vouchers/preview`（消费者视角预览）；“我的”中的团购券入口只对拥有 `merchant:voucher:manage`（团购券管理）权限的活动账号可用。
 - 列表提供审核状态分段筛选、券型筛选、关键词、真实空态和错误重试；展示封面、标题、券型、售价、库存、更新时间、中文状态以及编辑、预览、复制、删除动作；审核通过且处于 `SCHEDULED`（待开售）或 `ON_SALE`（销售中）的券提供下架命令。
 - 新建先选择 `PACKAGE`（套餐券）、`CASH`（代金券）、`DISCOUNT`（折扣券）或 `MULTI_USE`（次卡），服务端创建空草稿后进入四步编辑；券型创建后不可切换。
