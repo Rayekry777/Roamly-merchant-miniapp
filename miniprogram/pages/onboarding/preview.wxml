@@ -1,4 +1,6 @@
-<view class="page-shell preview-page">
+<app-navbar title="资料预览" />
+
+<view class="page-shell page-shell--subpage preview-page page-enter">
   <view class="page-kicker">APPLICATION PREVIEW</view>
   <view class="heading-row">
     <view class="page-heading">资料预览</view>
@@ -61,3 +63,4 @@
     </view>
   </block>
 </view>
+<success-motion id="success-motion" message="入驻资料已提交" />

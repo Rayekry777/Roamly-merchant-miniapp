@@ -1,6 +1,7 @@
 import { getEnvironment } from "../config/env";
 import type { ErrorResult, Result } from "../types/http";
 import { merchantSession } from "./session";
+import { captureCurrentIntent, routeToLogin } from "./auth-navigation";
 
 export class ApiError extends Error {
   constructor(
@@ -46,7 +47,10 @@ export function request<
         ...options.headers,
       },
       success(response) {
-        if (response.statusCode === 401) merchantSession.clear();
+        if (response.statusCode === 401) {
+          merchantSession.clear();
+          routeToLogin(captureCurrentIntent());
+        }
         if (response.statusCode === 204) {
           resolve({ code: "OK", message: "操作成功", data: null });
           return;
@@ -112,7 +116,10 @@ export function uploadFile<T>(
       timeout: 30000,
       header: { Authorization: `Bearer ${token}` },
       success(response) {
-        if (response.statusCode === 401) merchantSession.clear();
+        if (response.statusCode === 401) {
+          merchantSession.clear();
+          routeToLogin(captureCurrentIntent());
+        }
         let value: unknown;
         try {
           value = JSON.parse(response.data);
@@ -175,7 +182,10 @@ export function downloadPrivateFile(path: string): Promise<string> {
       timeout: 30000,
       header: { Authorization: `Bearer ${token}` },
       success(response) {
-        if (response.statusCode === 401) merchantSession.clear();
+        if (response.statusCode === 401) {
+          merchantSession.clear();
+          routeToLogin(captureCurrentIntent());
+        }
         if (response.statusCode < 200 || response.statusCode >= 300) {
           reject(
             new ApiError(

@@ -1,3 +1,6 @@
 {
-  "navigationBarTitleText": "商户登录"
+  "navigationBarTitleText": "商户登录",
+  "usingComponents": {
+    "app-navbar": "/components/app-navbar/index"
+  }
 }

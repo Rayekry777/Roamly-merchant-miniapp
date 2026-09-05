@@ -28,8 +28,8 @@ Page({
     try {
       await acceptStaffInvitation(this.data.token);
       await merchantStore.restore(true);
-      wx.showToast({ title: "已加入门店", icon: "success" });
-      wx.switchTab({ url: "/pages/me/index" });
+      this.selectComponent("#success-motion")?.show();
+      setTimeout(() => wx.switchTab({ url: "/pages/me/index" }), 1500);
     } catch (error) {
       this.setData({
         error: error instanceof Error ? error.message : "接受邀请失败",

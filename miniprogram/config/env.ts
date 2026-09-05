@@ -6,7 +6,26 @@ const environments: Record<EnvironmentVersion, { apiBaseUrl: string }> = {
   release: { apiBaseUrl: "https://api.example.com/api" },
 };
 
+const deviceDevelopEnvironment = {
+  apiBaseUrl: "http://192.168.2.106:8081",
+};
+
 export function getEnvironment(): { apiBaseUrl: string } {
-  const version = wx.getAccountInfoSync().miniProgram.envVersion;
+  let version: EnvironmentVersion = "develop";
+  try {
+    version =
+      wx.getAccountInfoSync().miniProgram.envVersion || "develop";
+  } catch {
+    version = "develop";
+  }
+  if (version === "develop") {
+    try {
+      if (wx.getDeviceInfo().platform !== "devtools") {
+        return deviceDevelopEnvironment;
+      }
+    } catch {
+      /* 获取设备信息失败时继续使用开发者工具地址。 */
+    }
+  }
   return environments[version];
 }

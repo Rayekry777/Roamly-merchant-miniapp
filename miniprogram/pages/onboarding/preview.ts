@@ -84,8 +84,8 @@ Page({
         submittedAt: application.submittedAt ?? "",
         canSubmit: false,
       });
-      wx.showToast({ title: "申请已提交", icon: "success" });
-      setTimeout(() => wx.switchTab({ url: "/pages/me/index" }), 500);
+      this.selectComponent("#success-motion")?.show();
+      setTimeout(() => wx.switchTab({ url: "/pages/me/index" }), 1500);
     } catch (error) {
       if (error instanceof ApiError && error.statusCode === 409) {
         await onboardingStore.load();

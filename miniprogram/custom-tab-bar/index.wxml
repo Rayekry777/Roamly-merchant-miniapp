@@ -1,0 +1,7 @@
+<view class="tabbar">
+  <view wx:for="{{items}}" wx:key="value" class="tabbar__item pressable {{value === item.value ? 'tabbar__item--active' : ''}}" data-value="{{item.value}}" bind:tap="select">
+    <view class="tabbar__icon"><t-icon name="{{item.icon}}" size="46rpx" /></view>
+    <text>{{item.label}}</text>
+  </view>
+</view>
+

@@ -1,6 +1,10 @@
 import { sendMerchantSmsCode } from "../../api/merchant-auth";
 import { merchantStore } from "../../store/merchant";
 import { ApiError } from "../../utils/request";
+import {
+  markLoginPageReady,
+  resumeAfterLogin,
+} from "../../utils/auth-navigation";
 
 Page({
   data: {
@@ -10,6 +14,13 @@ Page({
     sending: false,
     loggingIn: false,
     error: "",
+    showBack: true,
+  },
+  onLoad(options: Record<string, string>) {
+    this.setData({ showBack: options.entry === "protected" });
+  },
+  onShow() {
+    markLoginPageReady();
   },
   onUnload() {
     if (this.timer) clearInterval(this.timer);
@@ -53,12 +64,8 @@ Page({
         this.data.code,
       );
       wx.showToast({ title: "登录成功", icon: "success" });
-      wx.switchTab({
-        url:
-          current.status === "ACTIVE"
-            ? "/pages/workbench/index"
-            : "/pages/me/index",
-      });
+      void current;
+      resumeAfterLogin();
     } catch (error) {
       this.setData({ error: this.errorMessage(error) });
     } finally {

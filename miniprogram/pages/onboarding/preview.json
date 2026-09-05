@@ -1,3 +1,7 @@
 {
-  "navigationBarTitleText": "资料预览"
+  "navigationBarTitleText": "资料预览",
+  "usingComponents": {
+    "app-navbar": "/components/app-navbar/index",
+    "success-motion": "/components/success-motion/index"
+  }
 }

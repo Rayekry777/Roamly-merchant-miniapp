@@ -1,0 +1,88 @@
+.detail-page {
+  padding-top: 20rpx;
+}
+
+.detail-card {
+  position: relative;
+  padding: 38rpx 30rpx;
+}
+
+.detail-status {
+  display: inline-flex;
+  padding: 8rpx 16rpx;
+  border-radius: 18rpx;
+  font-size: 22rpx;
+  font-weight: 680;
+}
+
+.status-pending {
+  color: #6c59d9;
+  background: #f0edff;
+}
+
+.status-success {
+  color: #13795b;
+  background: #e7f7f0;
+}
+
+.status-danger {
+  color: #b14d39;
+  background: #fff0ec;
+}
+
+.status-muted {
+  color: #65636d;
+  background: #f0f0f4;
+}
+
+.detail-label {
+  margin-top: 34rpx;
+  color: var(--roamly-muted);
+  font-size: 23rpx;
+  text-align: center;
+}
+
+.detail-amount {
+  margin-top: 8rpx;
+  font-size: 54rpx;
+  font-weight: 790;
+  text-align: center;
+}
+
+.detail-rows {
+  margin-top: 36rpx;
+  border-top: 1rpx dashed var(--roamly-border);
+}
+
+.detail-rows > view {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 28rpx;
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid var(--roamly-border);
+}
+
+.detail-rows text {
+  flex: none;
+  color: var(--roamly-muted);
+  font-size: 23rpx;
+}
+
+.detail-rows strong {
+  overflow-wrap: anywhere;
+  font-size: 23rpx;
+  font-weight: 620;
+  text-align: right;
+}
+
+.failure-row strong {
+  color: var(--roamly-danger);
+}
+
+.detail-tip {
+  margin-top: 26rpx;
+  color: var(--roamly-muted);
+  font-size: 21rpx;
+  line-height: 1.6;
+}

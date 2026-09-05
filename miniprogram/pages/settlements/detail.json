@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "结算详情",
+  "usingComponents": {
+    "app-navbar": "/components/app-navbar/index"
+  }
+}

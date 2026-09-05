@@ -5,6 +5,7 @@ import {
   activateStaff,
   type MerchantStaff,
 } from "../../api/merchant-staff";
+import { guardMerchantPermission } from "../../utils/merchant-guard";
 
 Page({
   data: {
@@ -17,7 +18,18 @@ Page({
     invitationVisible: false,
   },
   onShow() {
-    void this.load();
+    void this.activate();
+  },
+  async activate() {
+    if (
+      await guardMerchantPermission(
+        "merchant:staff:manage",
+        "当前角色无权管理员工",
+        { route: "/pages/staff/index" },
+      )
+    ) {
+      await this.load();
+    }
   },
   async load() {
     this.setData({ loading: true });

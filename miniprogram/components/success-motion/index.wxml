@@ -1,0 +1,8 @@
+<view wx:if="{{visible}}" class="motion-mask" catch:tap="noop">
+  <view class="motion-card">
+    <canvas wx:if="{{motionEnabled}}" id="success-canvas" type="2d" class="motion-canvas" />
+    <view wx:else class="motion-fallback">✓</view>
+    <view class="motion-message">{{message}}</view>
+  </view>
+</view>
+

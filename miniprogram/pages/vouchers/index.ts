@@ -51,7 +51,8 @@ Page({
     void this.load().finally(() => wx.stopPullDownRefresh());
   },
   async load() {
-    if (!(await guardVoucherManager())) return;
+    if (!(await guardVoucherManager({ route: "/pages/vouchers/index" })))
+      return;
     this.setData({ loading: true, error: "" });
     try {
       const result = await listMerchantVoucherProducts({

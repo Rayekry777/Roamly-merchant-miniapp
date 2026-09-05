@@ -1,8 +1,55 @@
-<view class="page-shell">
-  <view class="page-kicker">ROAMLY MERCHANT</view>
-  <view class="page-heading">核销</view>
-  <view class="page-rule" aria-hidden="true"></view>
-  <view class="verify-panel"><input maxlength="64" type="text" placeholder="输入12位券码，或使用扫码" value="{{code}}" bindinput="onCode"/><button bindtap="scan">扫码二维码</button><button class="primary-action" loading="{{loading}}" bindtap="preview">预览核销</button></view>
+<app-navbar title="核销" />
+
+<view class="page-shell page-shell--subpage verify-page page-enter">
+  <view class="verify-heading">
+    <view class="page-kicker">VOUCHER REDEMPTION</view>
+    <view class="page-heading">核销服务</view>
+    <view class="verify-copy">扫码或输入 12 位券码，核对信息后再确认</view>
+  </view>
+
+  <view wx:if="{{!success}}" class="verify-panel surface-card">
+    <label class="verify-field">
+      <text>券码</text>
+      <input maxlength="12" type="number" placeholder="请输入 12 位券码" value="{{code}}" bindinput="onCode" focus="{{manualFocus}}" />
+    </label>
+    <label class="verify-field">
+      <text>本次消费金额（选填）</text>
+      <input type="digit" placeholder="未填写则按 0 元预览" value="{{consumptionYuan}}" bindinput="onConsumption" />
+    </label>
+    <view class="verify-actions">
+      <button class="secondary-action" disabled="{{loading}}" bindtap="scan"><t-icon name="scan" size="34rpx" /> 扫码</button>
+      <button class="primary-action" loading="{{loading}}" disabled="{{loading}}" bindtap="previewCode">预览核销</button>
+    </view>
+  </view>
+
   <view wx:if="{{error}}" class="error-panel">{{error}}</view>
-  <view wx:if="{{preview}}" class="section-block"><view><view class="section-title">{{preview.productTitle}}</view><view class="onboarding-note">券尾号 {{preview.codeLast4}} · 剩余 {{preview.remainingUseCount}} 次</view><view class="onboarding-note">抵扣 ¥{{preview.discountAmount / 100}}</view></view><button class="primary-action" bindtap="confirm">确认核销</button></view>
+
+  <view wx:if="{{preview && !success}}" class="preview-card surface-card">
+    <view class="preview-card__top">
+      <view>
+        <view class="preview-tag">核销预览</view>
+        <view class="preview-title">{{preview.productTitle || '团购券'}}</view>
+      </view>
+      <view class="remaining">剩余 {{preview.remainingUseCount}} 次</view>
+    </view>
+    <view class="preview-grid">
+      <view><text>券码尾号</text><strong>{{preview.codeLast4}}</strong></view>
+      <view><text>预览有效期</text><strong>{{preview.expiresAtText}}</strong></view>
+      <view><text>消费金额</text><strong>¥{{preview.consumptionAmountText}}</strong></view>
+      <view><text>本次抵扣</text><strong class="coral">¥{{preview.discountAmountText}}</strong></view>
+    </view>
+    <button class="confirm-action primary-action" loading="{{loading}}" disabled="{{loading}}" bindtap="confirm">确认核销</button>
+  </view>
+
+  <view wx:if="{{success}}" class="success-card surface-card">
+    <view class="success-mark">✓</view>
+    <view class="success-title">核销成功</view>
+    <view class="success-copy">本次核销已由服务端确认，请勿重复操作</view>
+    <view class="success-actions">
+      <button class="secondary-action" bindtap="openRecords">查看记录</button>
+      <button class="primary-action" bindtap="continueRedemption">继续核销</button>
+    </view>
+  </view>
 </view>
+
+<success-motion id="success-motion" message="核销成功" />

@@ -1,0 +1,57 @@
+.motion-mask {
+  position: fixed;
+  z-index: 300;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(36, 35, 49, 0.3);
+}
+
+.motion-card {
+  display: flex;
+  width: 300rpx;
+  min-height: 300rpx;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 48rpx;
+  background: #ffffff;
+  box-shadow: 0 30rpx 80rpx rgba(36, 35, 49, 0.2);
+  animation: motion-in 220ms ease-out both;
+}
+
+.motion-canvas,
+.motion-fallback {
+  width: 180rpx;
+  height: 180rpx;
+}
+
+.motion-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: #ffffff;
+  background: #ff5f57;
+  font-size: 92rpx;
+  font-weight: 800;
+}
+
+.motion-message {
+  margin-top: 8rpx;
+  font-size: 28rpx;
+  font-weight: 700;
+}
+
+@keyframes motion-in {
+  from {
+    transform: scale(0.88);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

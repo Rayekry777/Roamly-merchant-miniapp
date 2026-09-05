@@ -9,10 +9,12 @@
     "lint": "eslint miniprogram tests",
     "lint:styles": "stylelint \"miniprogram/**/*.wxss\"",
     "format:check": "prettier --check .",
+    "visual:check": "node scripts/visual-check.cjs",
     "test": "vitest run",
     "verify": "npm run type-check && npm run lint && npm run lint:styles && npm run test"
   },
   "dependencies": {
+    "lottie-miniprogram": "1.0.12",
     "tdesign-miniprogram": "1.16.0"
   },
   "devDependencies": {
@@ -21,8 +23,10 @@
     "eslint": "9.39.1",
     "globals": "17.4.0",
     "miniprogram-api-typings": "5.2.3",
+    "miniprogram-automator": "^0.12.1",
     "miniprogram-ci": "2.1.31",
     "prettier": "3.8.1",
+    "sharp": "^0.34.4",
     "stylelint": "16.23.1",
     "stylelint-config-standard": "39.0.0",
     "typescript": "5.9.3",

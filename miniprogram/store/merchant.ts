@@ -11,7 +11,15 @@ import { voucherDraftStore } from "./voucher-draft";
 class MerchantStore {
   current: CurrentMerchant | null = null;
   initialized = false;
+  authState: "unknown" | "anonymous" | "authenticated" = "unknown";
   private restoring: Promise<CurrentMerchant | null> | null = null;
+
+  bootstrap(): Promise<CurrentMerchant | null> {
+    return this.restore().then((current) => {
+      this.authState = current ? "authenticated" : "anonymous";
+      return current;
+    });
+  }
 
   async login(phone: string, code: string): Promise<CurrentMerchant> {
     const token = await loginMerchant(phone, code);
@@ -39,6 +47,7 @@ class MerchantStore {
       .then((current) => {
         this.current = current;
         this.initialized = true;
+        this.authState = "authenticated";
         return current;
       })
       .catch((error: ApiError) => {
@@ -63,6 +72,7 @@ class MerchantStore {
     voucherDraftStore.clear();
     this.current = null;
     this.initialized = true;
+    this.authState = "anonymous";
     merchantSession.clear();
   }
 }

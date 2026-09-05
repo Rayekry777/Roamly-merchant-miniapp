@@ -1,0 +1,40 @@
+<app-navbar title="核销记录" />
+
+<view class="page-shell page-shell--subpage redemption-page page-enter">
+  <view class="page-kicker">REDEMPTION HISTORY</view>
+  <view class="page-heading">核销记录</view>
+  <view class="page-copy">实时展示当前门店的核销与撤销结果</view>
+
+  <view wx:if="{{loading && !items.length}}" class="state-panel">正在加载核销记录...</view>
+  <view wx:elif="{{error && !items.length}}" class="error-panel">
+    <view>{{error}}</view>
+    <button class="text-action" bind:tap="retry">重新加载</button>
+  </view>
+  <view wx:elif="{{!items.length}}" class="state-panel">暂无核销记录</view>
+
+  <view wx:else class="record-list">
+    <view wx:for="{{items}}" wx:key="id" class="record-card surface-card">
+      <view class="record-head">
+        <view>
+          <view class="record-kicker">券尾号 {{item.voucherLast4}}</view>
+          <view class="record-title">核销 {{item.useCount}} 次</view>
+        </view>
+        <view class="record-status record-status--{{item.statusTone}}">{{item.statusText}}</view>
+      </view>
+      <view class="record-grid">
+        <view><text>消费金额</text><strong>¥{{item.consumptionAmountText}}</strong></view>
+        <view><text>抵扣金额</text><strong>¥{{item.discountAmountText}}</strong></view>
+        <view><text>剩余次数</text><strong>{{item.remainingUseCount}}</strong></view>
+        <view><text>核销时间</text><strong>{{item.redeemedTimeText}}</strong></view>
+      </view>
+      <view wx:if="{{item.reversalReason}}" class="reversal-copy">撤销原因：{{item.reversalReason}}</view>
+      <button wx:if="{{canReverse && item.status === 'SUCCEEDED'}}" class="reverse-action" loading="{{reversingId === item.id}}" disabled="{{reversingId}}" data-id="{{item.id}}" bind:tap="reverse">撤销本次核销</button>
+    </view>
+    <view wx:if="{{loading}}" class="list-footer">正在加载更多...</view>
+    <view wx:elif="{{error}}" class="list-footer list-error" bind:tap="retry">{{error}}，点击重试</view>
+    <view wx:elif="{{!hasMore}}" class="list-footer">没有更多记录了</view>
+  </view>
+</view>
+
+<success-motion id="success-motion" message="撤销成功" />
+

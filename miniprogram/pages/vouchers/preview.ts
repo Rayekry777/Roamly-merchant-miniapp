@@ -47,7 +47,13 @@ Page({
       this.setData({ loading: false, error: "缺少团购券编号" });
       return;
     }
-    if (!(await guardVoucherManager())) return;
+    if (
+      !(await guardVoucherManager({
+        route: "/pages/vouchers/preview",
+        query: { id },
+      }))
+    )
+      return;
     await this.load(id);
   },
   async load(id: string) {
@@ -142,7 +148,8 @@ Page({
       const draft = voucherDraftStore.formDraft;
       if (draft) this.setView(cloneForm(draft));
       this.setData({ canSubmit: false, canEdit: false });
-      wx.showToast({ title: product.reviewStatusLabel, icon: "success" });
+      this.selectComponent("#success-motion")?.show();
+      wx.showToast({ title: product.reviewStatusLabel, icon: "none" });
     } catch (error) {
       if (error instanceof ApiError && error.statusCode === 409) {
         const id = this.data.draft?.id;

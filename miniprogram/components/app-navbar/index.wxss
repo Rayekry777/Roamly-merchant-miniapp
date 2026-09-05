@@ -1,0 +1,49 @@
+:host {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.navbar {
+  position: relative;
+  z-index: 80;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  background: rgba(244, 245, 251, 0.94);
+}
+
+.navbar__body {
+  display: grid;
+  width: 100%;
+  max-width: 100%;
+  grid-template-columns: 112rpx minmax(0, 1fr) 112rpx;
+  align-items: center;
+  padding: 0 20rpx;
+  box-sizing: border-box;
+}
+
+.navbar__side {
+  display: flex;
+  min-height: 72rpx;
+  align-items: center;
+}
+
+.navbar__right {
+  justify-content: flex-end;
+}
+
+.navbar__title {
+  overflow: hidden;
+  color: #242331;
+  font-size: 31rpx;
+  font-weight: 720;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pressable:active {
+  opacity: 0.62;
+}

@@ -1,4 +1,6 @@
-<view class="login-page">
+<app-navbar title="商户登录" back="{{showBack}}" />
+
+<view class="login-page page-enter">
   <view class="login-header">
     <view class="brand-mark">R</view>
     <view class="brand-name">Roamly 商户</view>
@@ -16,7 +18,7 @@
       </button>
     </view>
     <view wx:if="{{error}}" class="form-error">{{error}}</view>
-    <button class="primary-button" loading="{{loggingIn}}" disabled="{{loggingIn}}" bindtap="submit">登录商户端</button>
+    <button class="primary-button" loading="{{loggingIn}}" disabled="{{loggingIn}}" bindtap="submit">登录</button>
   </view>
 
   <view class="login-foot">开发环境验证码由服务端 Mock 策略提供</view>

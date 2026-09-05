@@ -74,7 +74,13 @@ Page({
       this.setData({ loading: false, error: "缺少团购券编号" });
       return;
     }
-    if (!(await guardVoucherManager())) return;
+    if (
+      !(await guardVoucherManager({
+        route: "/pages/vouchers/editor",
+        query: { id },
+      }))
+    )
+      return;
     await this.load(id);
   },
   onShow() {

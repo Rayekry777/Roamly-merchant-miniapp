@@ -1,4 +1,7 @@
 {
   "navigationBarTitleText": "商户入驻",
-  "enablePullDownRefresh": false
+  "enablePullDownRefresh": false,
+  "usingComponents": {
+    "app-navbar": "/components/app-navbar/index"
+  }
 }

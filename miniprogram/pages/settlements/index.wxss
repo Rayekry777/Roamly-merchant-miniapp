@@ -1,0 +1,94 @@
+.settlement-page {
+  padding-top: 20rpx;
+}
+
+.page-copy {
+  margin-top: 12rpx;
+  color: var(--roamly-muted);
+  font-size: 24rpx;
+}
+
+.settlement-list {
+  margin-top: 22rpx;
+}
+
+.settlement-card {
+  padding: 30rpx;
+}
+
+.settlement-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20rpx;
+}
+
+.settlement-date {
+  font-size: 31rpx;
+  font-weight: 740;
+}
+
+.settlement-id {
+  margin-top: 7rpx;
+  color: var(--roamly-muted);
+  font-size: 21rpx;
+}
+
+.settlement-status {
+  padding: 8rpx 14rpx;
+  border-radius: 18rpx;
+  font-size: 21rpx;
+  font-weight: 680;
+}
+
+.status-pending {
+  color: #6c59d9;
+  background: #f0edff;
+}
+
+.status-success {
+  color: #13795b;
+  background: #e7f7f0;
+}
+
+.status-danger {
+  color: #b14d39;
+  background: #fff0ec;
+}
+
+.status-muted {
+  color: #65636d;
+  background: #f0f0f4;
+}
+
+.settlement-amount {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-top: 28rpx;
+  padding: 24rpx;
+  border-radius: 24rpx;
+  background: var(--roamly-bg);
+}
+
+.settlement-amount text {
+  color: var(--roamly-muted);
+  font-size: 22rpx;
+}
+
+.settlement-amount strong {
+  font-size: 34rpx;
+}
+
+.settlement-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20rpx;
+  color: var(--roamly-muted);
+  font-size: 21rpx;
+}
+
+.list-error {
+  color: var(--roamly-danger);
+}

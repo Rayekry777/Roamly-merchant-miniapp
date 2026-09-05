@@ -1,9 +1,14 @@
 {
   "pages": [
     "pages/workbench/index",
+    "pages/messages/index",
+    "pages/me/index",
+    "pages/operations/index",
     "pages/orders/index",
     "pages/verification/index",
-    "pages/me/index",
+    "pages/redemptions/index",
+    "pages/settlements/index",
+    "pages/settlements/detail",
     "pages/login/index",
     "pages/onboarding/index",
     "pages/onboarding/preview",
@@ -18,17 +23,18 @@
     "navigationBarBackgroundColor": "#ffffff",
     "navigationBarTextStyle": "black",
     "backgroundColor": "#f4f5fb",
-    "backgroundTextStyle": "light"
+    "backgroundTextStyle": "light",
+    "navigationStyle": "custom"
   },
   "tabBar": {
+    "custom": true,
     "color": "#8f8d99",
     "selectedColor": "#ff5f57",
     "backgroundColor": "#ffffff",
     "borderStyle": "white",
     "list": [
-      { "pagePath": "pages/workbench/index", "text": "工作台" },
-      { "pagePath": "pages/orders/index", "text": "订单" },
-      { "pagePath": "pages/verification/index", "text": "核销" },
+      { "pagePath": "pages/workbench/index", "text": "首页" },
+      { "pagePath": "pages/messages/index", "text": "消息" },
       { "pagePath": "pages/me/index", "text": "我的" }
     ]
   },

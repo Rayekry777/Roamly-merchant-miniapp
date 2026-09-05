@@ -1,0 +1,65 @@
+<app-navbar title="管理版" />
+
+<view class="page-shell operations page-enter">
+  <view class="operations-hero">
+    <view class="page-kicker">BUSINESS CENTER</view>
+    <view class="page-heading">经营中心</view>
+    <view class="operations-hero__copy">{{shopName}} · {{roleLabel}}</view>
+  </view>
+
+  <view wx:if="{{loading}}" class="state-panel">正在同步经营权限...</view>
+  <view wx:elif="{{error}}" class="error-panel">
+    <view>{{error}}</view>
+    <button class="text-action" bind:tap="load">重新加载</button>
+  </view>
+
+  <block wx:else>
+    <view wx:if="{{canRedemption || canOrder}}" class="business-group surface-card">
+      <view class="group-heading"><text>交易</text><text>到店履约与订单</text></view>
+      <view wx:if="{{canRedemption}}" class="business-row pressable" bind:tap="openVerification">
+        <view class="business-icon coral"><t-icon name="scan" size="42rpx" /></view>
+        <view class="business-copy"><view>核销服务</view><text>扫码或输入券码完成核销</text></view>
+        <t-icon name="chevron-right" size="38rpx" color="#9b99a3" />
+      </view>
+      <view wx:if="{{canRedemption}}" class="business-row pressable" bind:tap="openRedemptions">
+        <view class="business-icon purple"><t-icon name="check-circle" size="42rpx" /></view>
+        <view class="business-copy"><view>核销记录</view><text>查看成功、撤销和剩余次数</text></view>
+        <t-icon name="chevron-right" size="38rpx" color="#9b99a3" />
+      </view>
+      <view wx:if="{{canOrder}}" class="business-row pressable" bind:tap="openOrders">
+        <view class="business-icon amber"><t-icon name="order" size="42rpx" /></view>
+        <view class="business-copy"><view>门店订单</view><text>查询支付、取消和退款状态</text></view>
+        <t-icon name="chevron-right" size="38rpx" color="#9b99a3" />
+      </view>
+    </view>
+
+    <view wx:if="{{canVoucher}}" class="business-group surface-card">
+      <view class="group-heading"><text>商品</text><text>团购券全生命周期</text></view>
+      <view class="business-row pressable" bind:tap="openVouchers">
+        <view class="business-icon coral"><t-icon name="ticket" size="42rpx" /></view>
+        <view class="business-copy"><view>团购券管理</view><text>创建、提交审核、复制与下架</text></view>
+        <t-icon name="chevron-right" size="38rpx" color="#9b99a3" />
+      </view>
+    </view>
+
+    <view wx:if="{{canFinance}}" class="business-group surface-card">
+      <view class="group-heading"><text>财务</text><text>真实资金与结算结果</text></view>
+      <view class="business-row pressable" bind:tap="openSettlements">
+        <view class="business-icon purple"><t-icon name="wallet" size="42rpx" /></view>
+        <view class="business-copy"><view>结算记录</view><text>查看批次、金额与处理状态</text></view>
+        <t-icon name="chevron-right" size="38rpx" color="#9b99a3" />
+      </view>
+    </view>
+
+    <view wx:if="{{canStaff}}" class="business-group surface-card">
+      <view class="group-heading"><text>团队</text><text>员工与核销权限</text></view>
+      <view class="business-row pressable" bind:tap="openStaff">
+        <view class="business-icon amber"><t-icon name="usergroup" size="42rpx" /></view>
+        <view class="business-copy"><view>员工与权限</view><text>邀请、启用或停用门店员工</text></view>
+        <t-icon name="chevron-right" size="38rpx" color="#9b99a3" />
+      </view>
+    </view>
+
+    <view wx:if="{{!canRedemption && !canOrder && !canVoucher && !canFinance && !canStaff}}" class="state-panel">当前账号暂无可用经营模块</view>
+  </block>
+</view>

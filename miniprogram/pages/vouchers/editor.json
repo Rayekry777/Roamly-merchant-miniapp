@@ -1,5 +1,7 @@
 {
   "navigationBarTitleText": "编辑团购券",
   "enablePullDownRefresh": false,
-  "usingComponents": {}
+  "usingComponents": {
+    "app-navbar": "/components/app-navbar/index"
+  }
 }

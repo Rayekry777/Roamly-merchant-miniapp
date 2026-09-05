@@ -9,3 +9,4 @@ coverage/
 !.env.example
 project.private.config.json
 *.log
+artifacts/ui-qa/

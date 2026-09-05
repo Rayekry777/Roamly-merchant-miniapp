@@ -26,6 +26,8 @@
     "localPlugins": false,
     "disableUseStrict": false,
     "condition": false,
+    "compileHotReLoad": false,
+    "ignoreDevUnusedFiles": false,
     "babelSetting": {
       "ignore": [],
       "disablePlugins": [],

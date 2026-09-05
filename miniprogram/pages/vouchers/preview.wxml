@@ -1,4 +1,6 @@
-<view class="preview-page">
+<app-navbar title="团购券预览" />
+
+<view class="preview-page page-enter">
   <view wx:if="{{loading}}" class="page-shell state-panel">正在生成预览...</view>
   <view wx:elif="{{error && !draft}}" class="page-shell state-panel error-panel">
     <view>{{error}}</view>
@@ -77,3 +79,4 @@
     </view>
   </block>
 </view>
+<success-motion id="success-motion" message="团购券已提交" />

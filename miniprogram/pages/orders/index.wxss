@@ -1,32 +1,165 @@
-/* 页面样式由全局 Roamly 设计基线提供。 */
-.order-filters {
-  display: flex;
-  white-space: nowrap;
-  margin: 18rpx 0;
+.orders-page {
+  padding-top: 20rpx;
 }
 
-.order-filter {
-  display: inline-block;
-  margin-right: 28rpx;
+.page-copy {
+  margin-top: 12rpx;
   color: var(--roamly-muted);
   font-size: 24rpx;
 }
 
+.order-filters {
+  margin: 28rpx -28rpx 8rpx;
+  white-space: nowrap;
+}
+
+.order-filter-inner {
+  display: inline-flex;
+  gap: 12rpx;
+  padding: 0 28rpx 10rpx;
+}
+
+.order-filter {
+  display: inline-flex;
+  padding: 15rpx 24rpx;
+  border-radius: 24rpx;
+  color: var(--roamly-muted);
+  background: #ffffff;
+  font-size: 24rpx;
+}
+
 .order-filter--active {
-  color: var(--roamly-primary);
+  color: #ffffff;
+  background: var(--roamly-primary);
   font-weight: 700;
 }
 
+.order-list {
+  margin-top: 14rpx;
+}
+
 .order-card {
-  margin-top: 16rpx;
-  padding: 24rpx;
-  background: #fff;
-  border: 1rpx solid var(--roamly-border);
-  border-radius: 16rpx;
+  padding: 30rpx;
+}
+
+.order-head {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 18rpx;
+}
+
+.order-shop-mark {
+  display: flex;
+  width: 68rpx;
+  height: 68rpx;
+  flex: 0 0 68rpx;
+  align-items: center;
+  justify-content: center;
+  border-radius: 22rpx;
+  color: var(--roamly-primary);
+  background: rgba(255, 95, 87, 0.1);
+}
+
+.order-main {
+  min-width: 0;
+  flex: 1;
+}
+
+.order-title {
+  overflow: hidden;
+  font-size: 28rpx;
+  font-weight: 720;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.order-no {
+  margin-top: 7rpx;
+  overflow: hidden;
+  color: var(--roamly-muted);
+  font-size: 20rpx;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .order-status {
-  color: var(--roamly-primary);
-  font-size: 24rpx;
+  flex: none;
+  padding: 8rpx 14rpx;
+  border-radius: 18rpx;
+  font-size: 21rpx;
+  font-weight: 680;
+}
+
+.status-pending {
+  color: #6c59d9;
+  background: #f0edff;
+}
+
+.status-success {
+  color: #13795b;
+  background: #e7f7f0;
+}
+
+.status-warning {
+  color: #b06b18;
+  background: #fff3df;
+}
+
+.status-muted {
+  color: #65636d;
+  background: #f0f0f4;
+}
+
+.order-info {
+  display: grid;
+  grid-template-columns: 1.2fr 0.6fr 1fr;
+  gap: 12rpx;
+  margin-top: 26rpx;
+}
+
+.order-info view {
+  min-width: 0;
+  padding: 18rpx 14rpx;
+  border-radius: 22rpx;
+  background: var(--roamly-bg);
+}
+
+.order-info text {
+  display: block;
+  color: var(--roamly-muted);
+  font-size: 20rpx;
+}
+
+.order-info strong {
+  display: block;
+  margin-top: 7rpx;
+  overflow: hidden;
+  font-size: 23rpx;
+  text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.order-info .amount {
+  color: var(--roamly-primary);
+}
+
+.order-time {
+  margin-top: 20rpx;
+  color: var(--roamly-muted);
+  font-size: 21rpx;
+}
+
+.list-error {
+  color: var(--roamly-danger);
+}
+
+@media (width <= 340px) {
+  .order-info {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .order-info view:last-child {
+    grid-column: 1 / 3;
+  }
 }

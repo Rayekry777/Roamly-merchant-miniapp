@@ -1,6 +1,84 @@
-<view class="page-shell">
-  <view class="page-kicker">ROAMLY MERCHANT</view>
-  <view class="page-heading">经营工作台</view>
-  <view class="page-rule" aria-hidden="true"></view>
-  <view wx:if="{{summary}}" class="section-block"><view><view class="section-title">经营资金</view><view class="onboarding-note">冻结 ¥{{summary.frozenAmount / 100}} · 已确认 ¥{{summary.recognizedAmount / 100}}</view></view><view class="menu-state">净额 ¥{{summary.netAmount / 100}}</view></view>
+<view class="home-page" style="padding-top: {{statusBarHeight}}px;">
+  <view class="mode-bar" style="top: {{statusBarHeight}}px; padding-right: {{capsuleInset}}px;">
+    <view class="mode-tabs">
+      <view class="mode-tab mode-tab--active">到店</view>
+      <view class="mode-tab pressable" data-label="外卖" bind:tap="unavailable">外卖</view>
+    </view>
+    <view class="manage-link pressable" bind:tap="openManagement">
+      <t-icon name="swap" size="36rpx" />
+      <text>去管理版</text>
+    </view>
+  </view>
+
+  <view class="identity-wrap">
+    <view class="shop-name">{{shopName}}</view>
+    <view class="order-search pressable" data-label="订单搜索" bind:tap="unavailable">
+      <t-icon name="search" size="45rpx" color="#9b99a3" />
+      <text>订单有问题？点击搜索查看详情</text>
+    </view>
+  </view>
+
+  <view wx:if="{{error}}" class="home-alert home-alert--error">
+    <text>{{error}}</text>
+    <text class="home-alert__action" bind:tap="retry">重新加载</text>
+  </view>
+  <view wx:elif="{{current && current.status !== 'ACTIVE'}}" class="home-alert">
+    <text>当前账号状态：{{current.statusLabel}}</text>
+    <text class="home-alert__action" bind:tap="goToMe">前往处理</text>
+  </view>
+
+  <view class="verify-grid">
+    <view class="verify-card verify-card--scan pressable" bind:tap="scan">
+      <view class="verify-card__icon"><t-icon name="scan" size="70rpx" color="#ffffff" /></view>
+      <view class="verify-card__title">扫码验券</view>
+    </view>
+    <view class="verify-card verify-card--manual pressable" bind:tap="manual">
+      <view class="verify-card__icon"><t-icon name="keyboard" size="70rpx" color="#ffffff" /></view>
+      <view class="verify-card__title">输码验券</view>
+    </view>
+  </view>
+
+  <view class="home-menu-card pressable" data-label="预约处理" bind:tap="unavailable">
+    <view class="home-menu-icon home-menu-icon--coral"><t-icon name="calendar" size="42rpx" /></view>
+    <view class="home-menu-label">预约处理</view>
+    <t-icon name="chevron-right" size="42rpx" color="#777680" />
+  </view>
+
+  <view class="home-menu-card pressable" bind:tap="openRedemptions">
+    <view class="home-menu-icon home-menu-icon--purple"><t-icon name="check-circle" size="42rpx" /></view>
+    <view class="home-menu-label">核销明细</view>
+    <t-icon name="chevron-right" size="42rpx" color="#777680" />
+  </view>
+
+  <view class="home-menu-card home-menu-card--group">
+    <view class="home-menu-row pressable" data-label="处理售后" bind:tap="unavailable">
+      <view class="home-menu-icon home-menu-icon--amber"><t-icon name="service" size="42rpx" /></view>
+      <view class="home-menu-label">处理售后</view>
+      <t-icon name="chevron-right" size="42rpx" color="#777680" />
+    </view>
+    <view class="home-menu-row pressable" data-label="发起退款" bind:tap="unavailable">
+      <view class="home-menu-icon home-menu-icon--amber"><t-icon name="money" size="42rpx" /></view>
+      <view class="home-menu-label">发起退款</view>
+      <t-icon name="chevron-right" size="42rpx" color="#777680" />
+    </view>
+  </view>
+
+  <view class="receipt-card {{financeFlash ? 'receipt-card--flash' : ''}}">
+    <view class="receipt-head pressable" bind:tap="toggleFinance">
+      <view class="receipt-title">本店经营资金总计</view>
+      <view class="receipt-tools">
+        <view class="receipt-refresh pressable" catch:tap="refreshFinance"><t-icon name="refresh" size="37rpx" /></view>
+        <t-icon name="chevron-right" size="42rpx" color="#777680" />
+      </view>
+    </view>
+    <view wx:if="{{financeExpanded}}" class="receipt-body">
+      <view class="receipt-row"><text>已确认金额</text><strong>{{summary.recognizedAmountText}}<small wx:if="{{summary.recognizedAmountText !== '--'}}">元</small></strong></view>
+      <view class="receipt-row"><text>商户净额</text><strong>{{summary.netAmountText}}<small wx:if="{{summary.netAmountText !== '--'}}">元</small></strong></view>
+      <view wx:if="{{financeError}}" class="receipt-error">{{financeError}}</view>
+      <view wx:if="{{canFinance}}" class="receipt-link pressable" bind:tap="openSettlements">查看结算记录</view>
+    </view>
+    <view class="receipt-teeth"></view>
+  </view>
+
+  <view wx:if="{{loading && !current}}" class="home-loading">正在同步门店信息...</view>
 </view>

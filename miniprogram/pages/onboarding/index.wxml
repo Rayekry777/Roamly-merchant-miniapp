@@ -1,4 +1,6 @@
-<view class="page-shell onboarding-page">
+<app-navbar title="商户入驻" />
+
+<view class="page-shell page-shell--subpage onboarding-page page-enter">
   <view class="page-kicker">ROAMLY MERCHANT</view>
   <view class="page-heading">商户入驻</view>
   <view class="page-rule" aria-hidden="true"></view>

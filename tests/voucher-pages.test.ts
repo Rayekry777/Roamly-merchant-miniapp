@@ -63,14 +63,16 @@ describe("阶段 20 商户建券页面闭环", () => {
     expect(page.match(/bindtap="submit"/g)).toHaveLength(1);
   });
 
-  it("我的页面只通过权限态显示团购券入口", () => {
+  it("我的页面通过活动账号管理入口承接团购券能力", () => {
     const page = readFileSync(resolve(root, "pages/me/index.wxml"), "utf8");
     const guard = readFileSync(
       resolve(root, "utils/merchant-guard.ts"),
       "utf8",
     );
 
-    expect(page).toContain('wx:if="{{canManageVouchers}}"');
-    expect(guard).toContain('includes("merchant:voucher:manage")');
+    expect(page).toContain("进入管理版");
+    expect(page).toContain("current.status === 'ACTIVE'");
+    expect(guard).toContain("guardMerchantPermission");
+    expect(guard).toContain('"merchant:voucher:manage"');
   });
 });

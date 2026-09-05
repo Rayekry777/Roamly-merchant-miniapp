@@ -1,0 +1,22 @@
+<app-navbar title="结算详情" />
+
+<view class="page-shell page-shell--subpage detail-page page-enter">
+  <view wx:if="{{loading}}" class="state-panel">正在加载结算详情...</view>
+  <view wx:elif="{{error}}" class="error-panel">
+    <view>{{error}}</view>
+    <button class="text-action" bind:tap="load">重新加载</button>
+  </view>
+  <view wx:elif="{{detail}}" class="detail-card surface-card">
+    <view class="detail-status status-{{detail.statusTone}}">{{detail.statusText}}</view>
+    <view class="detail-label">结算金额</view>
+    <view class="detail-amount">¥{{detail.totalAmountText}}</view>
+    <view class="detail-rows">
+      <view><text>结算日期</text><strong>{{detail.settlementDateText}}</strong></view>
+      <view><text>结算批次</text><strong>{{detail.id}}</strong></view>
+      <view><text>处理时间</text><strong>{{detail.processedTimeText}}</strong></view>
+      <view wx:if="{{detail.failureReason}}" class="failure-row"><text>失败原因</text><strong>{{detail.failureReason}}</strong></view>
+    </view>
+    <view class="detail-tip">本页面仅展示服务端结算结果，不提供提现、修改费率或重试操作。</view>
+  </view>
+</view>
+

@@ -1,6 +1,38 @@
 import { listMerchantOrders, type MerchantOrder } from "../../api/orders";
-import { guardActiveMerchant } from "../../utils/merchant-guard";
+import { formatDateTime, formatFen, maskBusinessId } from "../../utils/format";
+import { guardMerchantPermission } from "../../utils/merchant-guard";
 import { connectMerchantRealtime } from "../../utils/realtime";
+
+type MerchantOrderView = MerchantOrder & {
+  statusText: string;
+  statusTone: string;
+  payAmountText: string;
+  maskedUserId: string;
+  createdTimeText: string;
+};
+
+const statusViews: Record<string, { text: string; tone: string }> = {
+  PENDING_PAYMENT: { text: "待支付", tone: "pending" },
+  PAID: { text: "已支付", tone: "success" },
+  CANCELED: { text: "已取消", tone: "muted" },
+  REFUNDING: { text: "退款中", tone: "warning" },
+  REFUNDED: { text: "已退款", tone: "muted" },
+};
+
+function toOrderView(item: MerchantOrder): MerchantOrderView {
+  const status = statusViews[item.status] || {
+    text: item.status,
+    tone: "muted",
+  };
+  return {
+    ...item,
+    statusText: status.text,
+    statusTone: status.tone,
+    payAmountText: formatFen(item.payAmount),
+    maskedUserId: maskBusinessId(item.userId),
+    createdTimeText: `创建时间 ${formatDateTime(item.createdTime)}`,
+  };
+}
 const statuses = [
   { value: "", label: "全部" },
   { value: "PENDING_PAYMENT", label: "待支付" },
@@ -11,7 +43,7 @@ const statuses = [
 ];
 Page({
   data: {
-    orders: [] as MerchantOrder[],
+    orders: [] as MerchantOrderView[],
     statuses,
     status: "",
     page: 1,
@@ -20,8 +52,20 @@ Page({
     error: "",
   },
   onShow() {
-    void guardActiveMerchant();
-    void this.load(true);
+    void this.activate();
+  },
+  async activate() {
+    if (
+      !(await guardMerchantPermission(
+        "merchant:order:read",
+        "当前角色无权查看订单",
+        { route: "/pages/orders/index" },
+      ))
+    )
+      return;
+    this.initialized = true;
+    await this.load(true);
+    this.stopRealtime?.();
     this.stopRealtime = connectMerchantRealtime((event) => {
       if (["PAYMENT_UPDATED", "REFUND_UPDATED"].includes(event.type))
         void this.load(true);
@@ -41,6 +85,7 @@ Page({
     if (this.data.hasMore && !this.data.loading) void this.load(false);
   },
   async load(reset: boolean) {
+    if (!this.initialized || (!reset && this.data.loading)) return;
     const page = reset ? 1 : this.data.page;
     this.setData({ loading: true, error: reset ? "" : this.data.error });
     try {
@@ -50,7 +95,7 @@ Page({
       );
       const current = reset ? [] : this.data.orders;
       const map = new Map(current.map((item) => [item.id, item]));
-      result.data?.items.forEach((item) => map.set(item.id, item));
+      result.data?.items.forEach((item) => map.set(item.id, toOrderView(item)));
       const orders = [...map.values()];
       this.setData({
         orders,
@@ -75,5 +120,9 @@ Page({
     this.setData({ status });
     void this.load(true);
   },
+  retry() {
+    void this.load(this.data.orders.length === 0);
+  },
+  initialized: false,
   stopRealtime: undefined as (() => void) | undefined,
 });

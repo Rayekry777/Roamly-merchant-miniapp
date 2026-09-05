@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "经营",
+  "usingComponents": {
+    "app-navbar": "/components/app-navbar/index",
+    "t-icon": "tdesign-miniprogram/icon/icon"
+  }
+}

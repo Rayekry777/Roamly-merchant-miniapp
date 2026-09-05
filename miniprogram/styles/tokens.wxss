@@ -10,6 +10,10 @@ page {
   --roamly-control-radius: 32rpx;
   --roamly-card-radius: 48rpx;
   --roamly-shadow: 0 20rpx 56rpx rgba(45, 42, 80, 0.1);
+  --roamly-shadow-soft: 0 12rpx 36rpx rgba(45, 42, 80, 0.07);
+  --roamly-success: #28a47c;
+  --roamly-warning: #f39a3f;
+  --roamly-danger: #d84d49;
   --td-brand-color: #ff5f57;
   --td-brand-color-active: #e94f49;
   --td-radius-default: 32rpx;

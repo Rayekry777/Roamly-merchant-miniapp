@@ -1,0 +1,11 @@
+<view class="messages-page page-enter" style="padding-top: {{statusBarHeight}}px;">
+  <view class="messages-head">
+    <view class="messages-title">消息</view>
+    <view class="messages-setting pressable" bind:tap="unavailable"><t-icon name="setting" size="42rpx" /></view>
+  </view>
+  <view class="empty-message">
+    <view class="empty-message__icon"><t-icon name="notification" size="74rpx" /></view>
+    <view class="empty-message__title">暂时没有消息</view>
+    <view class="empty-message__copy">订单与经营提醒功能正在准备中</view>
+  </view>
+</view>

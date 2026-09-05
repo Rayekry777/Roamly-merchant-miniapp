@@ -1,30 +1,41 @@
-import type { CurrentMerchant } from "../../types/merchant-auth";
 import { merchantStore } from "../../store/merchant";
+import { voucherDraftStore } from "../../store/voucher-draft";
+import type { CurrentMerchant } from "../../types/merchant-auth";
+import { routeToLogin } from "../../utils/auth-navigation";
 import { merchantProfileView } from "../../utils/merchant-view";
 import { ApiError } from "../../utils/request";
+import { syncMerchantTabBar } from "../../utils/routes";
 
 Page({
   data: {
+    statusBarHeight: 24,
     loading: true,
     current: null as CurrentMerchant | null,
     loggedIn: false,
+    accountPanelVisible: false,
     guidance: "",
     statusTone: "neutral",
-    canOperate: false,
-    avatarText: "商",
+    avatarText: "R",
+    displayName: "Roamly 商户",
     error: "",
     canOnboard: false,
     onboardingLabel: "",
-    canManageVouchers: false,
     canAcceptInvitation: false,
   },
-  onShow() {
-    void this.loadCurrent();
+  onLoad() {
+    this.setData({ statusBarHeight: wx.getWindowInfo().statusBarHeight || 24 });
   },
-  async loadCurrent() {
+  onShow() {
+    syncMerchantTabBar(this);
+    void this.loadCurrent(false);
+  },
+  onPullDownRefresh() {
+    void this.loadCurrent(true).finally(() => wx.stopPullDownRefresh());
+  },
+  async loadCurrent(force: boolean) {
     this.setData({ loading: true, error: "" });
     try {
-      const current = await merchantStore.restore(true);
+      const current = await merchantStore.restore(force);
       if (!current) {
         this.setData({ current: null, loggedIn: false });
         return;
@@ -35,8 +46,8 @@ Page({
         loggedIn: true,
         guidance: view.guidance,
         statusTone: view.tone,
-        canOperate: view.canOperate,
         avatarText: view.avatarText,
+        displayName: current.shop?.name || current.nickname || "Roamly 商户",
         canOnboard:
           current.role === "OWNER" &&
           ["NOT_APPLIED", "PENDING", "REJECTED"].includes(current.status),
@@ -46,15 +57,10 @@ Page({
             : current.status === "REJECTED"
               ? "修改入驻资料"
               : "开始商户入驻",
-        canManageVouchers:
-          current.status === "ACTIVE" &&
-          current.permissions.includes("merchant:voucher:manage"),
         canAcceptInvitation: !current.shop && current.status === "NOT_APPLIED",
       });
     } catch (error) {
       this.setData({
-        current: null,
-        loggedIn: false,
         error:
           error instanceof ApiError
             ? error.message
@@ -65,27 +71,63 @@ Page({
     }
   },
   openLogin() {
-    wx.navigateTo({ url: "/pages/login/index" });
+    routeToLogin({ route: "/pages/me/index" });
   },
+  openAccountPanel() {
+    if (!this.data.loggedIn) {
+      this.openLogin();
+      return;
+    }
+    this.setData({ accountPanelVisible: true });
+  },
+  closeAccountPanel() {
+    this.setData({ accountPanelVisible: false });
+  },
+  noop() {},
   openOnboarding() {
+    this.closeAccountPanel();
     wx.navigateTo({ url: "/pages/onboarding/index" });
   },
-  openVouchers() {
-    if (!this.data.canManageVouchers) {
-      wx.showToast({ title: "当前账号暂不能管理团购券", icon: "none" });
-      return;
-    }
-    wx.navigateTo({ url: "/pages/vouchers/index" });
-  },
-  openStaff() {
-    if (this.data.current?.role !== "OWNER") {
-      wx.showToast({ title: "仅店主管理员工", icon: "none" });
-      return;
-    }
-    wx.navigateTo({ url: "/pages/staff/index" });
-  },
   openStaffAcceptance() {
+    this.closeAccountPanel();
     wx.navigateTo({ url: "/pages/staff/acceptance/index" });
+  },
+  openManagement() {
+    this.closeAccountPanel();
+    wx.navigateTo({ url: "/pages/operations/index" });
+  },
+  unavailable(event: WechatMiniprogram.TouchEvent) {
+    const label = String(event.currentTarget.dataset.label || "该功能");
+    wx.showToast({ title: `${label}暂未开放`, icon: "none" });
+  },
+  openPrivacy() {
+    wx.openSetting({
+      fail: () => wx.showToast({ title: "暂时无法打开微信设置", icon: "none" }),
+    });
+  },
+  showAbout() {
+    wx.showModal({
+      title: "关于 Roamly",
+      content: "Roamly 商户端\n让门店经营与旅行消费连接得更轻松。",
+      showCancel: false,
+      confirmText: "知道了",
+      confirmColor: "#ff5f57",
+    });
+  },
+  async clearCache() {
+    const confirmed = await new Promise<boolean>((resolve) => {
+      wx.showModal({
+        title: "清除缓存",
+        content: "将清除团购券草稿和临时业务缓存，不会退出登录。",
+        confirmText: "清除",
+        confirmColor: "#ff5f57",
+        success: (result) => resolve(result.confirm),
+        fail: () => resolve(false),
+      });
+    });
+    if (!confirmed) return;
+    voucherDraftStore.clear();
+    wx.showToast({ title: "缓存已清除", icon: "success" });
   },
   async logout() {
     const confirmed = await new Promise<boolean>((resolve) => {
@@ -100,7 +142,7 @@ Page({
     });
     if (!confirmed) return;
     await merchantStore.logout();
-    this.setData({ current: null, loggedIn: false, error: "" });
-    wx.showToast({ title: "已退出登录", icon: "none" });
+    this.closeAccountPanel();
+    wx.reLaunch({ url: "/pages/login/index?entry=logout" });
   },
 });

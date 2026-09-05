@@ -1,79 +1,86 @@
-<view class="page-shell">
-  <view class="page-kicker">ROAMLY MERCHANT</view>
-  <view class="page-heading">我的</view>
-  <view class="page-rule" aria-hidden="true"></view>
+<view class="profile-page page-enter" style="padding-top: {{statusBarHeight}}px;">
+  <view class="profile-scan pressable" data-label="账号二维码" bind:tap="unavailable">
+    <t-icon name="scan" size="46rpx" />
+  </view>
 
-  <view wx:if="{{loading}}" class="state-panel">正在同步商户身份...</view>
+  <view wx:if="{{loading && !current}}" class="profile-loading">正在同步商户身份...</view>
+  <view wx:elif="{{error && !current}}" class="profile-error">
+    <text>{{error}}</text>
+    <text bind:tap="loadCurrent">重新加载</text>
+  </view>
 
-  <block wx:elif="{{!loggedIn}}">
-    <view class="profile-panel logged-out">
-      <view class="avatar avatar-empty">商</view>
-      <view class="profile-main">
-        <view class="profile-name">登录商户账号</view>
-        <view class="profile-subtitle">查看入驻进度与门店经营状态</view>
-      </view>
+  <view class="profile-hero pressable" bind:tap="openAccountPanel">
+    <image wx:if="{{current && current.avatarUrl}}" class="profile-avatar" src="{{current.avatarUrl}}" mode="aspectFill" />
+    <view wx:else class="profile-avatar profile-avatar--fallback">{{avatarText}}</view>
+    <view class="profile-name-row">
+      <view class="profile-name">{{loggedIn ? displayName : '登录商户账号'}}</view>
+      <t-icon name="chevron-right" size="38rpx" color="#64626d" />
     </view>
-    <view wx:if="{{error}}" class="error-panel">{{error}}</view>
-    <button class="primary-action" bindtap="openLogin">手机号登录</button>
-  </block>
+    <view class="profile-phone">{{loggedIn ? '账号：' + current.maskedPhone : '登录后查看门店与经营状态'}}</view>
+    <view wx:if="{{loggedIn}}" class="profile-tags">
+      <text>{{current.roleLabel}}</text>
+      <text class="profile-tag--accent">{{current.statusLabel}}</text>
+    </view>
+  </view>
 
-  <block wx:else>
-    <view class="profile-panel">
-      <image wx:if="{{current.avatarUrl}}" class="avatar" src="{{current.avatarUrl}}" mode="aspectFill" />
-      <view wx:else class="avatar avatar-empty">{{avatarText}}</view>
-      <view class="profile-main">
-        <view class="name-row">
-          <view class="profile-name">{{current.nickname}}</view>
-          <view class="status-badge status-{{statusTone}}">{{current.statusLabel}}</view>
+  <view class="profile-menu profile-menu--single pressable" data-label="切换公司" bind:tap="unavailable">
+    <view class="profile-menu-icon"><t-icon name="shop" size="42rpx" /></view>
+    <view class="profile-menu-label">切换公司</view>
+    <view class="profile-menu-value">{{current && current.shop ? current.shop.name : '暂无其他公司'}}</view>
+    <t-icon name="chevron-right" size="38rpx" color="#9b99a3" />
+  </view>
+
+  <view class="profile-menu profile-menu--group">
+    <view class="profile-menu-row pressable" data-label="我要反馈" bind:tap="unavailable">
+      <view class="profile-menu-icon"><t-icon name="edit" size="42rpx" /></view>
+      <view class="profile-menu-label">我要反馈</view>
+      <t-icon name="chevron-right" size="38rpx" color="#9b99a3" />
+    </view>
+    <view class="profile-menu-row pressable" data-label="消息设置" bind:tap="unavailable">
+      <view class="profile-menu-icon"><t-icon name="setting" size="42rpx" /></view>
+      <view class="profile-menu-label">消息设置</view>
+      <t-icon name="chevron-right" size="38rpx" color="#9b99a3" />
+    </view>
+    <view class="profile-menu-row pressable" bind:tap="openPrivacy">
+      <view class="profile-menu-icon"><t-icon name="lock-on" size="42rpx" /></view>
+      <view class="profile-menu-label">隐私与权限</view>
+      <t-icon name="chevron-right" size="38rpx" color="#9b99a3" />
+    </view>
+    <view class="profile-menu-row pressable" bind:tap="showAbout">
+      <view class="profile-menu-icon"><t-icon name="info-circle" size="42rpx" /></view>
+      <view class="profile-menu-label">关于 Roamly</view>
+      <t-icon name="chevron-right" size="38rpx" color="#9b99a3" />
+    </view>
+    <view class="profile-menu-row pressable" bind:tap="clearCache">
+      <view class="profile-menu-icon"><t-icon name="delete" size="42rpx" /></view>
+      <view class="profile-menu-label">清除缓存</view>
+      <t-icon name="chevron-right" size="38rpx" color="#9b99a3" />
+    </view>
+  </view>
+
+  <view wx:if="{{accountPanelVisible}}" class="account-mask" catch:tap="closeAccountPanel">
+    <view class="account-panel" catch:tap="noop">
+      <view class="account-panel__handle"></view>
+      <view class="account-panel__head">
+        <view>
+          <view class="account-panel__title">账号与门店</view>
+          <view class="account-panel__status">{{guidance}}</view>
         </view>
-        <view class="profile-subtitle">{{current.maskedPhone}} · {{current.roleLabel}}</view>
+        <view class="account-panel__close" bind:tap="closeAccountPanel">关闭</view>
       </view>
+      <view wx:if="{{canOnboard}}" class="account-action pressable" bind:tap="openOnboarding">
+        <view><strong>{{onboardingLabel}}</strong><text>查看并处理当前入驻状态</text></view>
+        <t-icon name="chevron-right" size="38rpx" />
+      </view>
+      <view wx:if="{{canAcceptInvitation}}" class="account-action pressable" bind:tap="openStaffAcceptance">
+        <view><strong>接受员工邀请</strong><text>通过邀请码加入门店</text></view>
+        <t-icon name="chevron-right" size="38rpx" />
+      </view>
+      <view wx:if="{{current && current.status === 'ACTIVE'}}" class="account-action pressable" bind:tap="openManagement">
+        <view><strong>进入管理版</strong><text>订单、团购券、员工和结算</text></view>
+        <t-icon name="chevron-right" size="38rpx" />
+      </view>
+      <button class="account-logout" bind:tap="logout">退出登录</button>
     </view>
-
-    <view class="status-panel status-panel-{{statusTone}}">
-      <view class="status-title">账号状态</view>
-      <view class="status-copy">{{guidance}}</view>
-    </view>
-
-    <view wx:if="{{canOnboard}}" class="section-block onboarding-entry" bindtap="openOnboarding">
-      <view>
-        <view class="section-title">商户入驻</view>
-        <view class="onboarding-note">{{guidance}}</view>
-      </view>
-      <view class="entry-action">{{onboardingLabel}} ›</view>
-    </view>
-
-    <view wx:if="{{current.shop}}" class="section-block">
-      <view class="section-title">当前门店</view>
-      <view class="shop-row">
-        <view class="shop-mark">店</view>
-        <view class="shop-copy">
-          <view class="shop-name">{{current.shop.name}}</view>
-          <view class="shop-address">{{current.shop.address}}</view>
-        </view>
-      </view>
-    </view>
-
-    <view class="section-block">
-      <view class="section-title">经营入口</view>
-      <view wx:if="{{canAcceptInvitation}}" class="menu-row" bindtap="openStaffAcceptance">
-        <view><view class="menu-name">接受员工邀请</view><view class="menu-note">使用店主发来的邀请码加入门店</view></view>
-        <view class="menu-state">进入 ›</view>
-      </view>
-      <view wx:if="{{canManageVouchers}}" class="menu-row" bindtap="openVouchers">
-        <view><view class="menu-name">团购券</view><view class="menu-note">创建、预览和提交四类团购券</view></view>
-        <view class="menu-state">进入 ›</view>
-      </view>
-      <view class="menu-row {{canOperate ? '' : 'menu-row-disabled'}}" bindtap="openStaff">
-        <view><view class="menu-name">员工与权限</view><view class="menu-note">邀请店长和核销员</view></view>
-        <view class="menu-state">{{canOperate ? '可用' : '待激活'}}</view>
-      </view>
-      <view class="menu-row {{canOperate ? '' : 'menu-row-disabled'}}">
-        <view><view class="menu-name">经营与结算</view><view class="menu-note">查看经营摘要和结算记录</view></view>
-        <view class="menu-state">{{canOperate ? '可用' : '待激活'}}</view>
-      </view>
-    </view>
-
-    <button class="logout-button" bindtap="logout">退出登录</button>
-  </block>
+  </view>
 </view>

@@ -1,1 +1,35 @@
-<view class="page-shell"><view class="page-kicker">ROAMLY MERCHANT</view><view class="page-heading">订单</view><view class="page-rule" aria-hidden="true"></view><scroll-view class="order-filters" scroll-x><view wx:for="{{statuses}}" wx:key="value" class="order-filter {{status === item.value ? 'order-filter--active' : ''}}" data-status="{{item.value}}" bindtap="selectStatus">{{item.label}}</view></scroll-view><view wx:if="{{loading && !orders.length}}" class="state-panel">正在加载订单...</view><view wx:elif="{{error && !orders.length}}" class="error-panel">{{error}}</view><view wx:elif="{{!orders.length}}" class="state-panel">暂无订单</view><view wx:else><view wx:for="{{orders}}" wx:key="id" class="order-card section-block"><view><view class="section-title">{{item.productTitle}}</view><view class="onboarding-note">订单 {{item.orderNo}} · 消费者 {{item.userId}}</view><view class="onboarding-note">数量 {{item.quantity}} · ¥{{item.payAmount / 100}}</view></view><view class="order-status">{{item.status === 'PENDING_PAYMENT' ? '待支付' : item.status === 'PAID' ? '已支付' : item.status === 'CANCELED' ? '已取消' : item.status === 'REFUNDING' ? '退款中' : '已退款'}}</view></view><view wx:if="{{loading}}" class="state-panel">加载中...</view></view></view>
+<app-navbar title="门店订单" />
+
+<view class="page-shell page-shell--subpage orders-page page-enter">
+  <view class="page-kicker">STORE ORDERS</view>
+  <view class="page-heading">门店订单</view>
+  <view class="page-copy">订单状态和金额均以服务端结果为准</view>
+
+  <scroll-view class="order-filters" scroll-x enhanced show-scrollbar="{{false}}">
+    <view class="order-filter-inner">
+      <view wx:for="{{statuses}}" wx:key="value" class="order-filter {{status === item.value ? 'order-filter--active' : ''}}" data-status="{{item.value}}" bindtap="selectStatus">{{item.label}}</view>
+    </view>
+  </scroll-view>
+
+  <view wx:if="{{loading && !orders.length}}" class="state-panel">正在加载订单...</view>
+  <view wx:elif="{{error && !orders.length}}" class="error-panel"><view>{{error}}</view><button class="text-action" bindtap="retry">重新加载</button></view>
+  <view wx:elif="{{!orders.length}}" class="state-panel">当前筛选下暂无订单</view>
+  <view wx:else class="order-list">
+    <view wx:for="{{orders}}" wx:key="id" class="order-card surface-card">
+      <view class="order-head">
+        <view class="order-shop-mark"><t-icon name="shop" size="40rpx" /></view>
+        <view class="order-main"><view class="order-title">{{item.productTitle}}</view><view class="order-no">订单 {{item.orderNo}}</view></view>
+        <view class="order-status status-{{item.statusTone}}">{{item.statusText}}</view>
+      </view>
+      <view class="order-info">
+        <view><text>消费者</text><strong>{{item.maskedUserId}}</strong></view>
+        <view><text>数量</text><strong>{{item.quantity}}</strong></view>
+        <view><text>实付金额</text><strong class="amount">¥{{item.payAmountText}}</strong></view>
+      </view>
+      <view class="order-time">{{item.createdTimeText}}</view>
+    </view>
+    <view wx:if="{{loading}}" class="list-footer">正在加载更多...</view>
+    <view wx:elif="{{error}}" class="list-footer list-error" bindtap="retry">{{error}}，点击重试</view>
+    <view wx:elif="{{!hasMore}}" class="list-footer">没有更多订单了</view>
+  </view>
+</view>
