@@ -4,14 +4,14 @@ Roamly 商户端是原生微信小程序，面向店主、店长和核销员，�
 
 ## 技术栈
 
-| 领域 | 技术与版本 | 用途 |
-|---|---|---|
-| 小程序运行时 | 微信原生小程序、WXML/WXSS | 商户工作台、表单和核销页面 |
-| 业务语言 | TypeScript 5.9.3、miniprogram-api-typings 5.2.3 | API、Store、页面模型和状态机类型 |
-| UI 与动效 | TDesign Miniprogram 1.16.0、Lottie Miniprogram 1.0.12 | 表单、列表、反馈和主题令牌 |
-| 构建与交付 | npm、miniprogram-ci 2.1.31、自定义 `build-npm` 脚本 | 依赖构建和上传准备 |
-| 质量保障 | ESLint 9.39、Stylelint 16.23、Prettier 3.8、Vitest 4.0 | 类型、脚本、样式、格式和单元测试 |
-| 自动化检查 | miniprogram-automator、Sharp | 页面验收和视觉检查 |
+| 领域         | 技术与版本                                             | 用途                             |
+| ------------ | ------------------------------------------------------ | -------------------------------- |
+| 小程序运行时 | 微信原生小程序、WXML/WXSS                              | 商户工作台、表单和核销页面       |
+| 业务语言     | TypeScript 5.9.3、miniprogram-api-typings 5.2.3        | API、Store、页面模型和状态机类型 |
+| UI 与动效    | TDesign Miniprogram 1.16.0、Lottie Miniprogram 1.0.12  | 表单、列表、反馈和主题令牌       |
+| 构建与交付   | npm、miniprogram-ci 2.1.31、自定义 `build-npm` 脚本    | 依赖构建和上传准备               |
+| 质量保障     | ESLint 9.39、Stylelint 16.23、Prettier 3.8、Vitest 4.0 | 类型、脚本、样式、格式和单元测试 |
+| 自动化检查   | miniprogram-automator、Sharp                           | 页面验收和视觉检查               |
 
 ## 核心解决方案
 

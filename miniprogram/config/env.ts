@@ -2,19 +2,18 @@ type EnvironmentVersion = "develop" | "trial" | "release";
 
 const environments: Record<EnvironmentVersion, { apiBaseUrl: string }> = {
   develop: { apiBaseUrl: "http://127.0.0.1:8081" },
-  trial: { apiBaseUrl: "https://api.example.com/api" },
+  trial: { apiBaseUrl: "https://test-api.example.com/api" },
   release: { apiBaseUrl: "https://api.example.com/api" },
 };
 
 const deviceDevelopEnvironment = {
-  apiBaseUrl: "http://192.168.2.106:8081",
+  apiBaseUrl: "http://192.168.2.109:8081",
 };
 
 export function getEnvironment(): { apiBaseUrl: string } {
   let version: EnvironmentVersion = "develop";
   try {
-    version =
-      wx.getAccountInfoSync().miniProgram.envVersion || "develop";
+    version = wx.getAccountInfoSync().miniProgram.envVersion || "develop";
   } catch {
     version = "develop";
   }

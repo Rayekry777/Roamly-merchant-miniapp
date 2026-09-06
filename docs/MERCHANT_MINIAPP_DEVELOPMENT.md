@@ -74,7 +74,7 @@ deviceAcceptanceStatus: 未确认
 
 ## 团购券
 
-- `PACKAGE`（套餐券）编辑套餐明细与数量单位；`CASH`（代金券）编辑抵扣额和最低消费；`DISCOUNT`（折扣券）编辑折扣、最低消费和最高优惠；`MULTI_USE`（次卡）编辑总次数和服务明细。
+- `PACKAGE`（套餐券）编辑套餐明细与数量单位；`CASH`（代金券）编辑抵扣额和最低消费；`DISCOUNT`（折扣券，仅核销）仅编辑通用商品与使用规则；`MULTI_USE`（次卡）编辑总次数和服务明细。
 - 共用表单包含标题、图片、售价、门市价、库存、限购、销售期、有效期、可用星期/时段、不可用日期、预约、叠加、随时退和过期退。
 - `DRAFT`（草稿）可编辑，`PENDING`（审核中）只读，`REJECTED`（审核未通过）显示原因并可重提，审核通过后展示 `SCHEDULED`（待开售）、`ON_SALE`（销售中）、`OFF_SALE`（已下架）、`SOLD_OUT`（已售罄）或 `ENDED`（已结束）。
 - 提交和下架期间禁用重复点击，并由 API 层发送 `Idempotency-Key`。
@@ -115,6 +115,7 @@ deviceAcceptanceStatus: 未确认
 
 - 仅调用 `/v1/merchant/**`；成功结构为 `Result`、`PageResult`，认证使用 `Authorization: Bearer <token>`。
 - 订单页调用 `GET /v1/merchant/orders`，按 `PENDING_PAYMENT`（待支付）、`PAID`（已支付）、`CANCELED`（已取消）、`REFUNDING`（退款中）、`REFUNDED`（已退款）筛选并分页；结果只读展示所属门店订单和脱敏消费者业务 ID。
+- 售后页调用 `/v1/merchant/after-sales` 查看本店退款申请，店主和店长可发起退款申请；商户不执行审批、驳回或资金变更，平台统一处理并通过 `REFUND_UPDATED` 刷新结果。
 - 订单入口在客户端只对具备 `merchant:order:read`（商户订单查看）权限的 `OWNER`（店主）和 `MANAGER`（店长）显示；`VERIFIER`（核销员）不展示入口，若直接访问接口则展示后端 `MERCHANT_FORBIDDEN`（商户无权操作）错误，不伪装为空列表。
 - API 层统一处理 401、403、404、409、429、503；页面消费适配后的领域结果，不直接解析响应包装。
 - `MERCHANT_FORBIDDEN`（商户无权操作）、`VOUCHER_CODE_INVALID`（券码无效）、`VOUCHER_NOT_USABLE`（券当前不可用）、`VOUCHER_SHOP_MISMATCH`（券与门店不匹配）、`VERIFICATION_ALREADY_COMPLETED`（核销已完成）保留独立文案。
@@ -147,6 +148,8 @@ deviceAcceptanceStatus: 未确认
 阶段 17 已完成：4 个 Vitest 文件共 19 项通过，TypeScript、ESLint、Stylelint、Prettier、npm 构建及微信开发者工具 `build-npm` 均通过；开发者工具构建无警告，Android/iOS 真机状态保持“未确认”。
 
 阶段 18 已完成：四步入驻、完整预览、地图选点、七日多时段、单张营业执照、最多九张经营图、Bearer 私有下载、草稿恢复、409 刷新和幂等提交均已落地；6 个 Vitest 文件共 29 项通过，TypeScript、ESLint、Stylelint、Prettier、npm 构建及微信开发者工具自动化项目连接通过，Android/iOS 真机状态保持“未确认”。
+
+2026-09-06 基线复核：统一 ESLint 9.39、Prettier 3.8、Vitest 4.0、TypeScript 5.9 工具链；`npm run verify`（11 个测试文件、56 项）通过，体验版 API 地址与消费者端统一为 `https://test-api.example.com/api`。
 
 ## 非目标
 

@@ -12,10 +12,7 @@ import {
   getMerchantSettlement,
   listMerchantSettlements,
 } from "../miniprogram/api/settlement";
-import {
-  formatFen,
-  settlementStatus,
-} from "../miniprogram/utils/format";
+import { formatFen, settlementStatus } from "../miniprogram/utils/format";
 
 const root = resolve(process.cwd(), "miniprogram");
 
