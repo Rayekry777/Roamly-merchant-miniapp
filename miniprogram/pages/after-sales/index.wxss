@@ -1,0 +1,8 @@
+.after-sales-page .primary-action {
+  margin: 0 0 20rpx;
+}
+
+.record-status {
+  color: #d97706;
+  font-size: 24rpx;
+}

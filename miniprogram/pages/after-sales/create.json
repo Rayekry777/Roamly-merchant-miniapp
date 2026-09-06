@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "app-navbar": "/components/app-navbar/index",
+    "t-button": "tdesign-miniprogram/button/button"
+  }
+}

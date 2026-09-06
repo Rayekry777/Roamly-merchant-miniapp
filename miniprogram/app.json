@@ -7,6 +7,8 @@
     "pages/orders/index",
     "pages/verification/index",
     "pages/redemptions/index",
+    "pages/after-sales/index",
+    "pages/after-sales/create",
     "pages/settlements/index",
     "pages/settlements/detail",
     "pages/login/index",

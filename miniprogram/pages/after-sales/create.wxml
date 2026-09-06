@@ -1,0 +1,8 @@
+<app-navbar title="发起退款" back />
+<view class="page-shell page-shell--subpage">
+  <view class="page-heading">发起退款申请</view>
+  <view class="field"><text>订单 ID</text><input placeholder="请输入订单 ID" bindinput="onOrder" /></view>
+  <view class="field"><text>券 ID</text><input placeholder="请输入券 ID" bindinput="onVoucher" /></view>
+  <view class="field"><text>申请说明</text><textarea placeholder="填写退款原因" maxlength="500" bindinput="onReason" /></view>
+  <t-button theme="primary" block loading="{{submitting}}" bindtap="submit">提交平台审核</t-button>
+</view>

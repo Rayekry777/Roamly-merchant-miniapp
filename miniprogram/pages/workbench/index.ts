@@ -77,12 +77,7 @@ Page({
   },
   async activate() {
     try {
-      if (
-        !(await guardAuthenticated(
-          { route: HOME_ROUTE },
-          { replace: true },
-        ))
-      )
+      if (!(await guardAuthenticated({ route: HOME_ROUTE }, { replace: true })))
         return;
       await this.load(false);
       const action = consumePendingAction(HOME_ROUTE);
@@ -222,6 +217,28 @@ Page({
       await this.requireCapability(
         "merchant:redemption:manage",
         "当前账号暂不能查看核销明细",
+        intent,
+      )
+    )
+      wx.navigateTo({ url: intent.route });
+  },
+  async openAfterSales() {
+    const intent = { route: "/pages/after-sales/index" };
+    if (
+      await this.requireCapability(
+        "merchant:after-sales:read",
+        "当前账号暂不能查看售后",
+        intent,
+      )
+    )
+      wx.navigateTo({ url: intent.route });
+  },
+  async openRefundCreate() {
+    const intent = { route: "/pages/after-sales/create" };
+    if (
+      await this.requireCapability(
+        "merchant:after-sales:create",
+        "当前账号暂不能发起退款",
         intent,
       )
     )

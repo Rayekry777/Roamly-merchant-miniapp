@@ -50,12 +50,12 @@
   </view>
 
   <view class="home-menu-card home-menu-card--group">
-    <view class="home-menu-row pressable" data-label="处理售后" bind:tap="unavailable">
+    <view class="home-menu-row pressable" bind:tap="openAfterSales">
       <view class="home-menu-icon home-menu-icon--amber"><t-icon name="service" size="42rpx" /></view>
       <view class="home-menu-label">处理售后</view>
       <t-icon name="chevron-right" size="42rpx" color="#777680" />
     </view>
-    <view class="home-menu-row pressable" data-label="发起退款" bind:tap="unavailable">
+    <view class="home-menu-row pressable" bind:tap="openRefundCreate">
       <view class="home-menu-icon home-menu-icon--amber"><t-icon name="money" size="42rpx" /></view>
       <view class="home-menu-label">发起退款</view>
       <t-icon name="chevron-right" size="42rpx" color="#777680" />
