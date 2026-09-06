@@ -47,6 +47,23 @@
         <text>券标题</text>
         <input value="{{draft.title}}" disabled="{{readonly}}" data-field="title" bindinput="fieldInput" maxlength="120" placeholder="例如：双人招牌套餐" />
       </label>
+
+      <view class="subsection-heading"><text>商品明细</text><text>{{draft.details.length}}/50</text></view>
+      <view wx:for="{{draft.details}}" wx:key="index" class="package-row">
+        <view class="package-row-head"><text>明细 {{index + 1}}</text><button wx:if="{{!readonly}}" class="remove-line" data-index="{{index}}" bindtap="removeDetailSection">删除</button></view>
+        <input value="{{item.title}}" disabled="{{readonly}}" data-index="{{index}}" data-field="title" bindinput="detailSectionInput" maxlength="80" placeholder="如：套餐包含" />
+        <textarea value="{{item.content}}" disabled="{{readonly}}" data-index="{{index}}" data-field="content" bindinput="detailSectionInput" maxlength="4000" auto-height placeholder="由商户填写具体内容" />
+      </view>
+      <button wx:if="{{!readonly && draft.details.length < 50}}" class="outline-action" bindtap="addDetailSection">+ 添加商品明细</button>
+      <label class="field"><text>展示标签</text><input value="{{draft.tagDraft}}" disabled="{{readonly}}" data-field="tagDraft" bindinput="fieldInput" maxlength="300" placeholder="多个标签用逗号分隔，如：招牌、双人、免预约" /></label>
+
+      <block wx:if="{{draft.productType === 'DISCOUNT'}}">
+        <view class="subsection-heading"><text>折扣券使用说明</text></view>
+        <label class="field"><text>折扣说明</text><input value="{{draft.discountText}}" disabled="{{readonly}}" data-field="discountText" bindinput="fieldInput" placeholder="如：全场统一八折" /></label>
+        <label class="field"><text>适用范围</text><input value="{{draft.discountScope}}" disabled="{{readonly}}" data-field="discountScope" bindinput="fieldInput" placeholder="如：仅限堂食" /></label>
+        <label class="field"><text>使用时段</text><input value="{{draft.discountPeriod}}" disabled="{{readonly}}" data-field="discountPeriod" bindinput="fieldInput" placeholder="如：周一至周五 10:00-18:00" /></label>
+        <label class="field"><text>补充说明</text><textarea value="{{draft.discountDescription}}" disabled="{{readonly}}" data-field="discountDescription" bindinput="fieldInput" maxlength="500" auto-height placeholder="其他使用规则" /></label>
+      </block>
       <label class="field">
         <text>副标题</text>
         <textarea value="{{draft.subTitle}}" disabled="{{readonly}}" data-field="subTitle" bindinput="fieldInput" maxlength="255" auto-height placeholder="补充套餐亮点或适用人群" />
@@ -86,11 +103,6 @@
       <view wx:if="{{draft.productType === 'CASH'}}" class="special-fields">
         <label class="field"><text>抵扣金额（元）</text><input value="{{draft.faceValueYuan}}" disabled="{{readonly}}" data-field="faceValueYuan" bindinput="fieldInput" type="digit" placeholder="0.00" /></label>
         <label class="field"><text>最低消费（元）</text><input value="{{draft.minimumSpendYuan}}" disabled="{{readonly}}" data-field="minimumSpendYuan" bindinput="fieldInput" type="digit" placeholder="0.00" /></label>
-      </view>
-      <view wx:if="{{draft.productType === 'DISCOUNT'}}" class="special-fields">
-        <label class="field"><text>折扣</text><input value="{{draft.discountRate}}" disabled="{{readonly}}" data-field="discountRate" bindinput="fieldInput" type="digit" placeholder="例如 8.5" /></label>
-        <label class="field"><text>最低消费（元）</text><input value="{{draft.minimumSpendYuan}}" disabled="{{readonly}}" data-field="minimumSpendYuan" bindinput="fieldInput" type="digit" placeholder="0.00" /></label>
-        <label class="field"><text>最高优惠（元）</text><input value="{{draft.maximumDiscountYuan}}" disabled="{{readonly}}" data-field="maximumDiscountYuan" bindinput="fieldInput" type="digit" placeholder="0.00" /></label>
       </view>
       <label wx:if="{{draft.productType === 'MULTI_USE'}}" class="field"><text>总使用次数</text><input value="{{draft.totalUseCount}}" disabled="{{readonly}}" data-field="totalUseCount" bindinput="fieldInput" type="number" maxlength="3" placeholder="2 至 100" /></label>
 

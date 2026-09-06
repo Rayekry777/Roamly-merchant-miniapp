@@ -208,6 +208,12 @@ export function parseVoucherProduct(value: unknown): MerchantVoucherProduct {
   }
   const usageRules = item.usageRules.map(parseDay);
   const packageItems = item.packageItems.map(parsePackageItem);
+  const details = Array.isArray(item.details)
+    ? item.details.map((v, index) => parseDetail(v, index))
+    : [];
+  const tags = Array.isArray(item.tags)
+    ? item.tags.map((v, index) => parseTag(v, index))
+    : [];
   const detailMedia = item.detailMedia.map(parseBusinessMedia);
   const coverMedia =
     item.coverMedia == null ? undefined : parseBusinessMedia(item.coverMedia);
@@ -229,6 +235,8 @@ export function parseVoucherProduct(value: unknown): MerchantVoucherProduct {
     refundAnytime: item.refundAnytime,
     refundExpired: item.refundExpired,
     packageItems,
+    details,
+    tags,
     reviewStatus: item.reviewStatus as VoucherReviewStatus,
     reviewStatusLabel: item.reviewStatusLabel,
     version: item.version,
@@ -254,8 +262,6 @@ export function parseVoucherProduct(value: unknown): MerchantVoucherProduct {
     "marketAmount",
     "faceValueAmount",
     "minimumSpendAmount",
-    "discountRateBps",
-    "maximumDiscountAmount",
     "totalUseCount",
     "validDays",
   ]);
@@ -267,7 +273,36 @@ export function parseVoucherProduct(value: unknown): MerchantVoucherProduct {
     result.saleStatus = item.saleStatus as MerchantVoucherProduct["saleStatus"];
   }
   if (coverMedia) result.coverMedia = coverMedia;
+  if (item.cashRule && typeof item.cashRule === "object")
+    result.cashRule = item.cashRule as MerchantVoucherProduct["cashRule"];
+  if (item.discountRule && typeof item.discountRule === "object")
+    result.discountRule =
+      item.discountRule as MerchantVoucherProduct["discountRule"];
+  if (item.multiUseRule && typeof item.multiUseRule === "object")
+    result.multiUseRule =
+      item.multiUseRule as MerchantVoucherProduct["multiUseRule"];
   return result;
+}
+
+function parseDetail(value: unknown, index: number) {
+  const v = record(value);
+  return {
+    id: typeof v.id === "string" ? v.id : undefined,
+    sectionType: String(v.sectionType || "CUSTOM"),
+    title: String(v.title || "详情"),
+    content: String(v.content || ""),
+    sortOrder: safeInteger(v.sortOrder) ? (v.sortOrder as number) : index,
+  };
+}
+function parseTag(value: unknown, index: number) {
+  const v = record(value);
+  return {
+    id: typeof v.id === "string" ? v.id : undefined,
+    text: String(v.text || ""),
+    iconKey: String(v.iconKey || "info"),
+    colorToken: typeof v.colorToken === "string" ? v.colorToken : undefined,
+    sortOrder: safeInteger(v.sortOrder) ? (v.sortOrder as number) : index,
+  };
 }
 
 function parsePackageItem(value: unknown): MerchantVoucherPackageItem {

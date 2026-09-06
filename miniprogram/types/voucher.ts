@@ -61,6 +61,26 @@ export interface MerchantVoucherPackageItem {
   unitPriceAmount?: number;
   sortOrder: number;
 }
+export interface VoucherProductDetailSection {
+  id?: string;
+  sectionType: string;
+  title: string;
+  content: string;
+  sortOrder: number;
+}
+export interface VoucherProductTag {
+  id?: string;
+  text: string;
+  iconKey: string;
+  colorToken?: string;
+  sortOrder: number;
+}
+export interface VoucherProductDiscountRule {
+  discountText?: string;
+  applicableScope?: string;
+  usagePeriodText?: string;
+  description?: string;
+}
 
 export interface MerchantVoucherProduct {
   id: string;
@@ -77,8 +97,6 @@ export interface MerchantVoucherProduct {
   marketAmount?: number;
   faceValueAmount?: number;
   minimumSpendAmount?: number;
-  discountRateBps?: number;
-  maximumDiscountAmount?: number;
   totalUseCount?: number;
   totalStock: number;
   availableStock: number;
@@ -99,6 +117,19 @@ export interface MerchantVoucherProduct {
   refundAnytime: boolean;
   refundExpired: boolean;
   packageItems: MerchantVoucherPackageItem[];
+  details?: VoucherProductDetailSection[];
+  tags?: VoucherProductTag[];
+  cashRule?: {
+    faceValueAmount?: number;
+    minimumSpendAmount?: number;
+    description?: string;
+  };
+  discountRule?: VoucherProductDiscountRule;
+  multiUseRule?: {
+    totalUseCount?: number;
+    useUnit?: string;
+    description?: string;
+  };
   reviewStatus: VoucherReviewStatus;
   reviewStatusLabel: string;
   saleStatus?: VoucherSaleStatus;
@@ -120,8 +151,6 @@ export interface MerchantVoucherProductUpdateRequest {
   marketAmount?: number;
   faceValueAmount?: number;
   minimumSpendAmount?: number;
-  discountRateBps?: number;
-  maximumDiscountAmount?: number;
   totalUseCount?: number;
   totalStock: number;
   purchaseLimit: number;
@@ -144,6 +173,19 @@ export interface MerchantVoucherProductUpdateRequest {
     unit: string;
     unitPriceAmount?: number;
   }>;
+  details?: VoucherProductDetailSection[];
+  tags?: VoucherProductTag[];
+  cashRule?: {
+    faceValueAmount?: number;
+    minimumSpendAmount?: number;
+    description?: string;
+  };
+  discountRule?: VoucherProductDiscountRule;
+  multiUseRule?: {
+    totalUseCount?: number;
+    useUnit?: string;
+    description?: string;
+  };
 }
 
 export interface VoucherPackageItemDraft {
@@ -165,8 +207,6 @@ export interface VoucherDraftForm {
   marketYuan: string;
   faceValueYuan: string;
   minimumSpendYuan: string;
-  discountRate: string;
-  maximumDiscountYuan: string;
   totalUseCount: string;
   totalStock: string;
   purchaseLimit: string;
@@ -184,6 +224,24 @@ export interface VoucherDraftForm {
   refundAnytime: boolean;
   refundExpired: boolean;
   packageItems: VoucherPackageItemDraft[];
+  details?: Array<{
+    sectionType: string;
+    title: string;
+    content: string;
+    sortOrder: number;
+  }>;
+  tags?: Array<{
+    text: string;
+    iconKey: string;
+    colorToken: string;
+    sortOrder: number;
+  }>;
+  discountText?: string;
+  discountScope?: string;
+  discountPeriod?: string;
+  discountDescription?: string;
+  detailDraft?: string;
+  tagDraft?: string;
   reviewStatus: VoucherReviewStatus;
   reviewStatusLabel: string;
   saleStatus?: VoucherSaleStatus;

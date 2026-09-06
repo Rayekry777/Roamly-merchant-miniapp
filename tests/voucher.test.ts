@@ -9,7 +9,6 @@ import {
   uploadVoucherImage,
 } from "../miniprogram/api/merchant-voucher";
 import {
-  discountRateToBps,
   fenToYuan,
   formFromVoucher,
   toVoucherUpdateRequest,
@@ -148,14 +147,12 @@ describe("阶段 20 商户团购券契约", () => {
     );
   });
 
-  it("金额元分、折扣基点转换保持整数精度", () => {
+  it("金额元分转换保持整数精度", () => {
     expect(yuanToFen("12.34", "售价")).toBe(1234);
     expect(fenToYuan(1234)).toBe("12.34");
-    expect(discountRateToBps("8.5")).toBe(8500);
     expect(() => yuanToFen("12.345", "售价")).toThrowError(
       "售价最多保留两位小数",
     );
-    expect(() => discountRateToBps("10")).toThrowError("折扣请输入0.1至9.9");
   });
 
   it("四类表单只提交各自专属字段", () => {
@@ -164,11 +161,7 @@ describe("阶段 20 商户团购券契约", () => {
       draft.faceValueYuan = "100";
       draft.minimumSpendYuan = "100";
     });
-    const discountRequest = requestFor("DISCOUNT", (draft) => {
-      draft.discountRate = "8.5";
-      draft.minimumSpendYuan = "100";
-      draft.maximumDiscountYuan = "50";
-    });
+    const discountRequest = requestFor("DISCOUNT");
     const multiUseRequest = requestFor("MULTI_USE", (draft) => {
       draft.totalUseCount = "5";
     });
@@ -180,13 +173,8 @@ describe("阶段 20 商户团购券契约", () => {
       minimumSpendAmount: 10000,
       packageItems: [],
     });
-    expect(cashRequest.discountRateBps).toBeUndefined();
-    expect(discountRequest).toMatchObject({
-      discountRateBps: 8500,
-      minimumSpendAmount: 10000,
-      maximumDiscountAmount: 5000,
-      packageItems: [],
-    });
+    expect(discountRequest.minimumSpendAmount).toBeUndefined();
+    expect(discountRequest.packageItems).toEqual([]);
     expect(multiUseRequest.totalUseCount).toBe(5);
     expect(multiUseRequest.packageItems).toHaveLength(1);
   });

@@ -1,7 +1,7 @@
 .preview-page {
   min-height: 100vh;
   padding-bottom: calc(142rpx + env(safe-area-inset-bottom));
-  background: var(--roamly-bg);
+  background: #ffffff;
 }
 
 .state-panel {

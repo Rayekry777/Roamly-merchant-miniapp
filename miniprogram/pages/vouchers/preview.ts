@@ -188,14 +188,14 @@ function benefitView(draft: VoucherDraftForm): {
   }
   if (draft.productType === "DISCOUNT") {
     return {
-      label: "券面折扣",
-      value: draft.discountRate ? `${draft.discountRate} 折` : "待填写",
+      label: "券面权益",
+      value: draft.discountText?.trim() || "待填写",
     };
   }
   if (draft.productType === "MULTI_USE") {
     return {
       label: "可用次数",
-      value: draft.totalUseCount ? `${draft.totalUseCount} 次` : "待填写",
+      value: draft.totalUseCount ? `${draft.totalUseCount}次卡` : "待填写",
     };
   }
   return {
@@ -245,8 +245,6 @@ export function errorStep(fields: string[]): number {
     "marketAmount",
     "faceValueAmount",
     "minimumSpendAmount",
-    "discountRateBps",
-    "maximumDiscountAmount",
     "totalUseCount",
     "totalStock",
     "purchaseLimit",

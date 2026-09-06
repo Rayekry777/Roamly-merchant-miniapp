@@ -282,6 +282,38 @@ Page({
     draft.packageItems.splice(index, 1);
     this.applyChangedDraft(draft);
   },
+  addDetailSection() {
+    if (this.data.readonly || !this.data.draft) return;
+    const draft = cloneForm(this.data.draft);
+    draft.details = draft.details || [];
+    if (draft.details.length >= 50) return;
+    draft.details.push({
+      sectionType: "CUSTOM",
+      title: "",
+      content: "",
+      sortOrder: draft.details.length,
+    });
+    this.applyChangedDraft(draft);
+  },
+  detailSectionInput(event: WechatMiniprogram.Input) {
+    if (this.data.readonly || !this.data.draft) return;
+    const index = Number(event.currentTarget.dataset.index);
+    const field = String(event.currentTarget.dataset.field) as
+      | "title"
+      | "content";
+    if (field !== "title" && field !== "content") return;
+    const draft = cloneForm(this.data.draft);
+    const detail = draft.details?.[index];
+    if (!detail) return;
+    detail[field] = event.detail.value;
+    this.applyChangedDraft(draft);
+  },
+  removeDetailSection(event: WechatMiniprogram.TouchEvent) {
+    if (this.data.readonly || !this.data.draft) return;
+    const draft = cloneForm(this.data.draft);
+    draft.details?.splice(Number(event.currentTarget.dataset.index), 1);
+    this.applyChangedDraft(draft);
+  },
   chooseCover() {
     if (!this.data.readonly) void this.chooseAndUpload("VOUCHER_COVER", 1);
   },
@@ -439,7 +471,7 @@ function usageRulesView(draft: VoucherDraftForm) {
 function productTypeHint(type: VoucherDraftForm["productType"]): string {
   if (type === "PACKAGE") return "组合商品或服务，按套餐内容一次使用";
   if (type === "CASH") return "满足消费门槛后抵扣固定金额";
-  if (type === "DISCOUNT") return "满足消费门槛后按折扣结算";
+  if (type === "DISCOUNT") return "到店出示券码完成核销";
   return "按约定次数分次使用服务";
 }
 

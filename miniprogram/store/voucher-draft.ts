@@ -123,11 +123,6 @@ export function formFromVoucher(
     marketYuan: fenToYuan(product.marketAmount),
     faceValueYuan: fenToYuan(product.faceValueAmount),
     minimumSpendYuan: fenToYuan(product.minimumSpendAmount),
-    discountRate:
-      product.discountRateBps == null
-        ? ""
-        : formatDecimal(product.discountRateBps / 1000),
-    maximumDiscountYuan: fenToYuan(product.maximumDiscountAmount),
     totalUseCount: optionalInteger(product.totalUseCount),
     totalStock: String(product.totalStock),
     purchaseLimit: String(product.purchaseLimit),
@@ -153,6 +148,24 @@ export function formFromVoucher(
       unit: item.unit,
       unitPriceYuan: fenToYuan(item.unitPriceAmount),
     })),
+    details: (product.details ?? []).map((d) => ({
+      sectionType: d.sectionType,
+      title: d.title,
+      content: d.content,
+      sortOrder: d.sortOrder,
+    })),
+    tags: (product.tags ?? []).map((t) => ({
+      text: t.text,
+      iconKey: t.iconKey,
+      colorToken: t.colorToken ?? "pink",
+      sortOrder: t.sortOrder,
+    })),
+    discountText: product.discountRule?.discountText ?? "",
+    discountScope: product.discountRule?.applicableScope ?? "",
+    discountPeriod: product.discountRule?.usagePeriodText ?? "",
+    discountDescription: product.discountRule?.description ?? "",
+    detailDraft: "",
+    tagDraft: (product.tags ?? []).map((t) => t.text).join(","),
     reviewStatus: product.reviewStatus,
     reviewStatusLabel: product.reviewStatusLabel,
     saleStatus: product.saleStatus,
@@ -178,16 +191,8 @@ export function toVoucherUpdateRequest(
         ? optionalFen(form.faceValueYuan, "抵扣额")
         : undefined,
     minimumSpendAmount:
-      form.productType === "CASH" || form.productType === "DISCOUNT"
+      form.productType === "CASH"
         ? optionalFen(form.minimumSpendYuan, "最低消费")
-        : undefined,
-    discountRateBps:
-      form.productType === "DISCOUNT"
-        ? optionalDiscountBps(form.discountRate)
-        : undefined,
-    maximumDiscountAmount:
-      form.productType === "DISCOUNT"
-        ? optionalFen(form.maximumDiscountYuan, "最高优惠")
         : undefined,
     totalUseCount:
       form.productType === "MULTI_USE"
@@ -228,6 +233,45 @@ export function toVoucherUpdateRequest(
             unitPriceAmount: optionalFen(item.unitPriceYuan, "明细门市价"),
           }))
         : [],
+    details: (form.details ?? []).map((d) => ({
+      ...d,
+      title: d.title.trim(),
+      content: d.content.trim(),
+    })),
+    tags: (form.tagDraft ?? "")
+      .split(",")
+      .map((text) => text.trim())
+      .filter(Boolean)
+      .slice(0, 20)
+      .map((text, index) => ({
+        text,
+        iconKey: "info",
+        colorToken: "pink",
+        sortOrder: index,
+      })),
+    cashRule:
+      form.productType === "CASH"
+        ? {
+            faceValueAmount: optionalFen(form.faceValueYuan, "抵扣额"),
+            minimumSpendAmount: optionalFen(form.minimumSpendYuan, "最低消费"),
+          }
+        : undefined,
+    discountRule:
+      form.productType === "DISCOUNT"
+        ? {
+            discountText: optionalText(form.discountText ?? ""),
+            applicableScope: optionalText(form.discountScope ?? ""),
+            usagePeriodText: optionalText(form.discountPeriod ?? ""),
+            description: optionalText(form.discountDescription ?? ""),
+          }
+        : undefined,
+    multiUseRule:
+      form.productType === "MULTI_USE"
+        ? {
+            totalUseCount: optionalIntegerValue(form.totalUseCount, "总次数"),
+            useUnit: "次",
+          }
+        : undefined,
   };
 }
 
@@ -254,14 +298,6 @@ export function yuanToFen(value: string, label = "金额"): number | undefined {
     throw new ApiError(`${label}超出可填写范围`, 400, "FORM_INVALID");
   }
   return amount;
-}
-
-export function discountRateToBps(value: string): number | undefined {
-  if (!value.trim()) return undefined;
-  if (!/^\d(?:\.\d{1,2})?$/.test(value.trim())) {
-    throw new ApiError("折扣请输入0.1至9.9", 400, "FORM_INVALID");
-  }
-  return Math.round(Number(value) * 1000);
 }
 
 export function validateUsageRules(
@@ -346,10 +382,6 @@ function clone<T>(value: T): T {
 
 function optionalFen(value: string, label: string): number | undefined {
   return yuanToFen(value, label);
-}
-
-function optionalDiscountBps(value: string): number | undefined {
-  return discountRateToBps(value);
 }
 
 function time(value: string): boolean {

@@ -40,7 +40,8 @@ describe("阶段 20 商户建券页面闭环", () => {
     expect(page).toContain("currentStep === 2");
     expect(page).toContain("packageItems");
     expect(page).toContain("faceValueYuan");
-    expect(page).toContain("discountRate");
+    expect(page).not.toContain("discountRate");
+    expect(page).not.toContain("maximumDiscount");
     expect(page).toContain("totalUseCount");
     expect(page).toContain('bindchange="toggleUsageDay"');
     expect(page).toContain('bindtap="chooseCover"');

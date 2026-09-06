@@ -40,7 +40,12 @@
         <view class="summary-row multiline"><text>销售时间</text><text>{{saleTimeText}}</text></view>
       </view>
 
-      <view wx:if="{{packageItems.length}}" class="content-section">
+      <view wx:if="{{draft.details && draft.details.length}}" class="content-section">
+        <view class="section-title">商品明细</view>
+        <view wx:for="{{draft.details}}" wx:key="index" class="rule-line"><text>{{item.title}}</text><text>{{item.content}}</text></view>
+      </view>
+
+      <view wx:if="{{packageItems.length && !(draft.details && draft.details.length)}}" class="content-section">
         <view class="section-title">{{draft.productType === 'MULTI_USE' ? '服务明细' : '套餐内容'}}</view>
         <view wx:for="{{packageItems}}" wx:key="index" class="package-row">
           <view class="package-name">{{item.name}}</view>
