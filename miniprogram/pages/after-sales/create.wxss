@@ -1,21 +1,234 @@
-.field {
-  display: flex;
-  flex-direction: column;
-  gap: 12rpx;
-  margin-bottom: 24rpx;
-  padding: 24rpx;
+.refund-create {
+  min-height: 100vh;
+  padding: 112rpx 40rpx calc(56rpx + env(safe-area-inset-bottom));
   background: #fff;
-  border-radius: 16rpx;
 }
 
-.field text {
-  color: #777680;
+.refund-intro {
+  text-align: center;
+}
+
+.refund-heading {
+  color: #111019;
+  font-size: 44rpx;
+  font-weight: 780;
+}
+
+.refund-subheading {
+  margin-top: 18rpx;
+  color: var(--roamly-muted);
+  font-size: 26rpx;
+  line-height: 1.5;
+}
+
+.candidate-search {
+  display: flex;
+  height: 108rpx;
+  align-items: center;
+  gap: 16rpx;
+  margin-top: 56rpx;
+  padding: 0 28rpx;
+  border-radius: 28rpx;
+  background: var(--roamly-bg);
+  text-align: left;
+}
+
+.candidate-search input {
+  min-width: 0;
+  flex: 1;
+  font-size: 28rpx;
+}
+
+.help-line {
+  margin-top: 22rpx;
+  color: #9b99a3;
+  font-size: 24rpx;
+  text-align: left;
+}
+
+.help-line text {
+  margin-left: 12rpx;
+  color: var(--roamly-accent);
+}
+
+.search-button {
+  height: 92rpx;
+  margin-top: 58rpx;
+  border-radius: 24rpx;
+  color: #fff;
+  background: linear-gradient(135deg, #ff756c, var(--roamly-primary));
+  font-size: 31rpx;
+  font-weight: 750;
+  line-height: 92rpx;
+}
+
+.candidate-result {
+  padding-bottom: 30rpx;
+}
+
+.result-heading {
+  font-size: 38rpx;
+  font-weight: 780;
+}
+
+.order-summary {
+  margin-top: 24rpx;
+  padding: 24rpx;
+  border-radius: 24rpx;
+  color: var(--roamly-muted);
+  background: var(--roamly-bg);
+  font-size: 23rpx;
+  line-height: 1.7;
+}
+
+.order-summary__title {
+  color: var(--roamly-text);
+  font-size: 29rpx;
+  font-weight: 740;
+}
+
+.candidate-warning {
+  margin-top: 24rpx;
+  padding: 22rpx;
+  border-radius: 20rpx;
+  color: var(--roamly-danger);
+  background: #fff0ef;
   font-size: 24rpx;
 }
 
-.field input,
-.field textarea {
+.voucher-options {
+  margin-top: 24rpx;
+}
+
+.voucher-option {
+  display: flex;
+  align-items: center;
+  gap: 18rpx;
+  margin-bottom: 14rpx;
+  padding: 22rpx;
+  border: 1rpx solid var(--roamly-border);
+  border-radius: 22rpx;
+}
+
+.voucher-option--selected {
+  border-color: var(--roamly-primary);
+  background: #fff8f7;
+}
+
+.voucher-option--disabled {
+  opacity: 0.5;
+}
+
+.voucher-check {
+  display: flex;
+  width: 40rpx;
+  height: 40rpx;
+  align-items: center;
+  justify-content: center;
+  border: 2rpx solid #c8c8d1;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 25rpx;
+}
+
+.voucher-option--selected .voucher-check {
+  border-color: var(--roamly-primary);
+  background: var(--roamly-primary);
+}
+
+.voucher-option__main {
+  min-width: 0;
+  flex: 1;
+  font-size: 25rpx;
+}
+
+.voucher-option__note {
+  margin-top: 8rpx;
+  color: var(--roamly-muted);
+  font-size: 21rpx;
+}
+
+.voucher-option__amount {
+  color: var(--roamly-primary);
+  font-size: 26rpx;
+  font-weight: 700;
+}
+
+.description-field {
+  margin-top: 26rpx;
+  padding: 24rpx;
+  border-radius: 22rpx;
+  background: var(--roamly-bg);
+  font-size: 25rpx;
+  font-weight: 700;
+}
+
+.description-field textarea {
   width: 100%;
-  box-sizing: border-box;
-  font-size: 28rpx;
+  height: 180rpx;
+  margin-top: 16rpx;
+  font-size: 25rpx;
+  font-weight: 400;
+}
+
+.description-count {
+  color: var(--roamly-muted);
+  font-size: 20rpx;
+  font-weight: 400;
+  text-align: right;
+}
+
+.result-actions {
+  display: flex;
+  gap: 18rpx;
+  margin-top: 30rpx;
+}
+
+.result-actions button {
+  flex: 1;
+  height: 84rpx;
+  border-radius: 24rpx;
+  font-size: 27rpx;
+  font-weight: 700;
+  line-height: 84rpx;
+}
+
+.primary-action {
+  color: #fff;
+  background: linear-gradient(135deg, #ff756c, var(--roamly-primary));
+}
+
+.secondary-action {
+  color: var(--roamly-text);
+  background: #f4f4f8;
+}
+
+.help-mask {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: flex-end;
+  background: rgba(20, 20, 30, 0.35);
+}
+
+.help-sheet {
+  width: 100%;
+  padding: 34rpx 36rpx calc(36rpx + env(safe-area-inset-bottom));
+  border-radius: 34rpx 34rpx 0 0;
+  color: var(--roamly-muted);
+  background: #fff;
+  font-size: 25rpx;
+  line-height: 1.6;
+}
+
+.help-title {
+  margin-bottom: 16rpx;
+  color: var(--roamly-text);
+  font-size: 32rpx;
+  font-weight: 750;
+}
+
+.help-sheet button {
+  margin-top: 24rpx;
 }

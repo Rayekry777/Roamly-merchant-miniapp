@@ -37,12 +37,6 @@
     </view>
   </view>
 
-  <view class="home-menu-card pressable" data-label="预约处理" bind:tap="unavailable">
-    <view class="home-menu-icon home-menu-icon--coral"><t-icon name="calendar" size="42rpx" /></view>
-    <view class="home-menu-label">预约处理</view>
-    <t-icon name="chevron-right" size="42rpx" color="#777680" />
-  </view>
-
   <view class="home-menu-card pressable" bind:tap="openRedemptions">
     <view class="home-menu-icon home-menu-icon--purple"><t-icon name="check-circle" size="42rpx" /></view>
     <view class="home-menu-label">核销明细</view>

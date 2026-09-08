@@ -13,11 +13,58 @@ export type AfterSale = {
   source?: string;
   requestedTime?: string;
   processedTime?: string;
+  reasonCode?: string;
+  refundNo?: string;
+  merchantOrderNo?: string;
 };
 
-export function listAfterSales(status?: string, page = 1, size = 20) {
+export type RefundStage = "PENDING" | "PROCESSING" | "DECLINED" | "COMPLETED";
+export type RefundCandidateVoucher = {
+  id: string;
+  sequenceNo: number;
+  voucherCodeLast4?: string;
+  status: string;
+  refundAmount: number;
+  refundable: boolean;
+  unavailableReason?: string;
+};
+export type RefundCandidate = {
+  orderId: string;
+  orderNo: string;
+  productTitle?: string;
+  status: string;
+  quantity: number;
+  payAmount?: number;
+  refundable: boolean;
+  unavailableReason?: string;
+  matchedVoucherId?: string;
+  vouchers: RefundCandidateVoucher[];
+};
+
+export function listAfterSales(
+  options: {
+    status?: string;
+    stage?: RefundStage;
+    keyword?: string;
+    page?: number;
+    size?: number;
+  } = {},
+) {
+  const params = [`page=${options.page || 1}`, `size=${options.size || 20}`];
+  if (options.status)
+    params.push(`status=${encodeURIComponent(options.status)}`);
+  if (options.stage) params.push(`stage=${encodeURIComponent(options.stage)}`);
+  if (options.keyword)
+    params.push(`keyword=${encodeURIComponent(options.keyword)}`);
   return request<PageResult<AfterSale>>(
-    `/v1/merchant/after-sales?page=${page}&size=${size}${status ? `&status=${encodeURIComponent(status)}` : ""}`,
+    `/v1/merchant/after-sales?${params.join("&")}`,
+    { showError: false },
+  );
+}
+
+export function getRefundCandidate(keyword: string) {
+  return request<RefundCandidate>(
+    `/v1/merchant/after-sales/candidate?keyword=${encodeURIComponent(keyword)}`,
     { showError: false },
   );
 }
@@ -39,11 +86,7 @@ export function createAfterSale(
 ) {
   return request<AfterSale>("/v1/merchant/after-sales", {
     method: "POST",
-    data: {
-      ...data,
-      orderId: Number(data.orderId),
-      voucherIds: data.voucherIds.map(Number),
-    },
+    data,
     headers: { "Idempotency-Key": key },
     showError: false,
   });

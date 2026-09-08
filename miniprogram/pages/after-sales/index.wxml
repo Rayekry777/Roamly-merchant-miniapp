@@ -1,16 +1,11 @@
-<app-navbar title="处理售后" />
-<view class="page-shell page-shell--subpage after-sales-page">
-  <view class="page-heading">处理售后</view>
-  <view class="page-copy">查看本店退款申请，资金处理由平台完成</view>
-  <button class="primary-action" bindtap="openCreate">发起退款申请</button>
-  <view wx:if="{{loading}}" class="state-panel"><t-loading size="42rpx" /> 正在加载售后</view>
-  <view wx:elif="{{error}}" class="error-panel"><view>{{error}}</view><button class="text-action" bindtap="retry">重新加载</button></view>
-  <view wx:elif="{{!items.length}}" class="state-panel">暂无售后记录</view>
-  <view wx:else class="record-list">
-    <view wx:for="{{items}}" wx:key="id" class="record-card surface-card">
-      <view class="record-head"><view><view class="record-kicker">订单 {{item.orderId}}</view><view class="record-title">券 {{item.voucherId}}</view></view><view class="record-status">{{item.statusText}}</view></view>
-      <view class="record-grid"><view><text>退款金额</text><strong>¥{{item.amountText}}</strong></view><view><text>申请时间</text><strong>{{item.timeText}}</strong></view></view>
-      <view wx:if="{{item.reason}}" class="reversal-copy">{{item.reason}}</view>
-    </view>
-  </view>
+<app-navbar title="处理售后" back>
+  <view slot="right" class="navbar-search" bindtap="toggleSearch"><t-icon name="search" size="42rpx" /></view>
+</app-navbar>
+<view class="after-sales-page page-enter">
+  <view wx:if="{{searchVisible}}" class="search-panel"><input focus="{{searchVisible}}" value="{{keyword}}" placeholder="搜索退款单号、订单号或券码" confirm-type="search" bindinput="onKeyword" bindconfirm="search" /><view class="search-submit" bindtap="search">搜索</view></view>
+  <scroll-view class="stage-tabs" scroll-x enhanced show-scrollbar="{{false}}"><view class="stage-tabs__inner"><view wx:for="{{stages}}" wx:key="value" class="stage-tab {{stage === item.value ? 'stage-tab--active' : ''}}" data-stage="{{item.value}}" bindtap="selectStage">{{item.label}}</view></view></scroll-view>
+  <view wx:if="{{loading && !items.length}}" class="state-panel"><t-loading size="42rpx" /> 正在加载售后</view>
+  <view wx:elif="{{error && !items.length}}" class="empty-state"><t-icon name="error-circle" size="64rpx" color="#d84d49" /><view>{{error}}</view><button class="text-action" bindtap="retry">重新加载</button></view>
+  <view wx:elif="{{!items.length}}" class="empty-state"><image class="empty-state__image" src="/assets/images/empty-after-sales.svg" mode="aspectFit" /><view class="empty-state__title">暂无相关数据</view><view class="empty-state__copy">当前页签下没有售后记录</view></view>
+  <view wx:else class="record-list"><view wx:for="{{items}}" wx:key="id" class="record-card surface-card"><view class="record-head"><view class="record-title">{{item.productTitle || '团购券退款'}}</view><view class="record-status status-{{item.statusTone}}">{{item.statusText}}</view></view><view class="record-no">订单 {{item.orderId}} · 售后单 {{item.refundNo || item.id}}</view><view class="record-grid"><view><text>退款金额</text><strong>¥{{item.amountText}}</strong></view><view><text>申请时间</text><strong>{{item.timeText}}</strong></view></view><view wx:if="{{item.reason}}" class="record-reason">{{item.reason}}</view></view><view wx:if="{{loading}}" class="list-footer">正在加载更多...</view><view wx:elif="{{!hasMore}}" class="list-footer">没有更多记录了</view></view>
 </view>
