@@ -3,19 +3,26 @@ import type {
   MerchantAccountStatus,
   MerchantAuthToken,
   MerchantRole,
+  MerchantSmsCodeScene,
 } from "../types/merchant-auth";
 import { merchantAccountStatuses, merchantRoles } from "../types/merchant-auth";
 import { ApiError, request } from "../utils/request";
 
 type UnknownRecord = Record<string, unknown>;
 
-export async function sendMerchantSmsCode(phone: string): Promise<void> {
-  await request<null, { phone: string }>("/v1/merchant/auth/sms-codes", {
-    method: "POST",
-    data: { phone },
-    auth: "public",
-    showError: false,
-  });
+export async function sendMerchantSmsCode(
+  phone: string,
+  scene: MerchantSmsCodeScene,
+): Promise<void> {
+  await request<null, { phone: string; scene: MerchantSmsCodeScene }>(
+    "/v1/merchant/auth/sms-codes",
+    {
+      method: "POST",
+      data: { phone, scene },
+      auth: "public",
+      showError: false,
+    },
+  );
 }
 
 export async function loginMerchant(
@@ -28,6 +35,40 @@ export async function loginMerchant(
   >("/v1/merchant/auth/login", {
     method: "POST",
     data: { phone, code },
+    auth: "public",
+    showError: false,
+  });
+  return parseToken(result.data);
+}
+
+export async function registerMerchant(
+  phone: string,
+  code: string,
+  password: string,
+  confirmPassword: string,
+): Promise<MerchantAuthToken> {
+  const result = await request<
+    MerchantAuthToken,
+    { phone: string; code: string; password: string; confirmPassword: string }
+  >("/v1/merchant/auth/registrations", {
+    method: "POST",
+    data: { phone, code, password, confirmPassword },
+    auth: "public",
+    showError: false,
+  });
+  return parseToken(result.data);
+}
+
+export async function loginMerchantByPassword(
+  phone: string,
+  password: string,
+): Promise<MerchantAuthToken> {
+  const result = await request<
+    MerchantAuthToken,
+    { phone: string; password: string }
+  >("/v1/merchant/auth/password-sessions", {
+    method: "POST",
+    data: { phone, password },
     auth: "public",
     showError: false,
   });
@@ -71,12 +112,16 @@ export function parseCurrentMerchant(value: unknown): CurrentMerchant {
     !isNonEmptyString(item.roleLabel) ||
     !isMerchantStatus(item.status) ||
     !isNonEmptyString(item.statusLabel) ||
+    typeof item.canAcceptStaffInvitation !== "boolean" ||
     !Array.isArray(item.permissions) ||
     !item.permissions.every(isNonEmptyString)
   ) {
     throw contractError();
   }
-  if (item.avatarUrl !== undefined && typeof item.avatarUrl !== "string") {
+  if (
+    item.avatarContentPath !== undefined &&
+    typeof item.avatarContentPath !== "string"
+  ) {
     throw contractError();
   }
   if (item.shop !== undefined) parseShop(item.shop);

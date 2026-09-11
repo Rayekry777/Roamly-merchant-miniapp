@@ -10,7 +10,7 @@
   </view>
 
   <view class="profile-hero pressable" bind:tap="openAccountPanel">
-    <image wx:if="{{current && current.avatarUrl}}" class="profile-avatar" src="{{current.avatarUrl}}" mode="aspectFill" />
+    <image wx:if="{{avatarLocalPath}}" class="profile-avatar" src="{{avatarLocalPath}}" mode="aspectFill" />
     <view wx:else class="profile-avatar profile-avatar--fallback">{{avatarText}}</view>
     <view class="profile-name-row">
       <view class="profile-name">{{loggedIn ? displayName : '登录商户账号'}}</view>
@@ -73,7 +73,11 @@
         <t-icon name="chevron-right" size="38rpx" />
       </view>
       <view wx:if="{{canAcceptInvitation}}" class="account-action pressable" bind:tap="openStaffAcceptance">
-        <view><strong>接受员工邀请</strong><text>通过邀请码加入门店</text></view>
+        <view><strong>接受员工邀请</strong><text>通过六位凭证加入公司</text></view>
+        <t-icon name="chevron-right" size="38rpx" />
+      </view>
+      <view class="account-action pressable" bind:tap="openAccount">
+        <view><strong>个人信息</strong><text>头像、昵称与账号安全</text></view>
         <t-icon name="chevron-right" size="38rpx" />
       </view>
       <view wx:if="{{current && current.status === 'ACTIVE'}}" class="account-action pressable" bind:tap="openManagement">

@@ -1,0 +1,36 @@
+<app-navbar title="个人信息" />
+<view class="account-page page-enter">
+  <view wx:if="{{loading}}" class="center-state"><t-loading size="52rpx" text="加载个人信息" /></view>
+  <block wx:elif="{{profile}}">
+    <view class="account-card roamly-panel">
+      <view class="account-row pressable" bind:tap="chooseAvatar">
+        <text class="label">头像</text>
+        <view class="row-value">
+          <image wx:if="{{avatarLocalPath}}" class="avatar" src="{{avatarLocalPath}}" mode="aspectFill" />
+          <view wx:else class="avatar avatar--fallback">{{avatarText}}</view>
+          <text>{{savingAvatar ? '保存中' : '更换 ›'}}</text>
+        </view>
+      </view>
+      <view class="divider"></view>
+      <view class="nickname-block">
+        <view class="account-row"><text class="label">昵称</text><t-input class="nickname-input" value="{{nickname}}" maxlength="64" placeholder="2–64个字符" bind:change="onNickname" /></view>
+        <view class="nickname-meta"><text>商户昵称可随时维护</text><text class="action pressable" bind:tap="saveNickname">{{savingNickname ? '保存中' : '保存昵称'}}</text></view>
+      </view>
+      <view class="divider"></view>
+      <view class="account-row pressable" bind:tap="openPhoneChange"><text class="label">手机号</text><text class="row-value">{{profile.phone}} ›</text></view>
+      <view class="divider"></view>
+      <view class="account-row pressable" bind:tap="openPasswordChange"><text class="label">密码</text><text class="row-value">修改密码 ›</text></view>
+    </view>
+
+    <view class="account-card account-card--readonly roamly-panel">
+      <view class="section-title">账号归属</view>
+      <view class="account-row"><text class="label">角色</text><text class="row-value">{{profile.roleLabel}}</text></view>
+      <view class="divider"></view>
+      <view class="account-row"><text class="label">账号状态</text><text class="row-value">{{profile.statusLabel}}</text></view>
+      <view class="divider"></view>
+      <view class="account-row"><text class="label">所属门店</text><text class="row-value row-value--shop">{{profile.shop ? profile.shop.name : '暂未加入门店'}}</text></view>
+      <view wx:if="{{profile.shop}}" class="shop-address">{{profile.shop.address}}</view>
+    </view>
+    <t-button class="logout-button" theme="danger" variant="outline" shape="round" block size="large" loading="{{loggingOut}}" disabled="{{savingNickname || savingAvatar}}" bind:tap="logout">退出登录</t-button>
+  </block>
+</view>

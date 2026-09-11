@@ -29,6 +29,9 @@ const allowedRoutes = new Set([
   "/pages/vouchers/preview",
   "/pages/staff/index",
   "/pages/staff/acceptance/index",
+  "/pages/account/index",
+  "/pages/phone-change/index",
+  "/pages/password-change/index",
 ]);
 
 let loginRouting = false;

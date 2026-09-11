@@ -5,21 +5,37 @@
 
   <view class="login-panel page-enter">
     <image class="brand-logo" src="/assets/images/roamly-logo.svg" mode="aspectFit" />
+    <view class="mode-title">{{mode === 'REGISTRATION' ? '注册商户账号' : mode === 'PASSWORD' ? '密码登录' : '验证码登录'}}</view>
     <view class="fields">
       <t-input value="{{phone}}" label="+86" type="number" maxlength="11" placeholder="输入手机号" bind:change="onPhone" />
       <view class="field-line"></view>
-      <view class="code-row">
+      <view wx:if="{{mode !== 'PASSWORD'}}" class="code-row">
         <t-input class="code-input" value="{{code}}" type="number" maxlength="6" placeholder="验证码" bind:change="onCode" />
         <t-button class="code-button" style="width: 178rpx; min-width: 178rpx; padding-left: 4rpx; padding-right: 4rpx;" variant="text" size="small" loading="{{sending}}" disabled="{{countdown > 0 || sending}}" bind:tap="sendCode">
           {{countdown ? countdown + 's' : '获取验证码'}}
         </t-button>
       </view>
+      <view wx:if="{{mode !== 'SMS'}}" class="field-line"></view>
+      <t-input wx:if="{{mode !== 'SMS'}}" value="{{password}}" type="password" maxlength="64" placeholder="密码（8–64位，含字母和数字）" bind:change="onPassword" />
+      <view wx:if="{{mode === 'REGISTRATION'}}" class="field-line"></view>
+      <t-input wx:if="{{mode === 'REGISTRATION'}}" value="{{confirmPassword}}" type="password" maxlength="64" placeholder="确认密码" bind:change="onConfirmPassword" />
     </view>
     <view wx:if="{{error}}" class="form-error">{{error}}</view>
-    <t-button theme="primary" shape="round" block size="large" loading="{{loggingIn}}" disabled="{{loggingIn}}" bind:tap="submit">开始漫游</t-button>
+    <t-button theme="primary" shape="round" block size="large" loading="{{loggingIn}}" disabled="{{loggingIn}}" bind:tap="submit">{{mode === 'REGISTRATION' ? '注册并进入' : '进入商户端'}}</t-button>
+    <view wx:if="{{mode === 'SMS'}}" class="mode-actions">
+      <text class="mode-link pressable" data-mode="REGISTRATION" bind:tap="switchMode">注册</text>
+      <text class="mode-link pressable" data-mode="PASSWORD" bind:tap="switchMode">密码登录</text>
+    </view>
+    <view wx:elif="{{mode === 'PASSWORD'}}" class="mode-actions">
+      <text class="mode-link pressable" data-mode="REGISTRATION" bind:tap="switchMode">注册</text>
+      <text class="mode-link pressable" data-mode="SMS" bind:tap="switchMode">验证码登录</text>
+    </view>
+    <view wx:else class="mode-actions mode-actions--center">
+      <text class="mode-link pressable" data-mode="SMS" bind:tap="switchMode">已有账号，去登录</text>
+    </view>
   </view>
 
-  <view class="login-foot">继续即代表你同意 Roamly 服务条款</view>
+  <view class="login-foot">继续即代表你同意 Roamly 商户服务条款</view>
 </view>
 
 <success-motion id="login-motion" message="登录成功" />

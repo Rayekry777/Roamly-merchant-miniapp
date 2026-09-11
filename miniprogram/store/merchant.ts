@@ -1,9 +1,15 @@
 import {
   getCurrentMerchant,
   loginMerchant,
+  loginMerchantByPassword,
   logoutMerchant,
+  registerMerchant,
 } from "../api/merchant-auth";
-import type { CurrentMerchant } from "../types/merchant-auth";
+import type {
+  CurrentMerchant,
+  MerchantAccountProfile,
+  MerchantAuthToken,
+} from "../types/merchant-auth";
 import { ApiError } from "../utils/request";
 import { merchantSession } from "../utils/session";
 import { voucherDraftStore } from "./voucher-draft";
@@ -21,8 +27,43 @@ class MerchantStore {
     });
   }
 
-  async login(phone: string, code: string): Promise<CurrentMerchant> {
-    const token = await loginMerchant(phone, code);
+  login(phone: string, code: string): Promise<CurrentMerchant> {
+    return this.establishSession(loginMerchant(phone, code));
+  }
+
+  register(
+    phone: string,
+    code: string,
+    password: string,
+    confirmPassword: string,
+  ): Promise<CurrentMerchant> {
+    return this.establishSession(
+      registerMerchant(phone, code, password, confirmPassword),
+    );
+  }
+
+  loginByPassword(phone: string, password: string): Promise<CurrentMerchant> {
+    return this.establishSession(loginMerchantByPassword(phone, password));
+  }
+
+  applyProfile(profile: MerchantAccountProfile): void {
+    if (!this.current || this.current.id !== profile.id) return;
+    this.current = {
+      ...this.current,
+      nickname: profile.nickname,
+      avatarContentPath: profile.avatarContentPath,
+      role: profile.role,
+      roleLabel: profile.roleLabel,
+      status: profile.status,
+      statusLabel: profile.statusLabel,
+      shop: profile.shop,
+    };
+  }
+
+  private async establishSession(
+    tokenPromise: Promise<MerchantAuthToken>,
+  ): Promise<CurrentMerchant> {
+    const token = await tokenPromise;
     merchantSession.setToken(token.accessToken);
     this.initialized = false;
     try {

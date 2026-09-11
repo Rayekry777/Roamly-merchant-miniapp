@@ -9,8 +9,8 @@
 .login-panel {
   position: relative;
   z-index: 2;
-  margin: 80rpx 34rpx 0;
-  padding: 56rpx 42rpx;
+  margin: 46rpx 34rpx 0;
+  padding: 46rpx 42rpx 40rpx;
   border: 1rpx solid var(--roamly-border);
   border-radius: var(--roamly-card-radius);
   background: rgba(255, 255, 255, 0.94);
@@ -19,9 +19,16 @@
 
 .brand-logo {
   display: block;
-  width: 96rpx;
-  height: 96rpx;
-  margin-bottom: 44rpx;
+  width: 88rpx;
+  height: 88rpx;
+  margin-bottom: 20rpx;
+}
+
+.mode-title {
+  margin-bottom: 28rpx;
+  color: var(--roamly-text);
+  font-size: 36rpx;
+  font-weight: 750;
 }
 
 .fields {
@@ -61,6 +68,23 @@
   color: var(--roamly-danger);
   font-size: 23rpx;
   line-height: 1.5;
+}
+
+.mode-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 30rpx;
+  padding: 0 10rpx;
+}
+
+.mode-actions--center {
+  justify-content: center;
+}
+
+.mode-link {
+  color: var(--roamly-accent);
+  font-size: 25rpx;
 }
 
 .login-foot {

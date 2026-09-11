@@ -1,4 +1,5 @@
 import { merchantStore } from "../../store/merchant";
+import { downloadMerchantAvatar } from "../../api/merchant-account";
 import { voucherDraftStore } from "../../store/voucher-draft";
 import type { CurrentMerchant } from "../../types/merchant-auth";
 import { routeToLogin } from "../../utils/auth-navigation";
@@ -16,6 +17,7 @@ Page({
     guidance: "",
     statusTone: "neutral",
     avatarText: "R",
+    avatarLocalPath: "",
     displayName: "Roamly 商户",
     error: "",
     canOnboard: false,
@@ -37,7 +39,11 @@ Page({
     try {
       const current = await merchantStore.restore(force);
       if (!current) {
-        this.setData({ current: null, loggedIn: false });
+        this.setData({
+          current: null,
+          loggedIn: false,
+          avatarLocalPath: "",
+        });
         return;
       }
       const view = merchantProfileView(current);
@@ -48,8 +54,9 @@ Page({
         statusTone: view.tone,
         avatarText: view.avatarText,
         displayName: current.shop?.name || current.nickname || "Roamly 商户",
+        avatarLocalPath: "",
         canOnboard:
-          current.role === "OWNER" &&
+          current.role === "VISITOR" &&
           ["NOT_APPLIED", "PENDING", "REJECTED"].includes(current.status),
         onboardingLabel:
           current.status === "PENDING"
@@ -57,8 +64,11 @@ Page({
             : current.status === "REJECTED"
               ? "修改入驻资料"
               : "开始商户入驻",
-        canAcceptInvitation: !current.shop && current.status === "NOT_APPLIED",
+        canAcceptInvitation: current.canAcceptStaffInvitation,
       });
+      if (current.avatarContentPath) {
+        void this.loadAvatar(current.id, current.avatarContentPath);
+      }
     } catch (error) {
       this.setData({
         error:
@@ -95,6 +105,19 @@ Page({
   openManagement() {
     this.closeAccountPanel();
     wx.navigateTo({ url: "/pages/operations/index" });
+  },
+  openAccount() {
+    this.closeAccountPanel();
+    wx.navigateTo({ url: "/pages/account/index" });
+  },
+  async loadAvatar(accountId: string, contentPath: string) {
+    try {
+      const avatarLocalPath = await downloadMerchantAvatar(contentPath);
+      if (this.data.current?.id === accountId)
+        this.setData({ avatarLocalPath });
+    } catch {
+      /* 头像加载失败时保留昵称首字回退，不影响账号信息。 */
+    }
   },
   unavailable(event: WechatMiniprogram.TouchEvent) {
     const label = String(event.currentTarget.dataset.label || "该功能");

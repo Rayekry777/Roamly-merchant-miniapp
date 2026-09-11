@@ -7,7 +7,8 @@ const environments: Record<EnvironmentVersion, { apiBaseUrl: string }> = {
 };
 
 const deviceDevelopEnvironment = {
-  apiBaseUrl: "http://192.168.2.109:8081",
+  // 真机必须访问当前开发机在局域网中实际可达的地址；127.0.0.1 及旧地址均无法回读私有头像。
+  apiBaseUrl: "http://192.168.2.102:8081",
 };
 
 export function getEnvironment(): { apiBaseUrl: string } {

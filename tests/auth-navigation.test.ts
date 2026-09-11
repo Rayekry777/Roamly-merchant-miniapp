@@ -16,12 +16,13 @@ import type { CurrentMerchant } from "../miniprogram/types/merchant-auth";
 const activeMerchant: CurrentMerchant = {
   id: "1",
   maskedPhone: "139****0001",
-  nickname: "Roamly 店主",
-  role: "OWNER",
-  roleLabel: "店主",
+  nickname: "Roamly 租户",
+  role: "TENANT",
+  roleLabel: "租户",
   status: "ACTIVE",
   statusLabel: "已激活",
   shop: { id: "1", name: "Roamly 门店", address: "测试地址" },
+  canAcceptStaffInvitation: false,
   permissions: ["merchant:finance:read"],
 };
 
