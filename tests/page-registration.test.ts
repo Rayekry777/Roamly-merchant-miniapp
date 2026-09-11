@@ -23,4 +23,14 @@ describe("小程序页面注册", () => {
 
     expect(page).toContain("/pages/staff/acceptance/index");
   });
+
+  it("接受邀请表单和按钮使用完整卡片宽度", () => {
+    const style = readFileSync(
+      resolve(root, "pages/staff/acceptance/index.wxss"),
+      "utf8",
+    );
+    expect(style).toContain("flex-direction: column");
+    expect(style.match(/width: 100%/g)?.length).toBeGreaterThanOrEqual(3);
+    expect(style).toContain(".accept-panel button");
+  });
 });

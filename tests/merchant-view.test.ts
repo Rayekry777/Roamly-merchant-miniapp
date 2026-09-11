@@ -10,10 +10,11 @@ describe("商户我的状态展示", () => {
       id: "1",
       maskedPhone: "139****0001",
       nickname: "测试商户",
-      role: "OWNER",
-      roleLabel: "店主",
+      role: "VISITOR",
+      roleLabel: "游客",
       status,
       statusLabel: "状态",
+      canAcceptStaffInvitation: status === "NOT_APPLIED",
       permissions: ["merchant:profile:read"],
     } satisfies CurrentMerchant);
 

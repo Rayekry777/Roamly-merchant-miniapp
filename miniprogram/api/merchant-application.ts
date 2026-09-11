@@ -233,7 +233,8 @@ function mediaPurpose(value: unknown): value is BusinessMediaPurpose {
     value === "LICENSE" ||
     value === "GALLERY" ||
     value === "VOUCHER_COVER" ||
-    value === "VOUCHER_DETAIL"
+    value === "VOUCHER_DETAIL" ||
+    value === "MERCHANT_AVATAR"
   );
 }
 

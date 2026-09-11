@@ -8,3 +8,28 @@ export type FinanceSummary = {
 export function loadFinanceSummary() {
   return request<FinanceSummary>("/v1/merchant/finance/summary");
 }
+export type TodayFinance = {
+  date: string;
+  timezone: string;
+  redeemedVoucherCount: number;
+  redemptionCount: number;
+  redemptionAmount: number;
+  refundedVoucherCount: number;
+  refundAmount: number;
+  netReceiptAmount: number;
+};
+export function loadTodayFinance(date?: string) {
+  return request<TodayFinance>(
+    `/v1/merchant/finance/today${date ? `?date=${date}` : ""}`,
+  );
+}
+export type ServiceFeePolicy = {
+  rateBps: number;
+  rateText: string;
+  formula: string;
+  effectiveFrom?: string;
+  effectiveTo?: string;
+};
+export function loadServiceFeePolicy() {
+  return request<ServiceFeePolicy>("/v1/merchant/finance/service-fee-policy");
+}

@@ -1,4 +1,8 @@
-import { loadFinanceSummary, type FinanceSummary } from "../../api/finance";
+import {
+  loadFinanceSummary,
+  loadTodayFinance,
+  type FinanceSummary,
+} from "../../api/finance";
 import { merchantStore } from "../../store/merchant";
 import type { CurrentMerchant } from "../../types/merchant-auth";
 import {
@@ -47,6 +51,12 @@ Page({
     financeExpanded: true,
     financeFlash: false,
     canFinance: false,
+    today: null as {
+      redemptionAmountText: string;
+      refundAmountText: string;
+      netReceiptAmountText: string;
+      redemptionCount: number;
+    } | null,
   },
   onLoad() {
     const windowInfo = wx.getWindowInfo();
@@ -118,6 +128,7 @@ Page({
         canFinance,
       });
       if (canFinance) await this.loadFinance(false);
+      if (canFinance) await this.loadToday();
     } catch (error) {
       this.setData({
         error: error instanceof Error ? error.message : "首页加载失败",
@@ -155,6 +166,23 @@ Page({
         financeError:
           error instanceof Error ? error.message : "经营资金加载失败",
       });
+    }
+  },
+  async loadToday() {
+    try {
+      const result = await loadTodayFinance();
+      const value = result.data;
+      if (value)
+        this.setData({
+          today: {
+            ...value,
+            redemptionAmountText: formatFen(value.redemptionAmount),
+            refundAmountText: formatFen(value.refundAmount),
+            netReceiptAmountText: formatFen(value.netReceiptAmount),
+          },
+        });
+    } catch {
+      /* 首页允许今日卡片稍后重试 */
     }
   },
   retry() {
@@ -221,6 +249,9 @@ Page({
       )
     )
       wx.navigateTo({ url: intent.route });
+  },
+  openToday() {
+    wx.navigateTo({ url: "/pages/today/index" });
   },
   async openAfterSales() {
     const intent = { route: "/pages/after-sales/index" };

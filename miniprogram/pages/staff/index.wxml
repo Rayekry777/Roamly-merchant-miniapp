@@ -1,3 +1,36 @@
 <app-navbar title="员工与权限" />
-<view class="page-shell page-shell--subpage page-enter"><view class="page-heading">员工与权限</view><view class="invite-panel"><input placeholder="员工手机号" value="{{phone}}" bindinput="onPhone"/><picker range="{{['店长','核销员']}}" bindchange="onRole"><view class="picker">{{role === 'MANAGER' ? '店长' : '核销员'}} ▾</view></picker><button class="primary-action" bindtap="invite">生成邀请</button></view><view wx:if="{{loading}}" class="state-panel">正在加载...</view><view wx:if="{{error}}" class="error-panel">{{error}}</view><view wx:for="{{staff}}" wx:key="id" class="section-block"><view><view class="section-title">{{item.nickname || item.phone}}</view><view class="onboarding-note">{{item.roleLabel}} · {{item.statusLabel}}</view></view><button size="mini" data-id="{{item.id}}" bindtap="toggle">{{item.status === 'ACTIVE' ? '停用' : '启用'}}</button></view></view>
-<view wx:if="{{invitationVisible}}" class="qr-mask" catch:tap="closeInvitation"><view class="qr-dialog" catch:tap="noop"><view class="qr-dialog__head"><text>员工邀请二维码</text><text class="qr-close" bind:tap="closeInvitation">关闭</text></view><t-qrcode value="{{invitationToken}}" size="240" level="M" include-margin /><view class="qr-token">邀请码：{{invitationToken}}</view><view class="qr-tip">员工登录后可扫码或手输邀请码接受邀请</view></view></view>
+<view class="page-shell page-shell--subpage page-enter">
+  <view class="page-heading">员工与权限</view>
+  <view class="invite-panel">
+    <input type="number" maxlength="11" placeholder="已注册的员工手机号" value="{{phone}}" bindinput="onPhone" />
+    <picker range="{{['店长','核销员']}}" bindchange="onRole">
+      <view class="picker">{{role === 'MANAGER' ? '店长' : '核销员'}} ▾</view>
+    </picker>
+    <button class="primary-action" loading="{{inviting}}" disabled="{{credentialCountdown > 0}}" bindtap="invite">
+      {{credentialCountdown > 0 ? '凭证生效中' : '验证并生成60秒凭证'}}
+    </button>
+    <view class="invite-hint">仅已注册且未创建入驻申请的游客账号可以接受邀请。</view>
+  </view>
+
+  <view wx:if="{{credentialCode}}" class="credential-card">
+    <view class="credential-card__label">员工邀请凭证</view>
+    <view class="credential-code {{credentialCountdown <= 0 ? 'credential-code--expired' : ''}}">{{credentialCode}}</view>
+    <view class="credential-status">
+      {{credentialCountdown > 0 ? credentialCountdown + ' 秒后失效' : '凭证已失效，请重新生成'}}
+    </view>
+    <view wx:if="{{credentialCountdown > 0}}" class="credential-actions">
+      <button class="secondary-action" bindtap="copyCredential">复制凭证</button>
+      <button class="secondary-action credential-revoke" loading="{{revoking}}" bindtap="revokeCredential">撤销</button>
+    </view>
+  </view>
+
+  <view wx:if="{{loading}}" class="state-panel">正在加载...</view>
+  <view wx:if="{{error}}" class="error-panel">{{error}}</view>
+  <view wx:for="{{staff}}" wx:key="id" class="section-block">
+    <view>
+      <view class="section-title">{{item.nickname || item.phone}}</view>
+      <view class="onboarding-note">{{item.roleLabel}} · {{item.statusLabel}}</view>
+    </view>
+    <button size="mini" data-id="{{item.id}}" bindtap="toggle">{{item.status === 'ACTIVE' ? '停用' : '启用'}}</button>
+  </view>
+</view>

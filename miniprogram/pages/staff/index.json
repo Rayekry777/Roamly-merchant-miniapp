@@ -1,6 +1,5 @@
 {
   "usingComponents": {
-    "app-navbar": "/components/app-navbar/index",
-    "t-qrcode": "tdesign-miniprogram/qrcode/qrcode"
+    "app-navbar": "/components/app-navbar/index"
   }
 }

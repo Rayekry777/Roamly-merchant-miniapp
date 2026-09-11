@@ -177,7 +177,7 @@
       <view class="media-heading"><text>券封面</text><text>1 张</text></view>
       <view class="cover-editor">
         <view wx:if="{{draft.coverMedia}}" class="cover-media">
-          <image wx:if="{{draft.coverMedia.localPath}}" src="{{draft.coverMedia.localPath}}" mode="aspectFill" />
+          <image wx:if="{{draft.coverMedia.localPath}}" src="{{draft.coverMedia.localPath}}" mode="aspectFill" bindtap="editCover" />
           <view wx:else class="media-unavailable">私有图片暂未加载</view>
           <button wx:if="{{!readonly}}" class="media-remove" bindtap="removeCover">×</button>
         </view>
@@ -187,7 +187,7 @@
       <view class="media-heading"><text>详情图</text><text>{{draft.detailMedia.length}}/9</text></view>
       <view class="media-grid">
         <view wx:for="{{draft.detailMedia}}" wx:key="id" class="media-item">
-          <image wx:if="{{item.localPath}}" src="{{item.localPath}}" mode="aspectFill" />
+          <image wx:if="{{item.localPath}}" src="{{item.localPath}}" mode="aspectFill" data-index="{{index}}" bindtap="editDetail" />
           <view wx:else class="media-unavailable">加载失败</view>
           <button wx:if="{{!readonly}}" class="media-remove" data-index="{{index}}" bindtap="removeDetail">×</button>
         </view>

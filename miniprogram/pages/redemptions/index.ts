@@ -36,6 +36,15 @@ Page({
     error: "",
     canReverse: false,
     reversingId: "",
+    activeTab: "ALL",
+    keyword: "",
+    tabs: [
+      { key: "ALL", label: "全部" },
+      { key: "REDEEMED", label: "已核销" },
+      { key: "REVERSIBLE", label: "可撤销核销" },
+      { key: "REVERSED", label: "核销已撤销" },
+      { key: "REFUNDED", label: "核销已退款" },
+    ],
   },
   onShow() {
     void this.activate();
@@ -79,7 +88,12 @@ Page({
     const page = reset ? 1 : this.data.page;
     this.setData({ loading: true, error: reset ? "" : this.data.error });
     try {
-      const result = await listMerchantRedemptions(page, PAGE_SIZE);
+      const result = await listMerchantRedemptions(
+        page,
+        PAGE_SIZE,
+        this.data.activeTab,
+        this.data.keyword,
+      );
       const pageData = result.data;
       if (!pageData || !Array.isArray(pageData.items)) {
         throw new Error("核销记录响应格式异常");
@@ -110,6 +124,22 @@ Page({
   },
   retry() {
     void this.load(this.data.items.length === 0);
+  },
+  selectTab(e: WechatMiniprogram.TouchEvent) {
+    const tab = String(e.currentTarget.dataset.tab || "ALL");
+    this.setData({ activeTab: tab });
+    void this.load(true);
+  },
+  onKeyword(e: WechatMiniprogram.Input) {
+    this.setData({ keyword: e.detail.value });
+  },
+  search() {
+    void this.load(true);
+  },
+  openDetail(e: WechatMiniprogram.TouchEvent) {
+    wx.navigateTo({
+      url: `/pages/redemptions/detail?id=${String(e.currentTarget.dataset.id)}`,
+    });
   },
   async reverse(event: WechatMiniprogram.TouchEvent) {
     const id = String(event.currentTarget.dataset.id || "");

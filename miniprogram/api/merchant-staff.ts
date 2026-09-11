@@ -17,7 +17,8 @@ export type StaffInvitation = {
   roleLabel: string;
   status: string;
   expireTime: string;
-  token?: string;
+  remainingSeconds: number;
+  credentialCode?: string;
 };
 export function listStaff(page = 1, size = 20) {
   return request<PageResult<MerchantStaff>>(
@@ -43,10 +44,19 @@ export function activateStaff(id: string) {
     headers: { "Idempotency-Key": `staff-enable-${id}-${Date.now()}` },
   });
 }
-export function acceptStaffInvitation(token: string) {
+export function revokeStaffInvitation(id: string) {
+  return request<StaffInvitation>(
+    `/v1/merchant/staff-invitations/${id}/revocation`,
+    {
+      method: "POST",
+      headers: { "Idempotency-Key": `staff-revoke-${id}-${Date.now()}` },
+    },
+  );
+}
+export function acceptStaffInvitation(credentialCode: string) {
   return request<MerchantStaff>("/v1/merchant/staff-invitations/acceptance", {
     method: "POST",
-    data: { token },
+    data: { credentialCode },
     headers: { "Idempotency-Key": `staff-accept-${Date.now()}` },
   });
 }

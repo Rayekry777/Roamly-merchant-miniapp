@@ -1,0 +1,61 @@
+.detail-page {
+  padding-top: 20rpx;
+}
+
+.status-title {
+  margin: 12rpx 0 22rpx;
+  color: #0aaf58;
+  font-size: 42rpx;
+  font-weight: 800;
+}
+
+.product-card,
+.info-card {
+  margin-top: 20rpx;
+  padding: 30rpx;
+}
+
+.product-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.product-title {
+  font-size: 31rpx;
+  font-weight: 700;
+}
+
+.price {
+  font-size: 30rpx;
+}
+
+.section-title {
+  margin-bottom: 20rpx;
+  font-size: 30rpx;
+  font-weight: 700;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 20rpx;
+  padding: 17rpx 0;
+  color: var(--roamly-muted);
+  font-size: 25rpx;
+  border-bottom: 1rpx solid #f1f1f5;
+}
+
+.info-row text:last-child {
+  color: var(--roamly-text);
+  text-align: right;
+}
+
+.info-row.total {
+  font-size: 29rpx;
+  font-weight: 700;
+}
+
+.link {
+  color: var(--roamly-primary) !important;
+}

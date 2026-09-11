@@ -13,6 +13,7 @@ import type {
   MerchantApplicationDraft,
 } from "../../types/merchant-application";
 import { ApiError } from "../../utils/request";
+import { editImageForUpload } from "../../utils/image";
 
 const steps = ["主体", "门店", "营业", "结算"];
 
@@ -197,11 +198,11 @@ Page({
         count,
         mediaType: ["image"],
         sourceType: ["album", "camera"],
-        sizeType: ["compressed"],
       });
       this.setData({ uploading: true });
       for (const file of chosen.tempFiles) {
-        const uploaded = await uploadBusinessImage(file.tempFilePath, purpose);
+        const editedPath = await editImageForUpload(file.tempFilePath);
+        const uploaded = await uploadBusinessImage(editedPath, purpose);
         if (purpose === "LICENSE") {
           const previous = this.data.draft?.licenseMedia;
           if (previous?.expiresAt) await deleteBusinessImage(previous.id);
@@ -212,6 +213,53 @@ Page({
         }
       }
       onboardingStore.clearSubmissionKey();
+    } catch (error) {
+      const err = error as { errMsg?: string };
+      if (!err.errMsg?.includes("cancel")) {
+        wx.showToast({ title: message(error), icon: "none" });
+      }
+    } finally {
+      this.setData({ uploading: false });
+    }
+  },
+  editLicense() {
+    const media = this.data.draft?.licenseMedia;
+    if (media) void this.editUploadedMedia(media, "LICENSE", -1);
+  },
+  editGallery(event: WechatMiniprogram.TouchEvent) {
+    const index = Number(event.currentTarget.dataset.index);
+    const media = this.data.draft?.galleryMedia[index];
+    if (media) void this.editUploadedMedia(media, "GALLERY", index);
+  },
+  async editUploadedMedia(
+    media: BusinessMedia,
+    purpose: "LICENSE" | "GALLERY",
+    index: number,
+  ) {
+    if (this.data.readonly || this.data.uploading) return;
+    if (!media.localPath) {
+      wx.showToast({ title: "图片尚未加载，请稍后重试", icon: "none" });
+      return;
+    }
+    this.setData({ uploading: true });
+    try {
+      const editedPath = await editImageForUpload(media.localPath);
+      const uploaded = await uploadBusinessImage(editedPath, purpose);
+      if (purpose === "LICENSE") {
+        this.setData({ "draft.licenseMedia": uploaded });
+      } else {
+        const gallery = [...(this.data.draft?.galleryMedia ?? [])];
+        gallery[index] = uploaded;
+        this.setData({ "draft.galleryMedia": gallery });
+      }
+      onboardingStore.clearSubmissionKey();
+      if (media.expiresAt) {
+        try {
+          await deleteBusinessImage(media.id);
+        } catch {
+          /* 新图已替换成功，旧临时图交由服务端过期清理。 */
+        }
+      }
     } catch (error) {
       const err = error as { errMsg?: string };
       if (!err.errMsg?.includes("cancel")) {

@@ -1,8 +1,9 @@
-<app-navbar title="核销记录" />
+<app-navbar title="核销明细" />
 
 <view class="page-shell page-shell--subpage redemption-page page-enter">
-  <view class="page-heading">核销记录</view>
-  <view class="page-copy">实时展示当前门店的核销与撤销结果</view>
+  <view class="page-heading">核销明细</view>
+  <view class="tab-scroll"><view wx:for="{{tabs}}" wx:key="key" class="tab {{activeTab === item.key ? 'tab--active' : ''}}" data-tab="{{item.key}}" bind:tap="selectTab">{{item.label}}</view></view>
+  <view class="search-row"><input value="{{keyword}}" placeholder="搜索订单号或券码" bindinput="onKeyword" confirm-type="search" bindconfirm="search"/><t-icon name="search" size="38rpx" bind:tap="search"/></view>
 
   <view wx:if="{{loading && !items.length}}" class="state-panel">正在加载核销记录...</view>
   <view wx:elif="{{error && !items.length}}" class="error-panel">
@@ -12,11 +13,11 @@
   <view wx:elif="{{!items.length}}" class="state-panel">暂无核销记录</view>
 
   <view wx:else class="record-list">
-    <view wx:for="{{items}}" wx:key="id" class="record-card surface-card">
+    <view wx:for="{{items}}" wx:key="id" class="record-card surface-card" data-id="{{item.id}}" bind:tap="openDetail">
       <view class="record-head">
         <view>
-          <view class="record-kicker">券尾号 {{item.voucherLast4}}</view>
-          <view class="record-title">核销 {{item.useCount}} 次</view>
+      <view class="record-kicker">订单 {{item.orderId || '--'}}</view>
+          <view class="record-title">{{item.productTitle || ('券尾号 ' + item.voucherLast4)}}</view>
         </view>
         <view class="record-status record-status--{{item.statusTone}}">{{item.statusText}}</view>
       </view>
@@ -26,7 +27,7 @@
         <view><text>核销时间</text><strong>{{item.redeemedTimeText}}</strong></view>
       </view>
       <view wx:if="{{item.reversalReason}}" class="reversal-copy">撤销原因：{{item.reversalReason}}</view>
-      <button wx:if="{{canReverse && item.status === 'SUCCEEDED'}}" class="reverse-action" loading="{{reversingId === item.id}}" disabled="{{reversingId}}" data-id="{{item.id}}" bind:tap="reverse">撤销本次核销</button>
+      <button wx:if="{{canReverse && item.status === 'SUCCEEDED'}}" catch:tap="reverse" class="reverse-action" loading="{{reversingId === item.id}}" disabled="{{reversingId}}" data-id="{{item.id}}">撤销本次核销</button>
     </view>
     <view wx:if="{{loading}}" class="list-footer">正在加载更多...</view>
     <view wx:elif="{{error}}" class="list-footer list-error" bind:tap="retry">{{error}}，点击重试</view>

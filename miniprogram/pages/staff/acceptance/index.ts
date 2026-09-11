@@ -2,31 +2,23 @@ import { acceptStaffInvitation } from "../../../api/merchant-staff";
 import { merchantStore } from "../../../store/merchant";
 
 Page({
-  data: { token: "", loading: false, error: "" },
+  data: { credentialCode: "", loading: false, error: "" },
   onLoad(options: Record<string, string>) {
-    if (options.token)
-      this.setData({ token: decodeURIComponent(options.token) });
+    if (/^\d{6}$/.test(options.code || ""))
+      this.setData({ credentialCode: options.code });
   },
-  onToken(e: WechatMiniprogram.Input) {
-    this.setData({ token: e.detail.value.trim(), error: "" });
-  },
-  scan() {
-    wx.scanCode({
-      onlyFromCamera: true,
-      scanType: ["qrCode"],
-      success: ({ result }) => this.setData({ token: result, error: "" }),
-      fail: (error) => {
-        if (!error.errMsg?.includes("cancel"))
-          wx.showToast({ title: "无法使用相机扫码", icon: "none" });
-      },
+  onCredentialCode(e: WechatMiniprogram.Input) {
+    this.setData({
+      credentialCode: e.detail.value.replace(/\D/g, "").slice(0, 6),
+      error: "",
     });
   },
   async accept() {
-    if (this.data.token.length < 16)
-      return this.setData({ error: "请输入有效的邀请码" });
+    if (!/^\d{6}$/.test(this.data.credentialCode))
+      return this.setData({ error: "请输入六位数字邀请凭证" });
     this.setData({ loading: true, error: "" });
     try {
-      await acceptStaffInvitation(this.data.token);
+      await acceptStaffInvitation(this.data.credentialCode);
       await merchantStore.restore(true);
       this.selectComponent("#success-motion")?.show();
       setTimeout(() => wx.switchTab({ url: "/pages/me/index" }), 1500);

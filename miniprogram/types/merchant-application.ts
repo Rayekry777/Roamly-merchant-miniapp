@@ -22,7 +22,8 @@ export type BusinessMediaPurpose =
   | "LICENSE"
   | "GALLERY"
   | "VOUCHER_COVER"
-  | "VOUCHER_DETAIL";
+  | "VOUCHER_DETAIL"
+  | "MERCHANT_AVATAR";
 
 export interface BusinessPeriod {
   open: string;

@@ -24,6 +24,34 @@ export type Redemption = {
   redeemedTime: string;
   reversedTime?: string;
   reversalReason?: string;
+  orderId?: string;
+  productId?: string;
+  productTitle?: string;
+  productCover?: string;
+  shopName?: string;
+  operatorName?: string;
+  redemptionMethod?: string;
+  merchantNote?: string;
+  income?: {
+    saleAmount: number;
+    merchantSubsidyAmount: number;
+    platformDiscountAmount: number;
+    customerPaidAmount: number;
+    serviceFeeBaseAmount: number;
+    serviceFeeRateBps: number;
+    serviceFeeAmount: number;
+    estimatedIncomeAmount: number;
+  };
+  canReverse?: boolean;
+  canAssistRefund?: boolean;
+  refundId?: string;
+  orderSource?: string;
+  dealChannel?: string;
+  promoterRole?: string;
+  promoterName?: string;
+  contentAddress?: string;
+  orderTime?: string;
+  paidTime?: string;
 };
 export function previewRedemption(code: string) {
   return request<RedemptionPreview>(
@@ -59,9 +87,29 @@ export function reverseRedemption(
   });
 }
 
-export function listMerchantRedemptions(page = 1, size = 20) {
+export function listMerchantRedemptions(
+  page = 1,
+  size = 20,
+  status?: string,
+  keyword?: string,
+) {
+  const params = new URLSearchParams({
+    page: String(page),
+    size: String(size),
+  });
+  if (status && status !== "ALL") params.set("status", status);
+  if (keyword) params.set("keyword", keyword);
   return request<PageResult<Redemption>>(
-    `/v1/merchant/redemptions?page=${page}&size=${size}`,
+    `/v1/merchant/redemptions?${params.toString()}`,
     { showError: false },
   );
+}
+export function getMerchantRedemption(id: string) {
+  return request<Redemption>(`/v1/merchant/redemptions/${id}`);
+}
+export function updateRedemptionNote(id: string, merchantNote: string) {
+  return request<Redemption>(`/v1/merchant/redemptions/${id}/note`, {
+    method: "PUT",
+    data: { merchantNote },
+  });
 }

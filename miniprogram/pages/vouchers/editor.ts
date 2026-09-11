@@ -16,6 +16,7 @@ import type {
 import { voucherTypeLabels } from "../../types/voucher";
 import { guardVoucherManager } from "../../utils/merchant-guard";
 import { ApiError } from "../../utils/request";
+import { editImageForUpload } from "../../utils/image";
 
 const steps = ["基础", "价格", "规则", "图片"];
 const dayLabels: Record<string, string> = {
@@ -336,12 +337,12 @@ Page({
         count,
         mediaType: ["image"],
         sourceType: ["album", "camera"],
-        sizeType: ["compressed"],
       });
       this.setData({ uploading: true });
       const draft = cloneForm(this.data.draft);
       for (const file of chosen.tempFiles) {
-        const uploaded = await uploadVoucherImage(file.tempFilePath, purpose);
+        const editedPath = await editImageForUpload(file.tempFilePath);
+        const uploaded = await uploadVoucherImage(editedPath, purpose);
         if (purpose === "VOUCHER_COVER") {
           const previous = draft.coverMedia;
           if (previous?.expiresAt) await deleteBusinessImage(previous.id);
@@ -351,6 +352,45 @@ Page({
         }
       }
       this.applyChangedDraft(draft);
+    } catch (error) {
+      if (!isCanceled(error)) {
+        wx.showToast({ title: message(error), icon: "none" });
+      }
+    } finally {
+      this.setData({ uploading: false });
+    }
+  },
+  editCover() {
+    const media = this.data.draft?.coverMedia;
+    if (media && !this.data.readonly) void this.editUploadedMedia(media, -1);
+  },
+  editDetail(event: WechatMiniprogram.TouchEvent) {
+    const index = Number(event.currentTarget.dataset.index);
+    const media = this.data.draft?.detailMedia[index];
+    if (media && !this.data.readonly) void this.editUploadedMedia(media, index);
+  },
+  async editUploadedMedia(media: BusinessMedia, detailIndex: number) {
+    if (!this.data.draft || this.data.readonly || this.data.uploading) return;
+    if (!media.localPath) {
+      wx.showToast({ title: "图片尚未加载，请稍后重试", icon: "none" });
+      return;
+    }
+    this.setData({ uploading: true });
+    try {
+      const purpose = detailIndex < 0 ? "VOUCHER_COVER" : "VOUCHER_DETAIL";
+      const editedPath = await editImageForUpload(media.localPath);
+      const uploaded = await uploadVoucherImage(editedPath, purpose);
+      const draft = cloneForm(this.data.draft);
+      if (detailIndex < 0) draft.coverMedia = uploaded;
+      else draft.detailMedia[detailIndex] = uploaded;
+      this.applyChangedDraft(draft);
+      if (media.expiresAt) {
+        try {
+          await deleteBusinessImage(media.id);
+        } catch {
+          /* 新图已替换成功，旧临时图交由服务端过期清理。 */
+        }
+      }
     } catch (error) {
       if (!isCanceled(error)) {
         wx.showToast({ title: message(error), icon: "none" });

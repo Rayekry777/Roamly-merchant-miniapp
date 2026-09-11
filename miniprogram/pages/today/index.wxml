@@ -1,0 +1,15 @@
+<app-navbar title="今日数据" />
+<view class="today-page page-shell page-shell--subpage">
+  <view class="page-heading">今日数据</view>
+  <view wx:if="{{loading}}" class="state-panel">正在加载今日数据...</view>
+  <view wx:elif="{{error}}" class="error-panel"><view>{{error}}</view><button class="text-action" bind:tap="retry">重新加载</button></view>
+  <block wx:else>
+    <view class="data-card surface-card">
+      <view class="card-head"><text>团购数据</text><text class="link" bind:tap="openRedemptions">核销明细 ›</text></view>
+      <view class="metric-box"><view><text>核销券数</text><strong>{{today.redeemedVoucherCount}}</strong></view><view><text>退款券数</text><strong>{{today.refundedVoucherCount}}</strong></view></view>
+      <view class="metric-row"><view><text>核销金额（元）</text><strong>{{today.redemptionAmountText}}</strong></view><view><text>退款金额（元）</text><strong>{{today.refundAmountText}}</strong></view></view>
+    </view>
+    <view class="data-card surface-card summary"><view class="card-head"><text>今日收银</text><text>{{today.dateText}}</text></view><view class="big-number">¥{{today.netReceiptAmountText}}</view><view class="sub">核销实收 ¥{{today.redemptionAmountText}}　退款 ¥{{today.refundAmountText}}</view></view>
+    <view wx:if="{{policy}}" class="policy-card surface-card"><view class="section-title">结算扣费规则</view><view>{{policy.formula}}</view><view class="sub">当前服务费率 {{policy.rateText}}，以核销时生效规则为准</view></view>
+  </block>
+</view>

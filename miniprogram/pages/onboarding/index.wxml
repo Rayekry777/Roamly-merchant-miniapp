@@ -66,7 +66,7 @@
         <view class="media-heading">营业执照</view>
         <view class="media-grid">
           <view wx:if="{{draft.licenseMedia}}" class="media-item">
-            <image src="{{draft.licenseMedia.localPath}}" mode="aspectFill" />
+            <image src="{{draft.licenseMedia.localPath}}" mode="aspectFill" bindtap="editLicense" />
             <button class="media-remove" bindtap="removeLicense">×</button>
           </view>
           <button wx:else class="media-add" bindtap="chooseLicense">+</button>
@@ -75,7 +75,7 @@
         <view class="media-heading">经营图片 <text>{{draft.galleryMedia.length}}/9</text></view>
         <view class="media-grid">
           <view wx:for="{{draft.galleryMedia}}" wx:key="id" class="media-item">
-            <image src="{{item.localPath}}" mode="aspectFill" />
+            <image src="{{item.localPath}}" mode="aspectFill" data-index="{{index}}" bindtap="editGallery" />
             <button class="media-remove" data-index="{{index}}" bindtap="removeGallery">×</button>
           </view>
           <button wx:if="{{draft.galleryMedia.length < 9}}" class="media-add" bindtap="chooseGallery">+</button>

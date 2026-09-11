@@ -1,0 +1,81 @@
+.today-page {
+  padding-top: 20rpx;
+}
+
+.data-card,
+.policy-card {
+  margin-top: 24rpx;
+  padding: 30rpx;
+}
+
+.card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 31rpx;
+  font-weight: 700;
+}
+
+.link {
+  color: var(--roamly-primary);
+  font-size: 24rpx;
+  font-weight: 500;
+}
+
+.metric-box {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16rpx;
+  margin-top: 26rpx;
+  padding: 26rpx;
+  border-radius: 24rpx;
+  background: var(--roamly-bg);
+}
+
+.metric-box text,
+.metric-row text {
+  display: block;
+  color: var(--roamly-muted);
+  font-size: 23rpx;
+}
+
+.metric-box strong {
+  display: block;
+  margin-top: 12rpx;
+  font-size: 42rpx;
+}
+
+.metric-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20rpx;
+  margin-top: 26rpx;
+}
+
+.metric-row strong {
+  display: block;
+  margin-top: 10rpx;
+  font-size: 30rpx;
+}
+
+.summary .big-number {
+  margin-top: 28rpx;
+  font-size: 58rpx;
+  font-weight: 800;
+}
+
+.sub {
+  margin-top: 14rpx;
+  color: var(--roamly-muted);
+  font-size: 23rpx;
+}
+
+.section-title {
+  margin-bottom: 18rpx;
+  font-size: 31rpx;
+  font-weight: 700;
+}
+
+.policy-card {
+  line-height: 1.7;
+}

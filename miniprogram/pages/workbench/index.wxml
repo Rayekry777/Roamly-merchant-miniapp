@@ -42,6 +42,10 @@
     <view class="home-menu-label">核销明细</view>
     <t-icon name="chevron-right" size="42rpx" color="#777680" />
   </view>
+  <view class="receipt-card today-receipt pressable" bind:tap="openToday">
+    <view class="receipt-head"><view class="receipt-title">本店经营资金总计（今日收银）</view><t-icon name="chevron-right" size="42rpx" color="#777680" /></view>
+    <view class="receipt-body"><view class="receipt-row"><text>核销金额</text><strong>{{today ? today.redemptionAmountText : "--"}}<small wx:if="{{today}}">元</small></strong></view><view class="receipt-row"><text>退款金额</text><strong>{{today ? today.refundAmountText : "--"}}<small wx:if="{{today}}">元</small></strong></view><view class="receipt-row receipt-row--total"><text>今日净收</text><strong>{{today ? today.netReceiptAmountText : "--"}}<small wx:if="{{today}}">元</small></strong></view><view class="receipt-note">结算记录包含历史批次和冲回调整</view></view><view class="receipt-teeth"></view>
+  </view>
 
   <view class="home-menu-card home-menu-card--group">
     <view class="home-menu-row pressable" bind:tap="openAfterSales">
@@ -54,24 +58,6 @@
       <view class="home-menu-label">发起退款</view>
       <t-icon name="chevron-right" size="42rpx" color="#777680" />
     </view>
-  </view>
-
-  <view class="receipt-card {{financeFlash ? 'receipt-card--flash' : ''}}">
-    <view class="receipt-head pressable" bind:tap="toggleFinance">
-      <view class="receipt-title">本店经营资金总计</view>
-      <view class="receipt-tools">
-        <view class="receipt-refresh pressable" catch:tap="refreshFinance"><t-icon name="refresh" size="37rpx" /></view>
-        <t-icon name="chevron-right" size="42rpx" color="#777680" />
-      </view>
-    </view>
-    <view wx:if="{{financeExpanded}}" class="receipt-body">
-      <view class="receipt-row"><text>当前确认收入</text><strong>{{summary.recognizedAmountText}}<small wx:if="{{summary.recognizedAmountText !== '--'}}">元</small></strong></view>
-      <view class="receipt-row"><text>当前商户净额</text><strong>{{summary.netAmountText}}<small wx:if="{{summary.netAmountText !== '--'}}">元</small></strong></view>
-      <view class="receipt-note">结算记录包含历史批次和冲回调整</view>
-      <view wx:if="{{financeError}}" class="receipt-error">{{financeError}}</view>
-      <view wx:if="{{canFinance}}" class="receipt-link pressable" bind:tap="openSettlements">查看结算记录</view>
-    </view>
-    <view class="receipt-teeth"></view>
   </view>
 
   <view wx:if="{{loading && !current}}" class="home-loading">正在同步门店信息...</view>
