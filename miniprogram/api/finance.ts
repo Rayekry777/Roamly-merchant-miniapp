@@ -14,6 +14,12 @@ export type TodayFinance = {
   redeemedVoucherCount: number;
   redemptionCount: number;
   redemptionAmount: number;
+  saleAmount: number;
+  merchantSubsidyAmount: number;
+  platformSubsidyAmount: number;
+  customerPaidAmount: number;
+  serviceFeeAmount: number;
+  estimatedIncomeAmount: number;
   refundedVoucherCount: number;
   refundAmount: number;
   netReceiptAmount: number;

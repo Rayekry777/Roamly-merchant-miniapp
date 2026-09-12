@@ -15,6 +15,12 @@ Page({
       | (TodayFinance & {
           dateText: string;
           redemptionAmountText: string;
+          saleAmountText: string;
+          merchantSubsidyAmountText: string;
+          platformSubsidyAmountText: string;
+          customerPaidAmountText: string;
+          serviceFeeAmountText: string;
+          estimatedIncomeAmountText: string;
           refundAmountText: string;
           netReceiptAmountText: string;
         })
@@ -46,6 +52,12 @@ Page({
           ...value,
           dateText: formatDate(value.date),
           redemptionAmountText: formatFen(value.redemptionAmount),
+          saleAmountText: formatFen(value.saleAmount),
+          merchantSubsidyAmountText: formatFen(value.merchantSubsidyAmount),
+          platformSubsidyAmountText: formatFen(value.platformSubsidyAmount),
+          customerPaidAmountText: formatFen(value.customerPaidAmount),
+          serviceFeeAmountText: formatFen(value.serviceFeeAmount),
+          estimatedIncomeAmountText: formatFen(value.estimatedIncomeAmount),
           refundAmountText: formatFen(value.refundAmount),
           netReceiptAmountText: formatFen(value.netReceiptAmount),
         },
