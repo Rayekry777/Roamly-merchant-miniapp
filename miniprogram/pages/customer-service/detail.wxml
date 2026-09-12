@@ -1,0 +1,10 @@
+<app-navbar title="平台客服" back />
+<view class="conversation-page page-enter">
+  <view wx:if="{{loading && !ticket}}" class="state"><t-loading size="42rpx" /> 正在加载会话</view>
+  <view wx:elif="{{error || !ticket}}" class="state"><text>{{error || '工单不存在'}}</text><text bind:tap="retry">重新加载</text></view>
+  <block wx:else>
+    <view class="ticket-summary"><view><strong>{{ticket.subject}}</strong><text>{{ticket.ticketNo}}</text></view><text class="ticket-status">{{statusText}}</text><view wx:if="{{ticket.orderId || ticket.refundId || ticket.redemptionId}}" class="business-links"><text wx:if="{{ticket.orderId}}">订单 {{ticket.orderId}}</text><text wx:if="{{ticket.refundId}}">退款 {{ticket.refundId}}</text><text wx:if="{{ticket.redemptionId}}">核销 {{ticket.redemptionId}}</text></view></view>
+    <view class="message-list"><view wx:if="{{hasMore}}" class="history" bind:tap="loadEarlier">加载更早消息</view><view wx:for="{{messages}}" wx:key="id" class="message-row {{item.mine ? 'message-row--mine' : ''}}"><view class="message-bubble"><text class="message-time">{{item.mine ? '我' : '平台客服'}} · {{item.timeText}}</text><view>{{item.content}}</view><image wx:for="{{item.attachments}}" wx:for-item="file" wx:key="id" wx:if="{{file.localPath}}" class="message-image" src="{{file.localPath}}" mode="aspectFill" data-path="{{file.localPath}}" bind:tap="preview" /></view></view></view>
+    <view wx:if="{{ticket.status !== 'CLOSED' && ticket.status !== 'RESOLVED'}}" class="composer"><view wx:if="{{pendingAttachmentNames.length}}" class="pending-files">待发送：{{pendingAttachmentNames.join('、')}}</view><textarea maxlength="4000" placeholder="输入回复内容" value="{{draft}}" bindinput="inputDraft" /><view class="composer-actions"><button bind:tap="chooseImage">{{uploading ? '上传中' : '添加图片'}}</button><button class="send" loading="{{sending}}" disabled="{{sending || !draft}}" bind:tap="send">发送</button></view></view>
+  </block>
+</view>

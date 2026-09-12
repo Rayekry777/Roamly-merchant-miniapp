@@ -2,6 +2,8 @@
   "pages": [
     "pages/workbench/index",
     "pages/messages/index",
+    "pages/customer-service/create",
+    "pages/customer-service/detail",
     "pages/me/index",
     "pages/operations/index",
     "pages/orders/index",
@@ -11,6 +13,7 @@
     "pages/today/index",
     "pages/after-sales/index",
     "pages/after-sales/create",
+    "pages/after-sales/detail",
     "pages/settlements/index",
     "pages/settlements/detail",
     "pages/login/index",

@@ -1,0 +1,143 @@
+.conversation-page {
+  min-height: 100vh;
+  padding: 22rpx 22rpx 240rpx;
+  background: #f4f5fb;
+}
+
+.ticket-summary {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 24rpx;
+  background: #fff;
+  border: 1rpx solid var(--roamly-border);
+  border-radius: 24rpx;
+}
+
+.ticket-summary > view:first-child {
+  display: grid;
+  gap: 6rpx;
+}
+
+.ticket-summary text {
+  color: var(--roamly-muted);
+  font-size: 21rpx;
+}
+
+.ticket-status {
+  color: var(--roamly-primary) !important;
+}
+
+.business-links {
+  display: flex;
+  width: 100%;
+  padding-top: 16rpx;
+  margin-top: 16rpx;
+  border-top: 1rpx solid var(--roamly-border);
+  gap: 18rpx;
+}
+
+.message-list {
+  padding: 26rpx 4rpx;
+}
+
+.message-row {
+  display: flex;
+  margin-bottom: 20rpx;
+}
+
+.message-row--mine {
+  justify-content: flex-end;
+}
+
+.message-bubble {
+  max-width: 76%;
+  padding: 18rpx 22rpx;
+  background: #fff;
+  border-radius: 8rpx 24rpx 24rpx;
+  font-size: 26rpx;
+  line-height: 1.55;
+}
+
+.message-row--mine .message-bubble {
+  background: #fff0ef;
+  border-radius: 24rpx 8rpx 24rpx 24rpx;
+}
+
+.message-time {
+  display: block;
+  margin-bottom: 8rpx;
+  color: var(--roamly-muted);
+  font-size: 20rpx;
+}
+
+.message-image {
+  display: block;
+  width: 240rpx;
+  height: 180rpx;
+  margin-top: 12rpx;
+  border-radius: 14rpx;
+}
+
+.history {
+  padding: 10rpx;
+  color: var(--roamly-primary);
+  font-size: 22rpx;
+  text-align: center;
+}
+
+.composer {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 5;
+  padding: 18rpx 24rpx calc(18rpx + env(safe-area-inset-bottom));
+  background: #fff;
+  border-top: 1rpx solid var(--roamly-border);
+}
+
+.composer textarea {
+  box-sizing: border-box;
+  width: 100%;
+  height: 110rpx;
+  padding: 16rpx;
+  background: #f7f7fa;
+  border-radius: 16rpx;
+  font-size: 25rpx;
+}
+
+.composer-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10rpx;
+}
+
+.composer-actions button {
+  color: var(--roamly-muted);
+  background: #fff;
+  border: 1rpx solid var(--roamly-border);
+  border-radius: 28rpx;
+  font-size: 23rpx;
+  line-height: 58rpx;
+}
+
+.composer-actions .send {
+  min-width: 140rpx;
+  color: #fff;
+  background: var(--roamly-primary);
+  border: 0;
+}
+
+.pending-files {
+  margin-bottom: 8rpx;
+  color: var(--roamly-muted);
+  font-size: 20rpx;
+}
+
+.state {
+  display: grid;
+  min-height: 500rpx;
+  color: var(--roamly-muted);
+  place-items: center;
+}

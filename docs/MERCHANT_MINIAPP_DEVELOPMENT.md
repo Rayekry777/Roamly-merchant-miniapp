@@ -1,13 +1,13 @@
 # Roamly 商户小程序契约
 
 ```yaml
-version: 9
-updatedAt: 2026-09-08
+version: 10
+updatedAt: 2026-09-12
 scope: 商户认证、账号资料、入驻、经营、员工、券、核销与结算展示
 reviewStatus: accepted
 designStatus: 已冻结
 implementationStatus: 已实现
-projectStatus: 阶段 35 收银与核销重构开发中
+projectStatus: 阶段 41 已实现；阶段 34/36 视觉验收未确认
 deviceAcceptanceStatus: 未确认
 ```
 
@@ -116,6 +116,13 @@ deviceAcceptanceStatus: 未确认
 - 结算列表与详情分别消费 `GET /v1/merchant/settlements` 和 `GET /v1/merchant/settlements/{id}`。
 - 本端不得根据订单或核销列表重新计算应结算金额。
 
+## 阶段 41 平台客服与售后详情
+
+- 原消息入口改为当前商户账号主动创建的平台客服工单列表，并支持创建、会话、游标消息、图片附件和未读提醒。
+- 售后列表和详情分别展示审核状态与执行状态；详情展示审核意见、Mock 渠道结果、逐券退款、收入冲回、服务费返还和服务端时间线。
+- 商户可以把退款、核销或结算问题关联到本人客服工单，但不能审批、拒绝、重试或直接执行退款，也不能查看消费者工单及其会话。
+- 工单可见范围以 `applicant_type=MERCHANT + applicant_id=当前商户账号` 为准；WebSocket 只触发刷新，不能修改业务状态。
+
 ## 接口消费
 
 - 仅调用 `/v1/merchant/**`；成功结构为 `Result`、`PageResult`，认证使用 `Authorization: Bearer <token>`。
@@ -146,6 +153,7 @@ deviceAcceptanceStatus: 未确认
 |   30 | 自动化、开发者工具与真机验收         | 已实现（自动化；真机未确认） |
 |   34 | 三种登录、个人信息与账号安全         | 开发中                       |
 |   36 | 游客/租户身份与六位员工邀请凭证      | 开发中                       |
+|   41 | 商户客服会话与退款售后详情           | 已实现（自动化；真机未确认） |
 
 ## 验收
 
@@ -163,6 +171,8 @@ deviceAcceptanceStatus: 未确认
 2026-09-08 阶段 34：三种商户登录、个人信息入口与页面、私有头像、手机号换绑、密码修改和个人信息页退出入口已落地；员工邀请接受页的输入区与按钮已改为卡片宽度自适应。后续阶段 36 收口时，全量类型检查、ESLint、Stylelint、格式检查、微信 npm 构建和 15 个 Vitest 文件共 73 项均已通过；尺寸脚本仍因缺少基准图无法执行，真机验收保持“未确认”，阶段继续标记“开发中”。
 
 2026-09-08 阶段 36：商户身份已切换为 `VISITOR/TENANT/MANAGER/VERIFIER`；租户通过已注册游客手机号签发 60 秒六位凭证，员工页提供倒计时、复制和撤销，接受页已删除二维码与扫码逻辑。`npm run verify`、`npm run format:check` 和构建通过，15 个 Vitest 文件共 73 项通过；`npm run visual:check` 因缺少 `artifacts/ui-qa/references/home-expanded.png` 等基准图未执行，320/375/390/430px 视觉验收仍未确认，因此阶段保持“开发中”。
+
+2026-09-12 阶段 41：商户平台客服列表、创建、会话、附件、未读和关联业务入口已实现；售后详情改用审核与执行权威状态并展示退款时间线。`npm run verify`（16 个测试文件、76 项）与 `npm run build:npm` 通过；阶段 41 变更文件格式检查通过，全仓格式检查仍被 1 个本阶段外既有文件阻塞，未混入本次提交。
 
 ## 非目标
 

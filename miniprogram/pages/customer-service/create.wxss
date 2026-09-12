@@ -1,0 +1,71 @@
+.create-page {
+  padding: 26rpx 24rpx 50rpx;
+}
+
+.create-intro {
+  display: grid;
+  padding: 10rpx 6rpx 24rpx;
+  gap: 8rpx;
+}
+
+.create-intro strong {
+  font-size: 36rpx;
+}
+
+.create-intro text,
+.field > text {
+  color: var(--roamly-muted);
+  font-size: 23rpx;
+}
+
+.create-form {
+  padding: 28rpx;
+  margin-bottom: 28rpx;
+  background: #fff;
+  border: 1rpx solid var(--roamly-border);
+  border-radius: 26rpx;
+}
+
+.field {
+  margin-bottom: 28rpx;
+}
+
+.field input,
+.field textarea,
+.picker {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 22rpx 0;
+  border-bottom: 1rpx solid var(--roamly-border);
+  font-size: 28rpx;
+}
+
+.field textarea {
+  height: 220rpx;
+}
+
+.picker {
+  display: flex;
+  justify-content: space-between;
+}
+
+.count {
+  color: var(--roamly-muted);
+  font-size: 20rpx;
+  text-align: right;
+}
+
+.links {
+  padding: 20rpx;
+  color: var(--roamly-muted);
+  background: #f7f6fb;
+  border-radius: 18rpx;
+  font-size: 22rpx;
+}
+
+.links text {
+  display: block;
+  margin-bottom: 8rpx;
+  color: var(--roamly-text);
+  font-weight: 700;
+}

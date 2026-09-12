@@ -20,6 +20,27 @@ const labels: Record<string, { text: string; tone: string }> = {
   FAILED: { text: "退款失败", tone: "danger" },
   REJECTED: { text: "已驳回", tone: "danger" },
 };
+function refundDisplay(item: AfterSale): { text: string; tone: string } {
+  if (item.decisionStatus === "REJECTED")
+    return { text: "审核未通过", tone: "danger" };
+  return (
+    (
+      {
+        WAITING_EXECUTION: { text: "等待退款", tone: "pending" },
+        PROCESSING: { text: "退款处理中", tone: "processing" },
+        RETRY_WAITING: { text: "等待重试", tone: "processing" },
+        SUCCESS: { text: "退款成功", tone: "success" },
+        PARTIAL_SUCCESS: { text: "部分退款", tone: "pending" },
+        FAILED: { text: "退款失败", tone: "danger" },
+        MANUAL_REQUIRED: { text: "平台人工处理", tone: "danger" },
+      } as Record<string, { text: string; tone: string }>
+    )[item.executionStatus || ""] ||
+    labels[item.status] || {
+      text: item.status,
+      tone: "muted",
+    }
+  );
+}
 type Item = AfterSale & {
   amountText: string;
   statusText: string;
@@ -63,13 +84,16 @@ Page({
         keyword: this.data.keyword.trim() || undefined,
         page,
       });
-      const incoming = (result.data?.items || []).map((item) => ({
-        ...item,
-        amountText: formatFen(item.amount),
-        statusText: labels[item.status]?.text || item.status,
-        statusTone: labels[item.status]?.tone || "muted",
-        timeText: formatDateTime(item.requestedTime),
-      }));
+      const incoming = (result.data?.items || []).map((item) => {
+        const display = refundDisplay(item);
+        return {
+          ...item,
+          amountText: formatFen(item.amount),
+          statusText: display.text,
+          statusTone: display.tone,
+          timeText: formatDateTime(item.requestedTime),
+        };
+      });
       const items = reset ? incoming : [...this.data.items, ...incoming];
       this.setData({
         items,
@@ -109,6 +133,13 @@ Page({
   },
   retry() {
     void this.load(true);
+  },
+  openDetail(event: WechatMiniprogram.TouchEvent) {
+    const id = String(event.currentTarget.dataset.id || "");
+    if (id)
+      wx.navigateTo({
+        url: "/pages/after-sales/detail?id=" + encodeURIComponent(id),
+      });
   },
   onReachBottom() {
     if (this.data.hasMore && !this.data.loading) void this.load(false);

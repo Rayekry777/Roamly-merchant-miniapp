@@ -31,7 +31,7 @@
   </view>
 
   <view class="profile-menu profile-menu--group">
-    <view class="profile-menu-row pressable" data-label="我要反馈" bind:tap="unavailable">
+    <view class="profile-menu-row pressable" bind:tap="openCustomerService">
       <view class="profile-menu-icon"><t-icon name="edit" size="42rpx" /></view>
       <view class="profile-menu-label">我要反馈</view>
       <t-icon name="chevron-right" size="38rpx" color="#9b99a3" />

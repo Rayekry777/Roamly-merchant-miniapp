@@ -1,0 +1,6 @@
+<app-navbar title="联系平台客服" back />
+<view class="create-page page-enter">
+  <view class="create-intro"><strong>提交经营问题</strong><text>平台客服可协助核对退款、核销和结算，但不会代替财务审批。</text></view>
+  <view class="create-form"><view class="field"><text>问题类型</text><picker mode="selector" range="{{types}}" range-key="label" value="{{typeIndex}}" bindchange="chooseType"><view class="picker">{{types[typeIndex].label}}<text>›</text></view></picker></view><view class="field"><text>问题主题</text><input maxlength="160" placeholder="请输入问题主题" value="{{subject}}" bindinput="inputSubject" /></view><view class="field"><text>详细描述</text><textarea maxlength="2000" placeholder="补充业务背景和期望处理方式" value="{{description}}" bindinput="inputDescription" /><view class="count">{{description.length}}/2000</view></view><view wx:if="{{orderId || voucherId || refundId || redemptionId}}" class="links"><text>已关联业务</text><view wx:if="{{orderId}}">订单 {{orderId}}</view><view wx:if="{{voucherId}}">团购券 {{voucherId}}</view><view wx:if="{{refundId}}">退款 {{refundId}}</view><view wx:if="{{redemptionId}}">核销 {{redemptionId}}</view></view></view>
+  <t-button block theme="primary" loading="{{submitting}}" disabled="{{submitting}}" bind:tap="submit">提交平台客服</t-button>
+</view>

@@ -21,10 +21,85 @@
   justify-content: space-between;
 }
 
+.messages-head > view {
+  display: grid;
+  gap: 5rpx;
+}
+
+.messages-head button {
+  padding: 0 24rpx;
+  color: #fff;
+  background: var(--roamly-primary);
+  border-radius: 30rpx;
+  font-size: 23rpx;
+  line-height: 62rpx;
+}
+
 .messages-title {
   color: var(--roamly-text);
   font-size: 44rpx;
   font-weight: 760;
+}
+
+.messages-subtitle {
+  color: var(--roamly-muted);
+  font-size: 21rpx;
+}
+
+.ticket-list {
+  display: grid;
+  padding: 20rpx 24rpx 140rpx;
+  gap: 18rpx;
+}
+
+.ticket-card {
+  padding: 26rpx;
+  background: #fff;
+  border: 1rpx solid var(--roamly-border);
+  border-radius: 24rpx;
+  box-shadow: 0 10rpx 30rpx rgb(45 42 80 / 6%);
+}
+
+.ticket-card__head {
+  display: flex;
+  justify-content: space-between;
+  gap: 18rpx;
+}
+
+.ticket-card__head strong {
+  overflow: hidden;
+  font-size: 28rpx;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ticket-card__head text,
+.ticket-card__unread,
+.retry {
+  color: var(--roamly-primary);
+  font-size: 22rpx;
+}
+
+.ticket-card__meta,
+.ticket-card__copy {
+  margin-top: 10rpx;
+  overflow: hidden;
+  color: var(--roamly-muted);
+  font-size: 22rpx;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ticket-card__unread {
+  margin-top: 12rpx;
+  font-weight: 700;
+}
+
+.message-state {
+  display: grid;
+  min-height: 500rpx;
+  color: var(--roamly-muted);
+  place-items: center;
 }
 
 .messages-setting {

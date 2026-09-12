@@ -1,0 +1,7 @@
+{
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "app-navbar": "../../components/app-navbar/index",
+    "t-loading": "tdesign-miniprogram/loading/loading"
+  }
+}

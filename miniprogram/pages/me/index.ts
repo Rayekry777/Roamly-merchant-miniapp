@@ -128,6 +128,9 @@ Page({
       fail: () => wx.showToast({ title: "暂时无法打开微信设置", icon: "none" }),
     });
   },
+  openCustomerService() {
+    wx.navigateTo({ url: "/pages/customer-service/create" });
+  },
   showAbout() {
     wx.showModal({
       title: "关于 Roamly",

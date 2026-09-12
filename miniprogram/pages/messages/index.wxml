@@ -1,11 +1,7 @@
 <view class="messages-page page-enter" style="padding-top: {{statusBarHeight}}px;">
-  <view class="messages-head">
-    <view class="messages-title">消息</view>
-    <view class="messages-setting pressable" bind:tap="unavailable"><t-icon name="setting" size="42rpx" /></view>
-  </view>
-  <view class="empty-message">
-    <view class="empty-message__icon"><t-icon name="notification" size="74rpx" /></view>
-    <view class="empty-message__title">暂时没有消息</view>
-    <view class="empty-message__copy">订单与经营提醒功能正在准备中</view>
-  </view>
+  <view class="messages-head"><view><view class="messages-title">平台客服</view><view class="messages-subtitle">只展示当前商户账号主动创建的工单</view></view><button bind:tap="create">发起咨询</button></view>
+  <view wx:if="{{loading && !items.length}}" class="message-state">正在加载工单...</view>
+  <view wx:elif="{{error && !items.length}}" class="message-state"><text>{{error}}</text><text class="retry" bind:tap="retry">重新加载</text></view>
+  <view wx:elif="{{!items.length}}" class="empty-message"><view class="empty-message__icon"><t-icon name="service" size="74rpx" /></view><view class="empty-message__title">还没有客服工单</view><view class="empty-message__copy">退款、核销和结算问题可由平台客服统一处理</view></view>
+  <view wx:else class="ticket-list"><view wx:for="{{items}}" wx:key="id" class="ticket-card" data-id="{{item.id}}" bind:tap="open"><view class="ticket-card__head"><strong>{{item.subject}}</strong><text>{{item.statusText}}</text></view><view class="ticket-card__meta">{{item.ticketNo}} · {{item.timeText}}</view><view class="ticket-card__copy">{{item.description || '点击查看客服会话'}}</view><view wx:if="{{item.unreadCount}}" class="ticket-card__unread">{{item.unreadCount}} 条新消息</view></view></view>
 </view>

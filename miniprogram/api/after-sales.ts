@@ -16,6 +16,35 @@ export type AfterSale = {
   reasonCode?: string;
   refundNo?: string;
   merchantOrderNo?: string;
+  decisionStatus?: string;
+  executionStatus?: string;
+  rejectReason?: string;
+  failureCode?: string;
+  failureMessage?: string;
+  providerRefundNo?: string;
+  retryCount?: number;
+  items?: AfterSaleItem[];
+};
+
+export type AfterSaleItem = {
+  id: string;
+  voucherId: string;
+  redeemed: boolean;
+  customerPaidAmount: number;
+  platformSubsidyAmount: number;
+  merchantSubsidyAmount: number;
+  serviceFeeAmount: number;
+  refundAmount: number;
+  status: string;
+  reversedIncomeAmount: number;
+  refundedServiceFeeAmount: number;
+};
+export type RefundTimelineEvent = {
+  type: string;
+  title: string;
+  status: string;
+  description?: string;
+  occurredAt?: string;
 };
 
 export type RefundStage = "PENDING" | "PROCESSING" | "DECLINED" | "COMPLETED";
@@ -73,6 +102,13 @@ export function getAfterSale(id: string) {
   return request<AfterSale>(`/v1/merchant/after-sales/${id}`, {
     showError: false,
   });
+}
+
+export function getAfterSaleTimeline(id: string) {
+  return request<RefundTimelineEvent[]>(
+    "/v1/merchant/after-sales/" + id + "/timeline",
+    { showError: false },
+  );
 }
 
 export function createAfterSale(

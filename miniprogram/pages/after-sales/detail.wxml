@@ -1,0 +1,12 @@
+<app-navbar title="退款详情" back />
+<view class="refund-detail page-enter">
+  <view wx:if="{{loading && !detail}}" class="state"><t-loading size="42rpx" /> 正在加载退款详情</view>
+  <view wx:elif="{{error || !detail}}" class="state"><text>{{error || '退款记录不存在'}}</text><text bind:tap="retry">重新加载</text></view>
+  <block wx:else>
+    <view class="refund-hero"><text>退款金额</text><strong>¥{{detail.amountText}}</strong><view>{{detail.refundNo || detail.id}}</view></view>
+    <view class="detail-card"><view class="detail-row"><text>审核结果</text><strong>{{detail.decisionText}}</strong></view><view class="detail-row"><text>Mock 执行状态</text><strong>{{detail.executionText}}</strong></view><view class="detail-row"><text>订单</text><strong>{{detail.merchantOrderNo || detail.orderId}}</strong></view><view class="detail-row"><text>渠道流水</text><strong>{{detail.providerRefundNo || '--'}}</strong></view><view wx:if="{{detail.rejectReason || detail.failureMessage}}" class="failure">{{detail.rejectReason || detail.failureMessage}}</view></view>
+    <view class="detail-card"><view class="card-title">逐券退款</view><view wx:for="{{detail.items}}" wx:key="id" class="voucher-item"><view><strong>券 {{item.voucherId}}</strong><text>{{item.redeemed ? '已核销退款' : '未核销退款'}}</text></view><view><strong>¥{{item.refundAmountText}}</strong><text>收入冲回 ¥{{item.reversedIncomeText}} · 服务费返还 ¥{{item.serviceFeeText}}</text></view></view></view>
+    <view class="detail-card"><view class="card-title">处理时间线</view><view wx:for="{{timeline}}" wx:key="key" class="timeline-item"><i></i><view><strong>{{item.title}}</strong><text>{{item.description || item.statusText}}</text><text>{{item.timeText}}</text></view></view></view>
+    <button class="service-button" bind:tap="contactService">联系平台客服</button>
+  </block>
+</view>

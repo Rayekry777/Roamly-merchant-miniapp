@@ -1,0 +1,121 @@
+.refund-detail {
+  padding: 24rpx;
+  padding-bottom: 60rpx;
+}
+
+.refund-hero {
+  display: grid;
+  padding: 38rpx;
+  color: #fff;
+  background: linear-gradient(135deg, #ff716a, #e94f49);
+  border-radius: 28rpx;
+  gap: 8rpx;
+}
+
+.refund-hero strong {
+  font-size: 52rpx;
+}
+
+.refund-hero text,
+.refund-hero view {
+  opacity: 0.82;
+  font-size: 22rpx;
+}
+
+.detail-card {
+  padding: 26rpx;
+  margin-top: 20rpx;
+  background: #fff;
+  border: 1rpx solid var(--roamly-border);
+  border-radius: 24rpx;
+}
+
+.card-title {
+  margin-bottom: 18rpx;
+  font-size: 28rpx;
+  font-weight: 800;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 13rpx 0;
+  gap: 22rpx;
+  font-size: 24rpx;
+}
+
+.detail-row text,
+.voucher-item text,
+.timeline-item text {
+  color: var(--roamly-muted);
+}
+
+.detail-row strong {
+  text-align: right;
+}
+
+.failure {
+  padding: 18rpx;
+  margin-top: 12rpx;
+  color: #b8413b;
+  background: #fff0ef;
+  border-radius: 16rpx;
+  font-size: 23rpx;
+}
+
+.voucher-item {
+  display: grid;
+  padding: 18rpx 0;
+  border-top: 1rpx solid var(--roamly-border);
+  grid-template-columns: 1fr auto;
+  gap: 18rpx;
+}
+
+.voucher-item view {
+  display: grid;
+  gap: 6rpx;
+}
+
+.voucher-item view:last-child {
+  text-align: right;
+}
+
+.voucher-item text {
+  font-size: 21rpx;
+}
+
+.timeline-item {
+  display: grid;
+  margin: 18rpx 0;
+  grid-template-columns: 18rpx 1fr;
+  gap: 12rpx;
+}
+
+.timeline-item i {
+  width: 12rpx;
+  height: 12rpx;
+  margin-top: 8rpx;
+  background: var(--roamly-primary);
+  border-radius: 50%;
+  box-shadow: 0 0 0 7rpx rgb(255 95 87 / 12%);
+}
+
+.timeline-item text {
+  display: block;
+  margin-top: 5rpx;
+  font-size: 21rpx;
+}
+
+.service-button {
+  margin-top: 28rpx;
+  color: #fff;
+  background: var(--roamly-primary);
+  border-radius: 40rpx;
+}
+
+.state {
+  display: grid;
+  min-height: 500rpx;
+  color: var(--roamly-muted);
+  place-items: center;
+}
