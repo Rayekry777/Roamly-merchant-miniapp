@@ -182,4 +182,15 @@ describe("核销与结算现有接口封装", () => {
       "http://127.0.0.1:8081/v1/merchant/settlements/9007199254740993",
     ]);
   });
+
+  it("核销列表使用小程序兼容方式编码筛选条件", async () => {
+    await listMerchantRedemptions(2, 10, "SUCCEEDED", "订单 1&2");
+
+    expect(vi.mocked(wx.request).mock.calls[0]?.[0].url).toBe(
+      "http://127.0.0.1:8081/v1/merchant/redemptions?page=2&size=10&status=SUCCEEDED&keyword=%E8%AE%A2%E5%8D%95%201%262",
+    );
+    expect(
+      readFileSync(resolve(root, "api/redemption.ts"), "utf8"),
+    ).not.toContain("URLSearchParams");
+  });
 });

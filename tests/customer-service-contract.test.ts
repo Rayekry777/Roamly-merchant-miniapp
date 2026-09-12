@@ -34,4 +34,17 @@ describe("阶段 41 商户客服与退款体验", () => {
     expect(page).toContain("处理时间线");
     expect(page).toContain("联系平台客服");
   });
+
+  it("客服主题输入框使用固定行高避免文字被裁切", () => {
+    const styles = readFileSync(
+      "miniprogram/pages/customer-service/create.wxss",
+      "utf8",
+    );
+    expect(styles).toMatch(
+      /\.field input,\s*\.picker \{[\s\S]*height: 80rpx;[\s\S]*padding: 0;[\s\S]*line-height: 80rpx;/,
+    );
+    expect(styles).toMatch(
+      /\.field textarea \{[\s\S]*height: 220rpx;[\s\S]*padding: 22rpx 0;/,
+    );
+  });
 });

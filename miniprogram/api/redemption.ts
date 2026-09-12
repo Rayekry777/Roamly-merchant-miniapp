@@ -93,14 +93,15 @@ export function listMerchantRedemptions(
   status?: string,
   keyword?: string,
 ) {
-  const params = new URLSearchParams({
-    page: String(page),
-    size: String(size),
-  });
-  if (status && status !== "ALL") params.set("status", status);
-  if (keyword) params.set("keyword", keyword);
+  const params = [`page=${page}`, `size=${size}`];
+  if (status && status !== "ALL") {
+    params.push(`status=${encodeURIComponent(status)}`);
+  }
+  if (keyword) {
+    params.push(`keyword=${encodeURIComponent(keyword)}`);
+  }
   return request<PageResult<Redemption>>(
-    `/v1/merchant/redemptions?${params.toString()}`,
+    `/v1/merchant/redemptions?${params.join("&")}`,
     { showError: false },
   );
 }
