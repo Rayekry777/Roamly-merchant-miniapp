@@ -61,6 +61,9 @@ class VoucherDraftStore {
     if (!this.conflictDraft || !this.serverSnapshot) return null;
     const value = cloneForm(this.conflictDraft);
     value.version = this.serverSnapshot.version;
+    value.platformDiscountYuan = fenToYuan(
+      this.serverSnapshot.platformDiscountAmount ?? 0,
+    );
     value.reviewStatus = this.serverSnapshot.reviewStatus;
     value.reviewStatusLabel = this.serverSnapshot.reviewStatusLabel;
     this.formDraft = value;
@@ -121,6 +124,8 @@ export function formFromVoucher(
     detailMedia: product.detailMedia,
     priceYuan: fenToYuan(product.priceAmount),
     marketYuan: fenToYuan(product.marketAmount),
+    merchantSubsidyYuan: fenToYuan(product.merchantSubsidyAmount ?? 0),
+    platformDiscountYuan: fenToYuan(product.platformDiscountAmount ?? 0),
     faceValueYuan: fenToYuan(product.faceValueAmount),
     minimumSpendYuan: fenToYuan(product.minimumSpendAmount),
     totalUseCount: optionalInteger(product.totalUseCount),
@@ -178,6 +183,20 @@ export function toVoucherUpdateRequest(
   form: VoucherDraftForm,
 ): MerchantVoucherProductUpdateRequest {
   validateUsageRules(form.usageRules);
+  const merchantSubsidyAmount =
+    optionalFen(form.merchantSubsidyYuan ?? "", "商家补贴") ?? 0;
+  const platformDiscountAmount =
+    optionalFen(form.platformDiscountYuan ?? "", "平台补贴") ?? 0;
+  if (
+    merchantSubsidyAmount + platformDiscountAmount >
+    (optionalFen(form.priceYuan, "售价") ?? 0)
+  ) {
+    throw new ApiError(
+      "商家补贴与平台补贴合计不能超过售价",
+      400,
+      "FORM_INVALID",
+    );
+  }
   return {
     version: form.version,
     title: optionalText(form.title),
@@ -186,6 +205,7 @@ export function toVoucherUpdateRequest(
     detailMediaIds: form.detailMedia.map((media) => media.id),
     priceAmount: optionalFen(form.priceYuan, "售价"),
     marketAmount: optionalFen(form.marketYuan, "门市价"),
+    merchantSubsidyAmount,
     faceValueAmount:
       form.productType === "CASH"
         ? optionalFen(form.faceValueYuan, "抵扣额")

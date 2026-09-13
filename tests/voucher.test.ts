@@ -342,3 +342,31 @@ function requestFor(
   change?.(draft);
   return toVoucherUpdateRequest(draft);
 }
+
+describe("活动补贴承担", () => {
+  it("读取两方补贴，只提交商家自担金额，支持取消", () => {
+    const parsed = parseVoucherProduct(
+      product("PACKAGE", {
+        merchantSubsidyAmount: 1200,
+        platformDiscountAmount: 500,
+      }),
+    );
+    const form = formFromVoucher(parsed);
+    expect(form.merchantSubsidyYuan).toBe("12");
+    expect(form.platformDiscountYuan).toBe("5");
+    const request = toVoucherUpdateRequest(form);
+    expect(request.merchantSubsidyAmount).toBe(1200);
+    expect(request).not.toHaveProperty("platformDiscountAmount");
+    form.merchantSubsidyYuan = "0";
+    expect(toVoucherUpdateRequest(form).merchantSubsidyAmount).toBe(0);
+  });
+  it("阻止负数、超额及超精度商家补贴", () => {
+    const form = formFromVoucher(
+      parseVoucherProduct(product("PACKAGE", { platformDiscountAmount: 500 })),
+    );
+    for (const value of ["-1", "123.01", "1.001"]) {
+      form.merchantSubsidyYuan = value;
+      expect(() => toVoucherUpdateRequest(form)).toThrow();
+    }
+  });
+});

@@ -95,6 +95,8 @@ export interface MerchantVoucherProduct {
   detailMedia: BusinessMedia[];
   priceAmount?: number;
   marketAmount?: number;
+  merchantSubsidyAmount?: number;
+  platformDiscountAmount?: number;
   faceValueAmount?: number;
   minimumSpendAmount?: number;
   totalUseCount?: number;
@@ -149,6 +151,7 @@ export interface MerchantVoucherProductUpdateRequest {
   detailMediaIds: string[];
   priceAmount?: number;
   marketAmount?: number;
+  merchantSubsidyAmount?: number;
   faceValueAmount?: number;
   minimumSpendAmount?: number;
   totalUseCount?: number;
@@ -205,6 +208,8 @@ export interface VoucherDraftForm {
   detailMedia: BusinessMedia[];
   priceYuan: string;
   marketYuan: string;
+  merchantSubsidyYuan?: string;
+  platformDiscountYuan?: string;
   faceValueYuan: string;
   minimumSpendYuan: string;
   totalUseCount: string;

@@ -106,6 +106,10 @@
       </view>
       <label wx:if="{{draft.productType === 'MULTI_USE'}}" class="field"><text>总使用次数</text><input value="{{draft.totalUseCount}}" disabled="{{readonly}}" data-field="totalUseCount" bindinput="fieldInput" type="number" maxlength="3" placeholder="2 至 100" /></label>
 
+      <view class="subsection-heading"><text>活动优惠</text></view>
+      <label class="field"><text>每份商家补贴（元）</text><input value="{{draft.merchantSubsidyYuan}}" disabled="{{readonly}}" data-field="merchantSubsidyYuan" bindinput="fieldInput" type="digit" placeholder="0.00，填 0 取消" /></label>
+      <view class="notice-copy">商家补贴由本店承担，从售价中抵扣；次卡按整张券设置。</view>
+      <view class="field"><text>每份平台补贴（元）</text><text>{{draft.platformDiscountYuan || '0'}}（平台设置）</text></view>
       <view class="subsection-heading"><text>销售时间</text></view>
       <view class="datetime-row">
         <text class="datetime-label">开始</text>

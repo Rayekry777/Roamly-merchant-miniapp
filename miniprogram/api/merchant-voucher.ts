@@ -260,6 +260,8 @@ export function parseVoucherProduct(value: unknown): MerchantVoucherProduct {
   assignOptionalNumbers(result, item, [
     "priceAmount",
     "marketAmount",
+    "merchantSubsidyAmount",
+    "platformDiscountAmount",
     "faceValueAmount",
     "minimumSpendAmount",
     "totalUseCount",
