@@ -28,6 +28,9 @@ Page({
     businessHoursView: [] as Array<Record<string, unknown>>,
     cities: [] as Array<{ code: string; name: string }>,
     shopTypes: [] as Array<{ id: string; name: string }>,
+    rootTypes: [] as Array<{ id: string; name: string }>,
+    rootTypeNames: [] as string[],
+    rootTypeIndex: -1,
     cityNames: [] as string[],
     shopTypeNames: [] as string[],
     cityIndex: -1,
@@ -64,7 +67,21 @@ Page({
     const cityIndex = onboardingStore.cities.findIndex(
       (city) => city.code === draft.cityCode,
     );
-    const shopTypeIndex = onboardingStore.shopTypes.findIndex(
+    const selectedType = onboardingStore.shopTypes.find(
+      (type) => type.id === draft.shopTypeId,
+    );
+    const rootTypes = onboardingStore.shopTypes.filter(
+      (type) => !type.parentId,
+    );
+    const rootTypeIndex = rootTypes.findIndex(
+      (type) => type.id === (selectedType?.parentId || selectedType?.id),
+    );
+    const shopTypes = onboardingStore.shopTypes.filter(
+      (type) =>
+        type.parentId === rootTypes[rootTypeIndex]?.id &&
+        Boolean(type.parentId),
+    );
+    const shopTypeIndex = shopTypes.findIndex(
       (type) => type.id === draft.shopTypeId,
     );
     this.setData({
@@ -74,9 +91,12 @@ Page({
         label: businessDayLabels[day.dayOfWeek],
       })),
       cities: onboardingStore.cities,
-      shopTypes: onboardingStore.shopTypes,
+      shopTypes,
+      rootTypes,
+      rootTypeIndex,
+      rootTypeNames: rootTypes.map((type) => type.name),
       cityNames: onboardingStore.cities.map((city) => city.name),
-      shopTypeNames: onboardingStore.shopTypes.map((type) => type.name),
+      shopTypeNames: shopTypes.map((type) => type.name),
       cityIndex,
       shopTypeIndex,
       ...extra,
@@ -107,6 +127,22 @@ Page({
     const city = this.data.cities[index];
     if (!city) return;
     this.setData({ cityIndex: index, "draft.cityCode": city.code });
+    onboardingStore.clearSubmissionKey();
+  },
+  onRootTypeChange(event: WechatMiniprogram.PickerChange) {
+    const rootTypeIndex = Number(event.detail.value);
+    const root = this.data.rootTypes[rootTypeIndex];
+    if (!root) return;
+    const shopTypes = onboardingStore.shopTypes.filter(
+      (type) => type.parentId === root.id,
+    );
+    this.setData({
+      rootTypeIndex,
+      shopTypes,
+      shopTypeNames: shopTypes.map((type) => type.name),
+      shopTypeIndex: -1,
+      "draft.shopTypeId": "",
+    });
     onboardingStore.clearSubmissionKey();
   },
   onShopTypeChange(event: WechatMiniprogram.PickerChange) {

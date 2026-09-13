@@ -40,7 +40,8 @@
 
       <view wx:elif="{{currentStep === 1}}" class="form-section">
         <view class="section-heading">门店与地图</view>
-        <label class="field"><text>经营类目</text><picker range="{{shopTypeNames}}" value="{{shopTypeIndex}}" bindchange="onShopTypeChange"><view class="picker-value">{{shopTypeIndex >= 0 ? shopTypeNames[shopTypeIndex] : '请选择经营类目'}}<text>›</text></view></picker></label>
+        <label class="field"><text>经营大类</text><picker range="{{rootTypeNames}}" value="{{rootTypeIndex}}" bindchange="onRootTypeChange"><view class="picker-value">{{rootTypeIndex >= 0 ? rootTypeNames[rootTypeIndex] : '请选择美食或休闲娱乐'}}<text>›</text></view></picker></label>
+        <label class="field"><text>二级类目</text><picker range="{{shopTypeNames}}" value="{{shopTypeIndex}}" bindchange="onShopTypeChange"><view class="picker-value">{{shopTypeIndex >= 0 ? shopTypeNames[shopTypeIndex] : '请选择经营类目'}}<text>›</text></view></picker></label>
         <label class="field"><text>所在城市</text><picker range="{{cityNames}}" value="{{cityIndex}}" bindchange="onCityChange"><view class="picker-value">{{cityIndex >= 0 ? cityNames[cityIndex] : '请选择城市'}}<text>›</text></view></picker></label>
         <label class="field"><text>区县</text><input value="{{draft.district}}" data-field="district" bindinput="onFieldInput" maxlength="64" placeholder="请输入区县" /></label>
         <label class="field"><text>详细地址</text><textarea value="{{draft.address}}" data-field="address" bindinput="onFieldInput" maxlength="255" auto-height placeholder="请输入详细地址" /></label>

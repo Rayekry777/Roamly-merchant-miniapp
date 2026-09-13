@@ -33,8 +33,17 @@ Page({
         label: businessDayLabels[day.dayOfWeek],
       })),
       shopTypeName:
-        onboardingStore.shopTypes.find((type) => type.id === draft.shopTypeId)
-          ?.name ?? "未选择",
+        onboardingStore.shopTypes
+          .filter(
+            (type) =>
+              type.id === draft.shopTypeId ||
+              type.id ===
+                onboardingStore.shopTypes.find(
+                  (leaf) => leaf.id === draft.shopTypeId,
+                )?.parentId,
+          )
+          .map((type) => type.name)
+          .join(" / ") || "未选择",
       cityName:
         onboardingStore.cities.find((city) => city.code === draft.cityCode)
           ?.name ?? "未选择",

@@ -127,6 +127,7 @@ export interface MerchantCity {
 }
 
 export interface MerchantShopType {
+  parentId?: string;
   id: string;
   name: string;
   icon?: string;
