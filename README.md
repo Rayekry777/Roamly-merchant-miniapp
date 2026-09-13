@@ -64,3 +64,5 @@ npm run visual:check
 ```
 
 `build:npm` 会生成 `miniprogram/miniprogram_npm`。真实 AppID 和环境地址写入本地私有配置，不要提交凭据。联调时确保微信开发者工具能访问后端 `/v1`，并按环境配置合法域名或开发调试选项。
+
+计费与补贴计算统一见 [计费、补贴与结算计算细节](../Roamly/docs/project-details/计费、补贴与结算计算细节.md)，页面操作说明继续维护在本项目对应细节文档。
