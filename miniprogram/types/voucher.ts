@@ -45,14 +45,6 @@ export const voucherReviewLabels: Record<VoucherReviewStatus, string> = {
   REJECTED: "审核未通过",
 };
 
-export const voucherSaleLabels: Record<VoucherSaleStatus, string> = {
-  SCHEDULED: "待开售",
-  ON_SALE: "销售中",
-  OFF_SALE: "已下架",
-  SOLD_OUT: "已售罄",
-  ENDED: "已结束",
-};
-
 export interface MerchantVoucherPackageItem {
   id: string;
   name: string;

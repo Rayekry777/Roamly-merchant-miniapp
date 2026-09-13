@@ -1,6 +1,5 @@
 {
   "usingComponents": {
-    "app-navbar": "/components/app-navbar/index",
-    "t-icon": "tdesign-miniprogram/icon/icon"
+    "app-navbar": "/components/app-navbar/index"
   }
 }
