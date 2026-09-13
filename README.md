@@ -51,7 +51,7 @@ miniprogram
 └─ pages           工作台、入驻、券管理、订单、核销、员工和我的
 ```
 
-接口边界和验收要求见[商户小程序契约](docs/MERCHANT_MINIAPP_DEVELOPMENT.md)；后端状态机、幂等和资金规则见[后端 README](../Roamly/README.md)，整体实施顺序见[四端交付路线图](../Roamly/docs/roadmap/FOUR_END_DELIVERY_ROADMAP.md)。
+接口边界和验收要求见[商户端功能细节说明](docs/商户端功能细节说明.md)；后端状态机、幂等和资金规则见[后端 README](../Roamly/README.md)与[退款客服资金细节](../Roamly/docs/project-details/退款客服与资金结算业务细节.md)。
 
 ## 本地开发与验证
 
